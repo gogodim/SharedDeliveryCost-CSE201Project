@@ -27,5 +27,5 @@ The application allows you to:
 - Danaé Broustail, danaebroustail, ,Optimization leader
 - Yarou Hsu, , ,Trello leader
 - Leonardo Israilovici, , ,
-- Estelle Martin, , ,
+- Estelle Martin, estellemartin , estellemartin20 ,
 
