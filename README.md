@@ -22,10 +22,10 @@ The application allows you to:
 ## Members (name surname, github username, trello username, [role])
 
 - Gorazd Dimitrov, gogodim, gorazddimitrov, project leader (Git leader)
-- Maika Edberg, , UI leader
-- Sigurjon Agustsson, , Databases and server leader
-- Danaé Broustail, , Optimization leader
-- Yarou Hsu, , Trello leader
-- Leonardo Israilovici, , 
-- Estelle Martin, , 
+- Maika Edberg, maikaedberg, ,UI leader
+- Sigurjon Agustsson, , ,Databases and server leader
+- Danaé Broustail, danaebroustail, ,Optimization leader
+- Yarou Hsu, , ,Trello leader
+- Leonardo Israilovici, , ,
+- Estelle Martin, , ,
 
