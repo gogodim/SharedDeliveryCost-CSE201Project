@@ -64,8 +64,26 @@ class Company{
 
 };
 
+class Order{
+public:
+    Order(User user, 
+          Company company,
+          double value,
+          double delivery_cost,
+          double distance);
+private:
+    User user;
+    Company company;
+    double value;
+    double delivery_cost;
+    double distance;
+   
+};
+
 bool check_valid_email(std::string email);
 
 bool check_valid_address(std::string address);
 
 Coordinate convert_to_coordinates(std::string address);
+
+
