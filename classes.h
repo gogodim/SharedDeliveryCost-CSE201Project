@@ -71,6 +71,11 @@ public:
           double value,
           double delivery_cost,
           double distance);
+    User get_user();
+    Company get_company();
+    double get_value();
+    double get_delivery_cost();
+    double get_distance();
 private:
     User user;
     Company company;
