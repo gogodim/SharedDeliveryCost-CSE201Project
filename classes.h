@@ -46,10 +46,6 @@ private:
 
 };
 
-class Order{
-
-
-};
 
 class Company{
 
