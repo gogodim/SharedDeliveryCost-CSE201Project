@@ -58,7 +58,7 @@ public:
     void set_options(std::list<std::vector<int>> options);
     void set_name(std::string name);
 private:
-    std::string company_name;
+    std::string name;
 
     std::list<std::vector<int>> options;
 
