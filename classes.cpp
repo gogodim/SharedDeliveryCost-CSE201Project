@@ -18,8 +18,24 @@ User::User(std::string username,std::string password,std::string name,std::strin
  ;
 }
 
+
 Company::Company(std::string name, std::list<std::vector<int>> opts){
-    ;
+    this->name = name;
+    this->opts = opts;    
+}
+
+Company::Company(){
+    this->name = "Default Company";
+    this->opts = std::list<std::vector<int>>();
+}
+
+void Company::set_options(std::list<std::vector<int>> options){
+	this->opts = options;
+}
+
+void Company::set_name(std::string name)
+{
+	this->name = name; 
 }
 
 bool check_valid_email(std::string email){
@@ -29,6 +45,9 @@ bool check_valid_email(std::string email){
 bool check_valid_address(std::string address){
     return true;
 }
+
+
+
 
 Order::Order(User user,
              Company company,

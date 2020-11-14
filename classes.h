@@ -48,15 +48,20 @@ private:
 
 
 class Company{
+public:
 
     // list of vectors of ints, each vector of the form:
     // ( minimum amount to pay, maximum amount, delivery fee for amounts in the interval [min_amount, max_mount])
 
     Company(std::string name, std::list<std::vector<int>> opts);
-
+    Company();
+    void set_options(std::list<std::vector<int>> options);
+    void set_name(std::string name);
+private:
     std::string company_name;
 
     std::list<std::vector<int>> options;
+
 
 };
 
