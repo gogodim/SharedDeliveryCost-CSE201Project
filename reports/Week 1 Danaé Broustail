@@ -1,0 +1,3 @@
+This week I created a header file for the classes involved in our database and enabled the use of the QGeolocation class.
+
+Next week, I will finish installing (and understanding) the wt library. I will also think about the optimization algorithm. I will also look at QGeolocation’s functionalities.
