@@ -1,0 +1,7 @@
+Week1 Report
+This week I try to built WT libraries on qt on Windows. But it cannot work to me by now.
+The way I try first to check if WT can work on different platform like Visual Studio, and it works.
+Further, I keep trying on Mingw of Qt, but it cannot work. I build boost for a long time and ,thanks to professor Ali, it finally works.
+But now I still dealing with building problems on WT.
+
+If I cannot successfuuly this week, I would change to ubuntu next week, then finished the setting and start making login page of our project.
