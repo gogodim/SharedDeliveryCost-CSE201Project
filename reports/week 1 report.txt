@@ -1,3 +1,0 @@
-
-This week, I created the basic backbone of the order class.\
-I then started to work on the QGeoLocation functionalities and researched about qt's location library, so that I can focus next week on converting addresses into latitudes and longitudes coordinates using the qt's location library.
