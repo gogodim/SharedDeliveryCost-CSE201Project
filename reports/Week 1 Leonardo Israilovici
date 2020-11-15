@@ -1,0 +1,2 @@
+This week I worked on the Company Class, creating a default constructor that took no inputs, and adding functions, set_options, set_name,
+that will allow to input any option into the program
