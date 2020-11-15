@@ -1,0 +1,2 @@
+Week1 Report
+I was working on exploring th library WT. After successfully installing it on ubuntu, I troubleshooted with making it work on Qt Creator. The fix was including the paths to some of the libraries directly in the .pro file in the Qt project. Other then that I worked on running few examples, I managed to run 3 examples, one concernng a simple input output on a website, another creating a database and adding/removing data from it, and the last one (still working on) a simple authentication form with sign up and log in.
