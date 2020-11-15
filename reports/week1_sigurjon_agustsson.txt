@@ -1,0 +1,4 @@
+This week I have spent installing and getting to know the WT library.
+I have not gotten it to fully work on Qt (Windows computer) but I tried it on Visual Studio with more success.
+
+This week I will finish to install and understand WT for Qt instead of Visual studio and start making a simple log in interface. 
