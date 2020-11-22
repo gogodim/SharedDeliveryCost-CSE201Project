@@ -1,0 +1,1 @@
+Delay in progress because of medical reasons, created an instalation guide for ubuntu, and tested the database library.
