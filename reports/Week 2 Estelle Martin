@@ -1,0 +1,4 @@
+This week I started implementing the distance optimization function which gives the coordinates of the point of livraison depending on the different orders it will
+deliver (depending on th eprice of the order made, the point of livraison will be more or less far away from the consumer's place). I send what I did to Leo whith
+who I was implementing the function, he should merge on github once done. For the rest of the td I continued working on the user's class for which I encounter issues
+that I hope I will be able to overcome next week, and I will then be able to upload it on github.
