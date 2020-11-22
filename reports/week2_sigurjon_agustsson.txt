@@ -1,0 +1,2 @@
+This week I finished installing and setting up WT on windows. 
+Next week I will be making some examples to familiraize myself with the library.
