@@ -1,0 +1,3 @@
+
+This week, I worked with a stack overflow I found that converts addresses into latitudes and longitudes. \
+I faced a lot of issues that a TA helped me with, and now I am working on making this into a function (because it currently works in the main) and being able to extend it to now doing the opposite direction: changing rdinates into addresses. 
