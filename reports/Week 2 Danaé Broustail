@@ -1,0 +1,3 @@
+This week I looked at the issues surrounding Wt’s installation on mac. The path linking issue was solved (the header files can now be included) but there are still problems (undefined objects) when attempting the basic examples (provided in wt tutorials). 
+
+Next week, I will fully install the library and run the examples on Qt. If this is done, I will either participate in understanding QGeolocation’s functionalities or think about optimization algorithms.
