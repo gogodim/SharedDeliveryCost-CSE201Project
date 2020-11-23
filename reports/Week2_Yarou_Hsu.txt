@@ -1,0 +1,2 @@
+Last week I successfully install WT on Windows but face another problems on WT examples like showing css and images on Web.
+This week I will try to fix these problems and start to make login page of our project.
