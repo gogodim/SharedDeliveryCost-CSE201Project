@@ -60,7 +60,7 @@
 			-llibboost_filesystem-mgw73-mt-x32-1_67 \
 			-llibboost_system-mgw73-mt-x32-1_67
 	
-	LIBS  +=  -LC:/Qt/Tools/mingw730_32/i686-w64-mingw32/lib  \
+	LIBS  +=  -LC:/Qt/Tools/mingw730_64/i686-w64-mingw32/lib  \
 			-llibws2_32  \
 			-llibwsock32
 	```
