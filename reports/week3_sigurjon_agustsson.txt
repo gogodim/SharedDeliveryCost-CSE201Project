@@ -1,0 +1,1 @@
+This week I worked more with the wt library and finished the setup. This week we will resolve an issue that has come up regarding the framework. 
