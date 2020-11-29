@@ -1,0 +1,3 @@
+
+This week, I worked with Danae on troubleshooting issues related to our .pro files. \
+I will work on finishing to fix these issues as well as working on converting coordinates into address next week.
