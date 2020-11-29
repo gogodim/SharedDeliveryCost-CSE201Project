@@ -1,0 +1,3 @@
+Managed to rended CSS files and pictures on WT on linux, and worked on final installation of WT on Mac. 
+After facing continuous issues, and discovering a bigger general problem with working with WT on 3 different platforms, I worked on finidng a new solution.
+Most feasable solution for now is sepaating the team according to their operating system, the 4 people with Mac work on the part that doesn't require WT, the other 3 work on Windws and work on parts that require WT.
