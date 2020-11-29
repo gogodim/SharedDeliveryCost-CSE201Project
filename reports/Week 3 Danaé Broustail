@@ -1,0 +1,3 @@
+This week I was looking at wt-related issues on Mac. There are still object warnings and we noticed another problem in path-linking (various libraries not included, although they exist in the corresponding directories) and unsuccessfully attempted to solve both problems.
+
+The plan for next week is to work with other mac users to solve both issues, or find an alternative to make wt compatible with the project.
