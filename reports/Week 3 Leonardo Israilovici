@@ -1,0 +1,1 @@
+This week I worked on the algorithm to find common points, making one that identifies all the users that place orders at the same adress, and putting them in an unordered map, with the address as keys, and the users as values.
