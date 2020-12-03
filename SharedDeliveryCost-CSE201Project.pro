@@ -1,3 +1,6 @@
+QT -= core
+QT -= gui
+QT += positioning
 QT -= gui
 QT += positioning
 
@@ -20,4 +23,4 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     classes.h \
-    hello.h
+
