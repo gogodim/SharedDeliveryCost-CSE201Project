@@ -1,6 +1,7 @@
 #include "classes.h"
+#include <math.h>
 
-Coordinate::Coordinate(int lat, int lo){
+Coordinate::Coordinate(double lat, double lo){
 
 latitude=lat;
 longitude=lo;
@@ -49,17 +50,17 @@ bool check_valid_address(std::string address){
 
 
 
-Order::Order(User user,
-             Company company,
-             double value,
-             double delivery_cost,
-             double distance){
-        this->user = user;
-        this->company = company;
-        this->value = value;
-        this->delivery_cost = delivery_cost;
-        this->distance = distance;
-}
+//Order::Order(User user,
+//             Company company,
+//             double value,
+//             double delivery_cost,
+//             double distance){
+//        this->user = user;
+//        this->company = company;
+//        this->value = value;
+//        this->delivery_cost = delivery_cost;
+//        this->distance = distance;
+//}
 
     User Order::get_user(){
         return user;
@@ -81,4 +82,44 @@ Coordinate convert_to_coordinates(std::string address){
 
     return Coordinate(0,0);
 }
+
+double Coordinate::get_distance(Coordinate other){
+
+    const int R=6371; //radius of the earth in km
+    const double PI=3.14159265358;
+    // all angles converted to radians
+    double lat1=latitude*PI/180;
+    double lon1=longitude*PI/180;
+    double lat2=other.latitude*PI/180;
+    double lon2=other.longitude*PI/180;
+
+    double latDist = (lat2 - lat1);
+    double lonDist =(lon2 - lon1);
+
+    double a = sin(latDist/2) * sin(latDist/2) + cos(lat1) * cos(lat2)* sin(lonDist / 2) * sin(lonDist / 2);
+    double c = 2 * atan2(sqrt(a), sqrt(1 - a));
+    double distance = R * c;
+
+    return distance; // in km
+
+
+}
+
+Bucket::Bucket(){
+    bucket_company="None";
+    std::list<Order> default_buckets; //empty list
+    bucket_content=default_buckets;
+    bucket_completion=false;
+    bucket_max_cost=0;
+    bucket_cur_amount=0;
+    bucket_cur_cost=0;
+
+}
+
+void Bucket::set_company(std::string company){
+
+    bucket_company=company;
+}
+
+
 
