@@ -30,6 +30,12 @@
 	```
 	Variable name: BOOST_ROOT
 	Variable value: C:\Boost
+	Variable name: BOOST_INCLUDEDIR
+	Variable value: C:\Boost\include
+	Variable name: BOOST_PREFIX
+	Variable value: C:\Boost
+	Variable name: BOOST_LIBRARYDIR
+	Variable value: C:\Boost\lib
 	```
 2. Find **FontSupportDirectWrite.C** in C:\wt-4.4.0\src\Wt, comment following lines so it would make successfully
 	```
