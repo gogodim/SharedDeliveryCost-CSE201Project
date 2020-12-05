@@ -4,7 +4,7 @@
 ### Add Mingw of qt to your System Path
 1. Right click **This PC** choose **Properties** /**Advanced system settings** /**Environment Variables**. 
 2. In user variables set **Path** to your QT mingw 
-	>C:\Qt\Tools\mingw730_32\bin
+	>C:\Qt\Tools\mingw730_64\bin
 
 ### First Step: Boost
 1.  Install [Boost](https://www.boost.org/) version 1.6 newer and compress it to path C:\
@@ -19,11 +19,11 @@
 	```
 	INCLUDEPATH  +=  C:/Boost/include/boost-1_67
 	LIBS  +=  -LC:/Boost/lib \
-			-llibboost_locale-mgw73-mt-x32-1_67 \
-			-llibboost_thread-mgw73-mt-x32-1_67 \
-			-llibboost_program_options-mgw73-mt-x32-1_67 \
-			-llibboost_filesystem-mgw73-mt-x32-1_67 \
-			-llibboost_system-mgw73-mt-x32-1_67
+			-llibboost_locale-mgw73-mt-x64-1_67 \
+			-llibboost_thread-mgw73-mt-x64-1_67 \
+			-llibboost_program_options-mgw73-mt-x64-1_67 \
+			-llibboost_filesystem-mgw73-mt-x64-1_67 \
+			-llibboost_system-mgw73-mt-x64-1_67
 	```
 ### Second Step: WT
 1. In **Environment Variables** add new variable in **User variables for user**
@@ -60,14 +60,14 @@
 			-LC:/wt-4.4.0/src/Wt/Dbo/backend  -llibwtdbosqlite3
 	LIBS  +=  -lole32
 	LIBS  +=  -LC:/Boost/lib \
-			-llibboost_locale-mgw73-mt-x32-1_67 \
-			-llibboost_thread-mgw73-mt-x32-1_67 \
-			-llibboost_program_options-mgw73-mt-x32-1_67 \
-			-llibboost_filesystem-mgw73-mt-x32-1_67 \
-			-llibboost_system-mgw73-mt-x32-1_67
+			-llibboost_locale-mgw73-mt-x64-1_67 \
+			-llibboost_thread-mgw73-mt-x64-1_67 \
+			-llibboost_program_options-mgw73-mt-x64-1_67 \
+			-llibboost_filesystem-mgw73-mt-x64-1_67 \
+			-llibboost_system-mgw73-mt-x64-1_67
 	
 	LIBS  +=  -LC:/Qt/Tools/mingw730_64/i686-w64-mingw32/lib  \
 			-llibws2_32  \
 			-llibwsock32
 	```
-### After all of this, you can start to run WT in your QT-creator
+### After all of this, you can start to run WT in your QT-creator with **64 DEBUG**
