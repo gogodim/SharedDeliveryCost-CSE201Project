@@ -4,7 +4,7 @@
 ### Add Mingw of qt to your System Path
 1. Right click **This PC** choose **Properties** /**Advanced system settings** /**Environment Variables**. 
 2. In user variables set **Path** to your QT mingw 
-	>C:\Qt\Tools\mingw730_64\bin
+	>C:\Qt\Tools\mingw730_32\bin
 
 ### First Step: Boost
 1.  Install [Boost](https://www.boost.org/) version 1.6 newer and compress it to path C:\
