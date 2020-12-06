@@ -1,0 +1,2 @@
+This week I started to make an "add order" window for the website.
+I will continue work on that and hopefully finish next week.
