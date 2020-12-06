@@ -1,0 +1,3 @@
+This week I understood the plan for implementing the different functions for the website. I then started implementing the function which adds an order to a bucket 
+and started to implement the one which check if adding the order is possible. I realized that we needed to create some other smaller function in order to implement 
+correctly the functions for the buckets, which I continue to do next week.
