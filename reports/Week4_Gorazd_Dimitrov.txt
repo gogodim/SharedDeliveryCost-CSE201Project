@@ -1,0 +1,2 @@
+This week we finally finished the planning of what ur 3 main screens for the interface would be. 
+I started working on the notification window and hopefully by next week I will be done with it, that way we have an initial working interface.
