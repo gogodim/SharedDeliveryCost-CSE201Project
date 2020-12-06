@@ -1,0 +1,2 @@
+
+This week, I pushed the functions that convert addresses into coordinates and coordinates into addresses onto GitHub. Next week, I will work on finding the nearest valid address.
