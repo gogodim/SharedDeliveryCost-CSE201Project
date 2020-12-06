@@ -1,0 +1,5 @@
+This week we discussed suggestions for the optimization problem, with a class called “Bucket” along with several external functions. 
+I wrote a tentative basic structure for the Bucket class and added a function to compute the distance between 2 coordinates given in latitude and longitude. 
+With Yarou’s help, we were also able to run a simple wt example on mac. 
+
+Next week, we will continue discussing the overall structure of the optimization, namely how to represent the common area enclosed by a Bucket (“intersection” of orders in the bucket).
