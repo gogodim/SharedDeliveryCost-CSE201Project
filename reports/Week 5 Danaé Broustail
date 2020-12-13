@@ -1,0 +1,6 @@
+This week we mainly discussed problems/challenges that could arise with our optimization design, for example encoding a common area between orders, 
+how to connect the “address to coordinates” function to the rest of the algorithm, 
+whether there should be a limit to the number of orders in a bucket, and how long a bucket should be kept.
+
+Next week, I will continue this discussion with the team and look for eventual design flaws within the optimization. 
+I will also try to focus on implementations (simple functions).
