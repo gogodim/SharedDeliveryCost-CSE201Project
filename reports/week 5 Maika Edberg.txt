@@ -1,0 +1,4 @@
+
+This week I discussed with Danae problems that we could encounter in the optimisation.
+
+Next week, I will work on any implementation that can already be done.

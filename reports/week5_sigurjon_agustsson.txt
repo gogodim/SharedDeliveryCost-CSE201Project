@@ -1,0 +1,1 @@
+This week I was working on the "create new order" functionality. I have not finished and will seek to do that this week.
