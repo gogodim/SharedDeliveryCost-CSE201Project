@@ -1,5 +1,5 @@
-#ifndef USER_H
-#define USER_H
+#ifndef DATABASE_H
+#define DATABASE_H
 
 #include <Wt/Dbo/Dbo.h>
 #include <Wt/Dbo/backend/Sqlite3.h>
@@ -18,7 +18,7 @@ public:
   std::string name;
   std::string password;
   Role        role;
-  std::string email;
+  int         karma;
 
   template<class Action>
   void persist(Action& a)
@@ -26,8 +26,14 @@ public:
     dbo::field(a, name,     "name");
     dbo::field(a, password, "password");
     dbo::field(a, role,     "role");
-    dbo::field(a, email,    "email");
+    dbo::field(a, karma,    "karma");
   }
 };
 
-#endif // USER_H
+class Database
+{
+public:
+    Database();
+};
+
+#endif // DATABASE_H

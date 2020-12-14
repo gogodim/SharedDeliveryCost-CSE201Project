@@ -17,7 +17,10 @@ public:
 
 private:
     Wt::WLineEdit *nameEdit_;
-    Wt::WText     *greeting_;
+    Wt::WLineEdit *emailEdit_;
+    Wt::WLineEdit *passwordEdit_;
+    Wt::WLineEdit *locationEdit_;
+    Wt::WText     *confirm_;
 
     void greet();
 };

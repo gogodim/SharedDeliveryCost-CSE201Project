@@ -12,13 +12,12 @@
 #include "User.h"
 
 using namespace Wt;
-//typedef Auth::Dbo::User<AuthInfo> USerDatabase;
 
 // Session Class used to hold users that connect to this website
 class Session{
 
 public:
-    static void configureAuth();
+    //static void configureAuth();
     Session();
     ~Session();
 

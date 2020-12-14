@@ -4,6 +4,7 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
+        Database.cpp \
         OrderPage.cpp \
         main.cpp
 
@@ -30,5 +31,6 @@ win32: LIBS += -LC:/Qt/Tools/mingw730_32/i686-w64-mingw32/lib \
                 -llibwsock32
 
 HEADERS += \
+    Database.h \
     OrderPage.h
 
