@@ -38,10 +38,18 @@ OrderPage::OrderPage(): WContainerWidget(){
 
     nameEdit_->enterPressed().connect(std::bind(&OrderPage::greet, this));
 
-     std::unique_ptr<Database> my_user = Wt::cpp14::make_unique<Database>();
+    database = Wt::cpp14::make_unique<Database>();
+
 
 }
 
 void OrderPage::greet(){
+    std::unique_ptr<User> user{new User()};
+    user->name = "Yarou";
+    user->password = "123456";
+    user->role = Role::Visitor;
+    user->karma = 13;
+    database->add_user(std::move(user));
+
     confirm_->setText("Confirm input " + nameEdit_->text() + emailEdit_->text() + locationEdit_->text());
 }

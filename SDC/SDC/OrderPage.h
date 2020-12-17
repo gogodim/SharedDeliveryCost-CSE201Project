@@ -8,6 +8,8 @@
 #include <Wt/WPushButton.h>
 #include <Wt/WText.h>
 
+#include "Database.h"
+
 using namespace Wt;
 
 class OrderPage: public WContainerWidget{
@@ -16,11 +18,12 @@ public:
     OrderPage();
 
 private:
-    Wt::WLineEdit *nameEdit_;
-    Wt::WLineEdit *emailEdit_;
-    Wt::WLineEdit *passwordEdit_;
-    Wt::WLineEdit *locationEdit_;
-    Wt::WText     *confirm_;
+    Wt::WLineEdit                  *nameEdit_;
+    Wt::WLineEdit                  *emailEdit_;
+    Wt::WLineEdit                  *passwordEdit_;
+    Wt::WLineEdit                  *locationEdit_;
+    Wt::WText                      *confirm_;
+    std::unique_ptr<Database>      database;
 
     void greet();
 };

@@ -9,8 +9,6 @@
 #include <Wt/Dbo/ptr.h>
 #include <Wt/Dbo/backend/Sqlite3.h>
 
-#include "User.h"
-
 using namespace Wt;
 
 // Session Class used to hold users that connect to this website
