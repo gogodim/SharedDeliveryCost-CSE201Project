@@ -26,23 +26,42 @@ public:
 
     //we assume all login details are valid, the check is done before.
 
-    User(std::string username,std::string password,std::string name,std::string surname,std::string address,std::string email,Coordinate coords);
+    User(std::string usernam,std::string mp,std::string nam,std::string surnam,std::string adres,std::string email, Coordinate coords);
 
-    std::string username;
+    //std::string username;
 
-    std::string name;
+    //std::string name;
 
-    std::string surname;
+   // std::string surname;
 
-    std::string address;
+    //std::string address;
 
-    std::string email;
+   // std::string email;
 
-    Coordinate coordinates;
+    void set_coordinates(int latitude, int longitude);
+    void set_name(std::string n);
+    void set_username(std::string n);
+    void set_surname(std::string n);
+    void set_email(std::string n);
+    void set_password(std::string n);
+    void set_address(std::string n);
+
+    Coordinate get_coordinates();
+    std::string get_name();
+    std::string get_address();
+    std::string get_password();
+    std::string get_email();
+    std::string get_surname();
+    std::string get_username();
 
 private:
-
     std::string password;
+    Coordinate coordinates;
+    std::string name;
+    std::string surname;
+    std::string username;
+    std::string email;
+    std::string address;
 
 };
 
@@ -86,5 +105,32 @@ bool check_valid_email(std::string email);
 bool check_valid_address(std::string address);
 
 Coordinate convert_to_coordinates(std::string address);
+double array_of_one_delivery();
+Coordinate distance_optimization(double array);
 
 
+
+Coordinate convert_to_coordinates(std::string address);
+
+class Bucket{
+
+    Bucket();
+    void set_company(std::string company);
+
+    std::string bucket_company; // company ID (in one bucket, there can only be one company)
+    std::list<Order> bucket_content; // list of orders in the bucket
+    double bucket_cur_amount; // total amount paid for all orders in the bucket
+    double bucket_cur_cost; // current sum of delivery cost contributions of each user
+    double bucket_max_cost; // total amount of delivery cost to pay (based on the company, and the current amount to pay for the orders)
+    bool bucket_completion; // true if the optimization is complete, i.e bucket_max_cost==bucket_cur_cost
+
+    bool is_compatible(Order order);
+    void add_order(Order order); // adds valid order in bucket_content and updates all data members accordingly
+
+};
+
+std::list<Bucket> generate_buckets(Order new_order,std::list<Bucket> buckets); // generates all valid bucket combinations of existing buckets with new_order
+
+bool radius_overlap(Order order1, Order order2); // True if there exists a common area between two orders/users
+
+bool match_delivery_cost(Bucket bucket, Order new_order); //True if the contribution of delivery cost of the new order doesn't overflow the max_cost

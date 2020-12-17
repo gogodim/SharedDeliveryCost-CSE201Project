@@ -14,13 +14,35 @@ longitude=0;
 
 }
 
-User::User(std::string username,std::string password,std::string name,std::string surname,std::string address,std::string email,Coordinate coords){
- ;
-}
+
 
 Company::Company(std::string name, std::list<std::vector<int>> opts){
-    ;
+    this->name = name;
+    this->options = opts;
 }
+
+Company::Company(){
+    this->name = "Default Company";
+    this->options = std::list<std::vector<int>>();
+}
+
+void Company::set_options(std::list<std::vector<int>> options){
+    this->options = options;
+}
+
+void Company::set_name(std::string name)
+{
+        this->name = name;
+}
+
+bool check_valid_email(std::string email){
+    return true;
+}
+
+bool check_valid_address(std::string address){
+    return true;
+}
+
 
 bool check_valid_email(std::string email){
     return true;
@@ -62,4 +84,136 @@ Coordinate convert_to_coordinates(std::string address){
 
     return Coordinate(0,0);
 }
+
+//User::User(std::string usernam,std::string password,std::string name,std::string surname,std::string address,std::string email,Coordinate coords){
+// username = usernam;
+// name = nam;
+// surname = surnam;
+//}
+
+
+User::User(std::string usernam,std::string mp,std::string nam,std::string surnam,std::string adres,std::string mai, Coordinate coords){
+    username = usernam;
+    name = nam;
+    surname = surnam;
+    email = mai;
+    address = adres;
+    password = mp;
+    coordinates = coords;
+};
+
+// SET
+void User::set_coordinates(int latitude,int longitude){
+    coordinates = Coordinate(latitude, longitude);
+};
+void User::set_name(std::string n){
+    name = n;
+    //return void;
+};
+void User::set_username(std::string n){
+    username = n;
+};
+void User::set_email(std::string n){
+    email = n;
+};
+void User::set_surname(std::string n){
+    surname = n;
+};
+
+void User::set_password(std::string n){
+    password = n;
+};
+void User::set_address(std::string n){
+    address = n;
+};
+
+// GET
+
+std::string User::get_address(){
+    return address;
+};
+std::string User::get_password(){
+    return password;
+};
+std::string User::get_surname(){
+    return surname;
+};
+std::string User::get_email(){
+    return email;
+};
+std::string User::get_username(){
+    return username;
+};
+std::string User::get_name(){
+    return name;
+};
+Coordinate User::get_coordinates(){
+    return coordinates;
+};
+
+
+
+double array_of_one_delivery(){ // This function creates the array of all the orders concerned by the delivery, idk how to do it because linked to the database?
+    double arr = new[5]
+    Coordinates c = order.get_user().get_coordinates()
+    double weight = oder.get_delivery_cost() //or get_value()?
+
+};
+
+
+Coordinate distance_optimization(double array_of_one_delivery()){  //arr has elements of type (lat, lon, weight) and it is the array of all the orders concerned by this delivery
+    double lat = 0;
+    double lon = 0;
+    for(int i, array_of_one_delivery().size(), i++){
+        if(i!=()){
+            lat = lat + i[0]*i[2];
+            lon = lon + i[1]*i[2];
+        };
+
+    };
+    return Coordinate(lat/array_of_one_delivery().size(),lon/array_of_one_delivery().size());
+};
+
+
+ Bucket::Bucket(){
+    bucket_company="None";
+    std::list<Order> default_buckets; //empty list
+    bucket_content=default_buckets;
+    bucket_completion=false;
+    bucket_max_cost=0;
+    bucket_cur_amount=0;
+    bucket_cur_cost=0;
+
+}
+
+void Bucket::set_company(std::string company){
+
+    bucket_company=company;
+};
+void Bucket::add_order(Order order){
+    if(order.get_company()==bucket_company){
+        //bol = True;
+        //while(bol==True){
+         //   for(command in bucket_content){
+          //      if(radius_overlap(command,order)==False){
+         if(radius_overlap(bucket.area,order)){
+             bucket_content.append(order);
+             bucket_cur_cost+= order.get_delivery_cost();
+             bucket_cur_amount+= order.get_value();
+             bucket_max_cost= delivery_cost(bucket_company,bucket_cur_amount);
+             if(bucket_max_cost==bucket_cur_cost){
+                 bucket_completion = True;
+             };
+         };
+    };
+};
+
+double delivery_cost(Company company,double amount){
+    for(int i, i<=company.options.size, i++){
+        if(amount<company.options[i][0] and amount>company.options[1]){
+            return company.options[2];
+        };
+    };
+};
+
 
