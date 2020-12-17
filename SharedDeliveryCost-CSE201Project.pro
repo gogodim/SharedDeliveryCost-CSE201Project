@@ -1,4 +1,9 @@
+QT -= core
 QT -= gui
+QT += positioning
+QT -= gui
+QT += positioning
+
 
 CONFIG += c++11 console
 CONFIG -= app_bundle
@@ -18,4 +23,4 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     classes.h \
-    hello.h
+
