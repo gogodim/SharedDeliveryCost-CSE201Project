@@ -35,7 +35,7 @@ void Company::set_options(std::list<std::vector<int>> options){
 void Company::set_name(std::string name)
 {
 
-	this->name = name; 
+    this->name = name;
 }
 
 bool check_valid_email(std::string email){
@@ -48,13 +48,6 @@ bool check_valid_address(std::string address){
 
 
 
-bool check_valid_email(std::string email){
-    return true;
-}
-
-bool check_valid_address(std::string address){
-    return true;
-}
 Order::Order(User user,
              Company company,
              double value,
@@ -150,10 +143,23 @@ Coordinate User::get_coordinates(){
 };
 
 
+std::vector<Bucket> generate_buckets(Order new_order,
+                                   std::list<Bucket> buckets){
+    std::vector<Bucket> res;
+    std::list<Bucket>::iterator it;
+    for (it = buckets.begin(); it != buckets.end(); it ++){
+        Bucket CurrentBucket = *it;
+        if (CurrentBucket.is_compatible(new_order)){
+            res.push_back(CurrentBucket);
+        }
+    }
+    return res;
+} // generates all valid bucket combinations of existing buckets with new_order
+
 
 double array_of_one_delivery(){ // This function creates the array of all the orders concerned by the delivery, idk how to do it because linked to the database?
-    double arr = new[5]
-    Coordinates c = order.get_user().get_coordinates()
+    double arr = 0;
+    Coordinate c = order.get_user().get_coordinates()
     double weight = oder.get_delivery_cost() //or get_value()?
 
 };
@@ -175,7 +181,7 @@ Coordinate distance_optimization(double array_of_one_delivery()){  //arr has ele
 
  Bucket::Bucket(){
 
-   
+
 double Coordinate::get_distance(Coordinate other){
 
     const int R=6371; //radius of the earth in km
@@ -213,7 +219,7 @@ void Bucket::set_company(std::string company){
 
     bucket_company=company;
 };
-   
+
 void Bucket::add_order(Order order){
     if(order.get_company()==bucket_company){
         //bol = True;
@@ -239,6 +245,5 @@ double delivery_cost(Company company,double amount){
         };
     };
 };
-
 
 
