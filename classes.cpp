@@ -1,50 +1,151 @@
-#include "classes.h"
-#include <math.h>
+# include "classes.h"
+# include <math.h>
+#include <iostream>
+#include <string>
+#include <regex>
 
-Coordinate::Coordinate(double lat, double lo){
 
-latitude=lat;
-longitude=lo;
-
-}
-
+//Coordinate Class
+//Coordinate Constructor
+Coordinate::Coordinate(double latitude,
+                       double longitude){
+    this->latitude = latitude;
+    this->longitude = longitude;
+    }
 Coordinate::Coordinate(){
+    latitude = 0;
+    longitude = 0;
+    }
+//Coordinate, Getters
+    double Coordinate::get_latitude(){
+        return latitude;
+    }
+    double Coordinate::get_longitude(){
+        return longitude;
+    }
+//Coordinate, Setters
+    void Coordinate::set_latitude(double latitude){
+        this->latitude = latitude;
+    }
+    void Coordinate::set_longitude(double longitude){
+        this->longitude = longitude;
+    }
+    void Coordinate::set_coordinate(double latitude,
+                                    double longitude){
+        this->latitude = latitude;
+        this->longitude = longitude;
+    }
 
-latitude=0;
-longitude=0;
-
+Coordinate coordinate_from_address(std::string address){
+    return Coordinate(0, 0);
 }
 
-
-
-
-Company::Company(std::string name, std::list<std::vector<int>> opts){
-    this->name = name;
-    this->options = opts;
-}
-
-Company::Company(){
-    this->name = "Default Company";
-    this->options = std::list<std::vector<int>>();
-}
-
-void Company::set_options(std::list<std::vector<int>> options){
-    this->options = options;
-}
-
-void Company::set_name(std::string name)
-{
-
-    this->name = name;
-}
-
+//functions necessary for user
 bool check_valid_email(std::string email){
-    return true;
+    return regex_match(email, std::regex("(\\w+)(\\.|_)?(\\w*)@(\\w+)(\\.(\\w+))+"));
 }
 
 bool check_valid_address(std::string address){
     return true;
 }
+
+Coordinate address_to_coordinates(std::string address){
+    return Coordinate();
+}
+std::string coordinte_to_address(Coordinate coordinate){
+    return "";
+}
+
+
+//User Constructor
+User::User(){
+    username = "Default User";
+    name = "";
+    surname = "";
+    email = "";
+    address = "";
+}
+User::User(std::string username,
+           std::string password,
+           std::string name,
+           std::string surname,
+           std::string address,
+           std::string email){
+    this->username = username;
+    this->name = name;
+    this->surname = surname;
+    this->email = email;
+    this->address = address;
+    this->password = password;
+    set_coordinates(coordinate_from_address(address));
+};
+
+// User, Gettters
+std::string User::get_username(){
+    return username;
+}
+std::string User::get_password(){
+    return password;
+};
+std::string User::get_name(){
+    return name;
+};
+std::string User::get_surname(){
+    return surname;
+};
+std::string User::get_address(){
+    return address;
+};
+std::string User::get_email(){
+    return email;
+};
+Coordinate User::get_coordinates(){
+    return coordinates;
+};
+
+//User, Setters
+void User::set_username(std::string username){
+    this->username = username;
+}
+void User::set_password(std::string password){
+    this->password = password;
+};
+void User::set_name(std::string name){
+    this->name = name;
+};
+void User::set_surname(std::string surname){
+    this->surname = surname;
+};
+void User::set_address(std::string address){
+    this->address = address;
+};
+void User::set_email(std::string email){
+    this->email = email;
+};
+void User::set_coordinates(Coordinate coordinates){
+    this->coordinates = coordinates;
+};
+
+
+//Company
+Company::Company(std::string name, std::list<std::vector<int>> opts){
+    this->name = name;
+    this->options = opts;
+}
+Company::Company(){
+    this->name = "Default Company";
+    this->options = std::list<std::vector<int>>();
+}
+void Company::set_options(std::list<std::vector<int>> options){
+    this->options = options;
+}
+void Company::set_name(std::string name){
+    this->name = name;
+}
+
+
+
+
 
 
 
@@ -76,71 +177,6 @@ Order::Order(User user,
         return distance;
     };
 
-Coordinate convert_to_coordinates(std::string address){
-
-    return Coordinate(0,0);
-}
-
-
-
-User::User(std::string usernam,std::string mp,std::string nam,std::string surnam,std::string adres,std::string mai, Coordinate coords){
-    username = usernam;
-    name = nam;
-    surname = surnam;
-    email = mai;
-    address = adres;
-    password = mp;
-    coordinates = coords;
-};
-
-// SET
-void User::set_coordinates(int latitude,int longitude){
-    coordinates = Coordinate(latitude, longitude);
-};
-void User::set_name(std::string n){
-    name = n;
-    //return void;
-};
-void User::set_username(std::string n){
-    username = n;
-};
-void User::set_email(std::string n){
-    email = n;
-};
-void User::set_surname(std::string n){
-    surname = n;
-};
-
-void User::set_password(std::string n){
-    password = n;
-};
-void User::set_address(std::string n){
-    address = n;
-};
-
-// GET
-
-std::string User::get_address(){
-    return address;
-};
-std::string User::get_password(){
-    return password;
-};
-std::string User::get_surname(){
-    return surname;
-};
-std::string User::get_email(){
-    return email;
-};
-std::string User::get_username(){
-    return username;
-};
-std::string User::get_name(){
-    return name;
-};
-Coordinate User::get_coordinates(){
-    return coordinates;
-};
 
 
 std::vector<Bucket> generate_buckets(Order new_order,
@@ -179,7 +215,6 @@ Coordinate distance_optimization(double array_of_one_delivery()){  //arr has ele
 };
 
 
- Bucket::Bucket(){
 
 
 double Coordinate::get_distance(Coordinate other){
@@ -201,9 +236,7 @@ double Coordinate::get_distance(Coordinate other){
 
     return distance; // in km
 
-
 }
-
 Bucket::Bucket(){
     bucket_company="None";
     std::list<Order> default_buckets; //empty list
@@ -221,7 +254,7 @@ void Bucket::set_company(std::string company){
 };
 
 void Bucket::add_order(Order order){
-    if(order.get_company()==bucket_company){
+    if(order.get_company().get_name() == bucket_company){
         //bol = True;
         //while(bol==True){
          //   for(command in bucket_content){
