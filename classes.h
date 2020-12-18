@@ -90,7 +90,7 @@ private:
 
 class Order{
 public:
-    Order(User user, 
+    Order(User user,
           Company company,
           double value,
           double delivery_cost,
@@ -106,7 +106,7 @@ private:
     double value;
     double delivery_cost;
     double distance;
-   
+
 };
 
 bool check_valid_email(std::string email);
@@ -122,10 +122,13 @@ Coordinate distance_optimization(double array);
 Coordinate convert_to_coordinates(std::string address);
 
 class Bucket{
-
+public:
     Bucket();
-    void set_company(std::string company);
+    bool is_compatible(Order order);
+    void add_order(Order order); // adds valid order in bucket_content and updates all data members accordingly
 
+private:
+    void set_company(std::string company);
     std::string bucket_company; // company ID (in one bucket, there can only be one company)
     std::list<Order> bucket_content; // list of orders in the bucket
     double bucket_cur_amount; // total amount paid for all orders in the bucket
@@ -133,33 +136,13 @@ class Bucket{
     double bucket_max_cost; // total amount of delivery cost to pay (based on the company, and the current amount to pay for the orders)
     bool bucket_completion; // true if the optimization is complete, i.e bucket_max_cost==bucket_cur_cost
 
-    bool is_compatible(Order order);
-    void add_order(Order order); // adds valid order in bucket_content and updates all data members accordingly
 
 };
 
-std::list<Bucket> generate_buckets(Order new_order,std::list<Bucket> buckets); // generates all valid bucket combinations of existing buckets with new_order
+std::vector<Bucket> generate_buckets(Order new_order,std::list<Bucket> buckets); // generates all valid bucket combinations of existing buckets with new_order
 
-
-class Bucket{
-
-    Bucket();
-    void set_company(std::string company);
-
-    std::string bucket_company; // company ID (in one bucket, there can only be one company)
-    std::list<Order> bucket_content; // list of orders in the bucket
-    double bucket_cur_amount; // total amount paid for all orders in the bucket
-    double bucket_cur_cost; // current sum of delivery cost contributions of each user
-    double bucket_max_cost; // total amount of delivery cost to pay (based on the company, and the current amount to pay for the orders)
-    bool bucket_completion; // true if the optimization is complete, i.e bucket_max_cost==bucket_cur_cost
-
-    bool is_compatible(Order order);
-    void add_order(Order order); // adds valid order in bucket_content and updates all data members accordingly
-
-};
-
-std::list<Bucket> generate_buckets(Order new_order,std::list<Bucket> buckets); // generates all valid bucket combinations of existing buckets with new_order
 
 bool radius_overlap(Order order1, Order order2); // True if there exists a common area between two orders/users
 
 bool match_delivery_cost(Bucket bucket, Order new_order); //True if the contribution of delivery cost of the new order doesn't overflow the max_cost
+
