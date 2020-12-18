@@ -9,63 +9,58 @@
 
 
 class Coordinate{
-
 public:
-
     Coordinate();
-
     Coordinate(double lat,double lo);
-
-    double get_distance( Coordinate other);
-
+    double get_distance(Coordinate other);
+    double get_latitude();
+    double get_longitude();
+    void set_latitude(double latitude);
+    void set_longitude(double longitude);
+    void set_coordinate(double latitude,
+                            double longitude);
+private:
     double latitude; //given in degrees (western latitudes are negative angles)
-
     double longitude; // given in degrees (southern longtidues are negative angles)
-
 };
 
+Coordinate coordinate_from_address(std::string address);
+
 class User{
-
 public:
-
     //we assume all login details are valid, the check is done before.
+    User();
+    User(std::string username,
+         std::string password,
+         std::string name,
+         std::string surname,
+         std::string adresss,
+         std::string email);
 
-    User(std::string usernam,std::string mp,std::string nam,std::string surnam,std::string adres,std::string email, Coordinate coords);
-
-    //std::string username;
-
-    //std::string name;
-
-   // std::string surname;
-
-    //std::string address;
-
-   // std::string email;
-
-    void set_coordinates(int latitude, int longitude);
-    void set_name(std::string n);
-    void set_username(std::string n);
-    void set_surname(std::string n);
-    void set_email(std::string n);
-    void set_password(std::string n);
-    void set_address(std::string n);
-
-    Coordinate get_coordinates();
-    std::string get_name();
-    std::string get_address();
-    std::string get_password();
-    std::string get_email();
-    std::string get_surname();
     std::string get_username();
+    std::string get_password();
+    std::string get_name();
+    std::string get_surname();
+    std::string get_address();
+    std::string get_email();
+    Coordinate get_coordinates();
 
-private:
+    void set_username(std::string n);
+    void set_password(std::string n);
+    void set_name(std::string n);
+    void set_surname(std::string n);
+    void set_address(std::string n);
+    void set_email(std::string n);
+    void set_coordinates(Coordinate coord);
+
+private:  
+    std::string username;
     std::string password;
-    Coordinate coordinates;
     std::string name;
     std::string surname;
-    std::string username;
-    std::string email;
     std::string address;
+    std::string email;
+    Coordinate coordinates;
 
 };
 
