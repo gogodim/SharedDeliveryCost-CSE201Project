@@ -28,9 +28,9 @@ int main(int argc, char *argv[])
 
     // small test case for match_delivery cost
 
-    User user=User( ("username"),("password"),("name"),("surname"),("address"), ("email"),NY);
+    User user=User();
 
-    list<vector<double>> l;
+    vector<vector<double>> l;
     vector<double> v;
     v.push_back(1);
     v.push_back(10);

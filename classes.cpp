@@ -127,16 +127,16 @@ void User::set_coordinates(Coordinate coordinates){
 
 
 //Company
-Company::Company(std::string name, std::list<std::vector<double>> opts){
+Company::Company(std::string name, std::vector<std::vector<double>> opts){
     this->name = name;
     this->options = opts;
 }
 Company::Company(){
     this->name = "Default Company";
-    this->options = std::list<std::vector<double>>();
+    this->options = std::vector<std::vector<double>>();
 }
 
-void Company::set_options(std::list<std::vector<double>> options){
+void Company::set_options(std::vector<std::vector<double>> options){
     this->options = options;
 }
 void Company::set_name(std::string name){
@@ -190,8 +190,8 @@ std::vector<Bucket> generate_buckets(Order new_order,
 
 double array_of_one_delivery(){ // This function creates the array of all the orders concerned by the delivery, idk how to do it because linked to the database?
     double arr = 0;
-    Coordinate c = order.get_user().get_coordinates()
-    double weight = order.get_delivery_cost() //or get_value()?
+    Coordinate c = order.get_user().get_coordinates();
+    double weight = order.get_delivery_cost(); //or get_value()?
 
 };
 
@@ -199,7 +199,7 @@ double array_of_one_delivery(){ // This function creates the array of all the or
 Coordinate distance_optimization(double array_of_one_delivery()){  //arr has elements of type (lat, lon, weight) and it is the array of all the orders concerned by this delivery
     double lat = 0;
     double lon = 0;
-    for(int i, array_of_one_delivery().size(), i++){
+    for(int i;array_of_one_delivery().size(); i++){
         if(i!=()){
             lat = lat + i[0]*i[2];
             lon = lon + i[1]*i[2];
@@ -257,28 +257,30 @@ Bucket::Bucket(Company company, std::list<Order> content,double cur_amount,doubl
 
 
 void Bucket::add_order(Order order){
-    if(order.get_company().get_name() == company.get_name()){
+    if(order.get_company().name == company.name){
         //bol = True;
         //while(bol==True){
          //   for(command in bucket_content){
           //      if(radius_overlap(command,order)==False){
-         if(radius_overlap(bucket.area,order)){
-             content.append(order);
+         //if(radius_overlap(bucket.area,order)){
+             content.push_back(order);
              cur_cost+= order.get_delivery_cost();
              cur_amount+= order.get_value();
              max_cost= delivery_cost(company,cur_amount);
              if(max_cost==cur_cost){
-                 completion = True;
-             };
-         };
-    };
-};
+                 completion = true;
+             }
+         }
+    }
 
 
 double delivery_cost(Company company,double amount){
-    for(int i, i<=company.options.size, i++){
-        if(amount<company.options[i][0] and amount>company.options[1]){
-            return company.options[2];
+
+    int v=company.options.size();
+
+    for(int i; i<v; i++){
+        if(amount<company.options[i][0] and amount>company.options[i][1]){
+            return company.options[i][2];
         };
     };
 };
