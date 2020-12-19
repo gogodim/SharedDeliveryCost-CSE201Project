@@ -1,34 +1,136 @@
-#include "classes.h"
-#include <math.h>
+# include "classes.h"
+# include <math.h>
+#include <iostream>
+#include <string>
+#include <regex>
 
-Coordinate::Coordinate(double lat, double lo){
 
-latitude=lat;
-longitude=lo;
-
-}
-
+//Coordinate Class
+//Coordinate Constructor
+Coordinate::Coordinate(double latitude,
+                       double longitude){
+    this->latitude = latitude;
+    this->longitude = longitude;
+    }
 Coordinate::Coordinate(){
+    latitude = 0;
+    longitude = 0;
+    }
+//Coordinate, Getters
+    double Coordinate::get_latitude(){
+        return latitude;
+    }
+    double Coordinate::get_longitude(){
+        return longitude;
+    }
+//Coordinate, Setters
+    void Coordinate::set_latitude(double latitude){
+        this->latitude = latitude;
+    }
+    void Coordinate::set_longitude(double longitude){
+        this->longitude = longitude;
+    }
+    void Coordinate::set_coordinate(double latitude,
+                                    double longitude){
+        this->latitude = latitude;
+        this->longitude = longitude;
+    }
 
-latitude=0;
-longitude=0;
-
+Coordinate coordinate_from_address(std::string address){
+    return Coordinate(0, 0);
 }
 
-User::User(std::string username,std::string password,std::string name,std::string surname,std::string address,std::string email,Coordinate coords){
- ;
+//functions necessary for user
+bool check_valid_email(std::string email){
+    return regex_match(email, std::regex("(\\w+)(\\.|_)?(\\w*)@(\\w+)(\\.(\\w+))+"));
 }
 
+bool check_valid_address(std::string address){
+    return true;
+}
+
+Coordinate address_to_coordinates(std::string address){
+    return Coordinate();
+}
+std::string coordinte_to_address(Coordinate coordinate){
+    return "";
+}
+
+//User Constructor
 User::User(){
-    ;
+    username = "Default User";
+    name = "";
+    surname = "";
+    email = "";
+    address = "";
 }
+User::User(std::string username,
+           std::string password,
+           std::string name,
+           std::string surname,
+           std::string address,
+           std::string email){
+    this->username = username;
+    this->name = name;
+    this->surname = surname;
+    this->email = email;
+    this->address = address;
+    this->password = password;
+    set_coordinates(coordinate_from_address(address));
+};
+
+// User, Gettters
+std::string User::get_username(){
+    return username;
+}
+std::string User::get_password(){
+    return password;
+};
+std::string User::get_name(){
+    return name;
+};
+std::string User::get_surname(){
+    return surname;
+};
+std::string User::get_address(){
+    return address;
+};
+std::string User::get_email(){
+    return email;
+};
+Coordinate User::get_coordinates(){
+    return coordinates;
+};
+
+//User, Setters
+void User::set_username(std::string username){
+    this->username = username;
+}
+void User::set_password(std::string password){
+    this->password = password;
+};
+void User::set_name(std::string name){
+    this->name = name;
+};
+void User::set_surname(std::string surname){
+    this->surname = surname;
+};
+void User::set_address(std::string address){
+    this->address = address;
+};
+void User::set_email(std::string email){
+    this->email = email;
+};
+void User::set_coordinates(Coordinate coordinates){
+    this->coordinates = coordinates;
+};
 
 
+//Company
 Company::Company(std::string name, std::list<std::vector<double>> opts){
     this->name = name;
     this->options = opts;
 }
-
 Company::Company(){
     this->name = "Default Company";
     this->options = std::list<std::vector<double>>();
@@ -37,21 +139,9 @@ Company::Company(){
 void Company::set_options(std::list<std::vector<double>> options){
     this->options = options;
 }
-
-void Company::set_name(std::string name)
-{
-	this->name = name; 
+void Company::set_name(std::string name){
+    this->name = name;
 }
-
-bool check_valid_email(std::string email){
-    return true;
-}
-
-bool check_valid_address(std::string address){
-    return true;
-}
-
-
 
 
 Order::Order(User user,
@@ -82,10 +172,45 @@ Order::Order(User user,
         return distance;
     };
 
-Coordinate convert_to_coordinates(std::string address){
 
-    return Coordinate(0,0);
-}
+
+std::vector<Bucket> generate_buckets(Order new_order,
+                                   std::list<Bucket> buckets){
+    std::vector<Bucket> res;
+    std::list<Bucket>::iterator it;
+    for (it = buckets.begin(); it != buckets.end(); it ++){
+        Bucket CurrentBucket = *it;
+        if (CurrentBucket.is_compatible(new_order)){
+            res.push_back(CurrentBucket);
+        }
+    }
+    return res;
+} // generates all valid bucket combinations of existing buckets with new_order
+
+
+double array_of_one_delivery(){ // This function creates the array of all the orders concerned by the delivery, idk how to do it because linked to the database?
+    double arr = 0;
+    Coordinate c = order.get_user().get_coordinates()
+    double weight = order.get_delivery_cost() //or get_value()?
+
+};
+
+
+Coordinate distance_optimization(double array_of_one_delivery()){  //arr has elements of type (lat, lon, weight) and it is the array of all the orders concerned by this delivery
+    double lat = 0;
+    double lon = 0;
+    for(int i, array_of_one_delivery().size(), i++){
+        if(i!=()){
+            lat = lat + i[0]*i[2];
+            lon = lon + i[1]*i[2];
+        };
+
+    };
+    return Coordinate(lat/array_of_one_delivery().size(),lon/array_of_one_delivery().size());
+};
+
+
+
 
 double Coordinate::get_distance(Coordinate other){
 
@@ -106,9 +231,7 @@ double Coordinate::get_distance(Coordinate other){
 
     return distance; // in km
 
-
 }
-
 Bucket::Bucket(){
     company=Company();
     std::list<Order> default_buckets; //empty list
@@ -123,8 +246,8 @@ Bucket::Bucket(){
 Bucket::Bucket(Company company, std::list<Order> content,double cur_amount,double cur_cost,
                double max_cost,bool completion){
 
-    this->company=company;
 
+    this->company=company;
     this->content=content;
     this->completion=completion;
     this->max_cost=max_cost;
@@ -132,6 +255,33 @@ Bucket::Bucket(Company company, std::list<Order> content,double cur_amount,doubl
     this->cur_cost=cur_cost;
 }
 
+
+void Bucket::add_order(Order order){
+    if(order.get_company().get_name() == company.get_name()){
+        //bol = True;
+        //while(bol==True){
+         //   for(command in bucket_content){
+          //      if(radius_overlap(command,order)==False){
+         if(radius_overlap(bucket.area,order)){
+             content.append(order);
+             cur_cost+= order.get_delivery_cost();
+             cur_amount+= order.get_value();
+             max_cost= delivery_cost(company,cur_amount);
+             if(max_cost==cur_cost){
+                 completion = True;
+             };
+         };
+    };
+};
+
+
+double delivery_cost(Company company,double amount){
+    for(int i, i<=company.options.size, i++){
+        if(amount<company.options[i][0] and amount>company.options[1]){
+            return company.options[2];
+        };
+    };
+};
 
 void Bucket::match_delivery_cost(){
 
