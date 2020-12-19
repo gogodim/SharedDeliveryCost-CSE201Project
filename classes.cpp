@@ -19,18 +19,22 @@ User::User(std::string username,std::string password,std::string name,std::strin
  ;
 }
 
+User::User(){
+    ;
+}
 
-Company::Company(std::string name, std::list<std::vector<int>> opts){
+
+Company::Company(std::string name, std::list<std::vector<double>> opts){
     this->name = name;
     this->options = opts;
 }
 
 Company::Company(){
     this->name = "Default Company";
-    this->options = std::list<std::vector<int>>();
+    this->options = std::list<std::vector<double>>();
 }
 
-void Company::set_options(std::list<std::vector<int>> options){
+void Company::set_options(std::list<std::vector<double>> options){
     this->options = options;
 }
 
@@ -50,17 +54,17 @@ bool check_valid_address(std::string address){
 
 
 
-//Order::Order(User user,
-//             Company company,
-//             double value,
-//             double delivery_cost,
-//             double distance){
-//        this->user = user;
-//        this->company = company;
-//        this->value = value;
-//        this->delivery_cost = delivery_cost;
-//        this->distance = distance;
-//}
+Order::Order(User user,
+             Company company,
+             double value,
+             double delivery_cost,
+             double distance){
+        this->user = user;
+        this->company = company;
+        this->value = value;
+        this->delivery_cost = delivery_cost;
+        this->distance = distance;
+}
 
     User Order::get_user(){
         return user;
@@ -106,20 +110,44 @@ double Coordinate::get_distance(Coordinate other){
 }
 
 Bucket::Bucket(){
-    bucket_company="None";
+    company=Company();
     std::list<Order> default_buckets; //empty list
-    bucket_content=default_buckets;
-    bucket_completion=false;
-    bucket_max_cost=0;
-    bucket_cur_amount=0;
-    bucket_cur_cost=0;
+    content=default_buckets;
+    completion=false;
+    max_cost=0;
+    cur_amount=0;
+    cur_cost=0;
 
 }
 
-void Bucket::set_company(std::string company){
+Bucket::Bucket(Company company, std::list<Order> content,double cur_amount,double cur_cost,
+               double max_cost,bool completion){
 
-    bucket_company=company;
+    this->company=company;
+
+    this->content=content;
+    this->completion=completion;
+    this->max_cost=max_cost;
+    this->cur_amount=cur_amount;
+    this->cur_cost=cur_cost;
 }
 
 
+void Bucket::match_delivery_cost(){
 
+    double difference=cur_cost-max_cost;
+
+    if (difference>=0){ //the bucket is overflowing, conditions are met, we just need to redistribute the shared delivery cost
+
+        completion=true;
+        cur_cost-=difference;
+
+        double idv=difference/content.size();
+
+        list<Order>::iterator i;
+
+        for(i=content.begin();i!=content.end(); ++i) {
+            i->delivery_cost-=idv;
+        }
+      }
+}
