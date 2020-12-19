@@ -56,7 +56,6 @@ std::string coordinte_to_address(Coordinate coordinate){
     return "";
 }
 
-
 //User Constructor
 User::User(){
     username = "Default User";
@@ -128,25 +127,21 @@ void User::set_coordinates(Coordinate coordinates){
 
 
 //Company
-Company::Company(std::string name, std::list<std::vector<int>> opts){
+Company::Company(std::string name, std::list<std::vector<double>> opts){
     this->name = name;
     this->options = opts;
 }
 Company::Company(){
     this->name = "Default Company";
-    this->options = std::list<std::vector<int>>();
+    this->options = std::list<std::vector<double>>();
 }
-void Company::set_options(std::list<std::vector<int>> options){
+
+void Company::set_options(std::list<std::vector<double>> options){
     this->options = options;
 }
 void Company::set_name(std::string name){
     this->name = name;
 }
-
-
-
-
-
 
 
 Order::Order(User user,
@@ -196,7 +191,7 @@ std::vector<Bucket> generate_buckets(Order new_order,
 double array_of_one_delivery(){ // This function creates the array of all the orders concerned by the delivery, idk how to do it because linked to the database?
     double arr = 0;
     Coordinate c = order.get_user().get_coordinates()
-    double weight = oder.get_delivery_cost() //or get_value()?
+    double weight = order.get_delivery_cost() //or get_value()?
 
 };
 
@@ -238,38 +233,47 @@ double Coordinate::get_distance(Coordinate other){
 
 }
 Bucket::Bucket(){
-    bucket_company="None";
+    company=Company();
     std::list<Order> default_buckets; //empty list
-    bucket_content=default_buckets;
-    bucket_completion=false;
-    bucket_max_cost=0;
-    bucket_cur_amount=0;
-    bucket_cur_cost=0;
+    content=default_buckets;
+    completion=false;
+    max_cost=0;
+    cur_amount=0;
+    cur_cost=0;
 
 }
 
-void Bucket::set_company(std::string company){
+Bucket::Bucket(Company company, std::list<Order> content,double cur_amount,double cur_cost,
+               double max_cost,bool completion){
 
-    bucket_company=company;
-};
+
+    this->company=company;
+    this->content=content;
+    this->completion=completion;
+    this->max_cost=max_cost;
+    this->cur_amount=cur_amount;
+    this->cur_cost=cur_cost;
+}
+
 
 void Bucket::add_order(Order order){
-    if(order.get_company().get_name() == bucket_company){
+    if(order.get_company().get_name() == company.get_name()){
         //bol = True;
         //while(bol==True){
          //   for(command in bucket_content){
           //      if(radius_overlap(command,order)==False){
          if(radius_overlap(bucket.area,order)){
-             bucket_content.append(order);
-             bucket_cur_cost+= order.get_delivery_cost();
-             bucket_cur_amount+= order.get_value();
-             bucket_max_cost= delivery_cost(bucket_company,bucket_cur_amount);
-             if(bucket_max_cost==bucket_cur_cost){
-                 bucket_completion = True;
+             content.append(order);
+             cur_cost+= order.get_delivery_cost();
+             cur_amount+= order.get_value();
+             max_cost= delivery_cost(company,cur_amount);
+             if(max_cost==cur_cost){
+                 completion = True;
              };
          };
     };
 };
+
 
 double delivery_cost(Company company,double amount){
     for(int i, i<=company.options.size, i++){
@@ -279,4 +283,21 @@ double delivery_cost(Company company,double amount){
     };
 };
 
+void Bucket::match_delivery_cost(){
 
+    double difference=cur_cost-max_cost;
+
+    if (difference>=0){ //the bucket is overflowing, conditions are met, we just need to redistribute the shared delivery cost
+
+        completion=true;
+        cur_cost-=difference;
+
+        double idv=difference/content.size();
+
+        list<Order>::iterator i;
+
+        for(i=content.begin();i!=content.end(); ++i) {
+            i->delivery_cost-=idv;
+        }
+      }
+}
