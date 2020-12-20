@@ -1,16 +1,56 @@
-#include <Wt/WApplication.h>
+/*#include <Wt/WApplication.h>
+#include <Wt/WBreak.h>
+#include <Wt/WContainerWidget.h>
+#include <Wt/WLineEdit.h>
+#include <Wt/WPushButton.h>
+#include <Wt/WText.h>
+
+class HelloApplication : public Wt::WApplication
+{
+public:
+    HelloApplication(const Wt::WEnvironment& env);
+
+private:
+    Wt::WLineEdit *nameEdit_;
+    Wt::WText *greeting_;
+};
+
+HelloApplication::HelloApplication(const Wt::WEnvironment& env)
+    : Wt::WApplication(env)
+{
+    setTitle("Hello world");
+
+    root()->addWidget(std::make_unique<Wt::WText>("Your name, please? "));
+    nameEdit_ = root()->addWidget(std::make_unique<Wt::WLineEdit>());
+    Wt::WPushButton *button = root()->addWidget(std::make_unique<Wt::WPushButton>("Greet me."));
+    root()->addWidget(std::make_unique<Wt::WBreak>());
+    greeting_ = root()->addWidget(std::make_unique<Wt::WText>());
+    auto greet = [this]{
+      greeting_->setText("Hello there, " + nameEdit_->text());
+    };
+    button->clicked().connect(greet);
+}
+
+int main(int argc, char **argv)
+{
+    return Wt::WRun(argc, argv, [](const Wt::WEnvironment& env) {
+      return std::make_unique<HelloApplication>(env);
+    });
+}
+*/
+/*#include <Wt/WApplication.h>
 #include <Wt/WServer.h>
 #include <iostream>
 
 #include "OrderPage.h"
-#include "Session.h"
+//#include "Session.h"
 
 using namespace Wt;
 
 // Create a New Application/Page of Web
 std::unique_ptr<WApplication> createApplication(const WEnvironment& env){
     auto app = cpp14::make_unique<WApplication>(env);
-    
+
     //Load needy string from ResourceBundle
     app->setTitle("Shared Delivery Cost");
     app->messageResourceBundle().use(app->docRoot() + "\\" + "string");
@@ -35,4 +75,4 @@ int main(int argc, char** argv){
     } catch (std::exception &e){
         std::cerr << "exception: " << e.what() << std::endl;
     }
-}
+}*/
