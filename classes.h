@@ -72,15 +72,14 @@ public:
     // list of vectors of doubles, each vector of the form:
     // ( minimum amount to pay, maximum amount, delivery fee for amounts in the interval [min_amount, max_mount])
 
-    Company(string name, list<vector<double>> opts);
+    Company(string name, vector<vector<double>> opts);
     Company();
-    void set_options(list<vector<double>> options);
+    void set_options(vector<vector<double>> options);
     void set_name(string name);
-private:
+//private:
     string name;
 
-    list<vector<double>> options;
-
+    vector<vector<double>> options;
 
 };
 
@@ -96,6 +95,9 @@ public:
     double get_value();
     double get_delivery_cost();
     double get_distance();
+    bool operator==(Order other);
+
+
 //private:
     User user;
     Company company;
@@ -110,8 +112,11 @@ bool check_valid_email(std::string email);
 bool check_valid_address(std::string address);
 
 Coordinate convert_to_coordinates(std::string address);
+
 double array_of_one_delivery();
+
 Coordinate distance_optimization(double array);
+
 Coordinate convert_to_coordinates(std::string address);
 
 
@@ -122,10 +127,59 @@ public:
     bool is_compatible(Order order);
     void add_order(Order order); // adds valid order in bucket_content and updates all data members accordingly
     void match_delivery_cost();//Checks if the contribution of delivery cost of the new order doesn't overflow the max_cost, and distribute the cost
-                                         // Function is applied after the order has been added to the bucket, to redistribute the cost in the case of an overflow
-                                         //and update the bucket completion
+                               // Function is applied after the order has been added to the bucket, to redistribute the cost in the case of an overflow
+                              //and update the bucket completion
+
+    // functions to modify bucket content
+    void append_to_content(Order order){
+        content.push_back(order);
+    }
+    void find_and_remove(Order order);
+
+    //setters
+
+    void set_company(Company comp){
+        company=comp;
+    }
+    void set_completion(bool b){
+        completion=b;
+    }
+    void set_max_cost(double v){
+        max_cost=v;
+    }
+    void set_cur_cost(double v){
+        cur_cost=v;
+    }
+    void set_cur_amount(double v){
+        cur_amount=v;
+    }
+
+    //getters
+
+    std::list<Order> get_content(){
+        return content;
+    }
+    Company get_company(){
+        return company;
+    }
+    bool get_completion(){
+
+        return completion;
+    }
+    double get_max_cost(){
+        return max_cost;
+    }
+    double get_cur_cost(){
+
+        return cur_cost;
+    }
+    double get_cur_amount(){
+
+        return cur_amount;
+    }
+
 private:
-    void set_company(std::string company);
+
     Company company; // company of the bucket (in one bucket, there can only be one company)
     std::list<Order> content; // list of orders in the bucket
     double cur_amount; // total amount paid for all orders in the bucket
@@ -135,9 +189,12 @@ private:
 
 };
 
+
 std::vector<Bucket> generate_buckets(Order new_order,std::list<Bucket> buckets); // generates all valid bucket combinations of existing buckets with new_order
 
 bool radius_overlap(Order order1, Order order2); // True if there exists a common area between two orders/users
 
 double delivery_cost(Company company,double amount);
+
+
 

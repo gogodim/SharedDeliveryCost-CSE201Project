@@ -5,7 +5,10 @@
 #include <regex>
 
 
-//Coordinate Class
+
+//---------Coordinate-----------
+
+
 //Coordinate Constructor
 Coordinate::Coordinate(double latitude,
                        double longitude){
@@ -40,6 +43,38 @@ Coordinate coordinate_from_address(std::string address){
     return Coordinate(0, 0);
 }
 
+
+Coordinate address_to_coordinates(std::string address){
+    return Coordinate();
+}
+std::string coordinate_to_address(Coordinate coordinate){
+    return "";
+}
+
+double Coordinate::get_distance(Coordinate other){
+
+    const int R=6371; //radius of the earth in km
+    const double PI=3.14159265358;
+    // all angles converted to radians
+    double lat1=latitude*PI/180;
+    double lon1=longitude*PI/180;
+    double lat2=other.latitude*PI/180;
+    double lon2=other.longitude*PI/180;
+
+    double latDist = (lat2 - lat1);
+    double lonDist =(lon2 - lon1);
+
+    double a = sin(latDist/2) * sin(latDist/2) + cos(lat1) * cos(lat2)* sin(lonDist / 2) * sin(lonDist / 2);
+    double c = 2 * atan2(sqrt(a), sqrt(1 - a));
+    double distance = R * c;
+
+    return distance; // in km
+
+}
+
+
+//---------User-----------
+
 //functions necessary for user
 bool check_valid_email(std::string email){
     return regex_match(email, std::regex("(\\w+)(\\.|_)?(\\w*)@(\\w+)(\\.(\\w+))+"));
@@ -47,13 +82,6 @@ bool check_valid_email(std::string email){
 
 bool check_valid_address(std::string address){
     return true;
-}
-
-Coordinate address_to_coordinates(std::string address){
-    return Coordinate();
-}
-std::string coordinte_to_address(Coordinate coordinate){
-    return "";
 }
 
 //User Constructor
@@ -126,22 +154,25 @@ void User::set_coordinates(Coordinate coordinates){
 };
 
 
-//Company
-Company::Company(std::string name, std::list<std::vector<double>> opts){
+//---------Company-----------
+
+Company::Company(std::string name, std::vector<std::vector<double>> opts){
     this->name = name;
     this->options = opts;
 }
 Company::Company(){
     this->name = "Default Company";
-    this->options = std::list<std::vector<double>>();
+    this->options = std::vector<std::vector<double>>();
 }
 
-void Company::set_options(std::list<std::vector<double>> options){
+void Company::set_options(std::vector<std::vector<double>> options){
     this->options = options;
 }
 void Company::set_name(std::string name){
     this->name = name;
 }
+
+//---------Order-----------
 
 
 Order::Order(User user,
@@ -154,6 +185,26 @@ Order::Order(User user,
         this->value = value;
         this->delivery_cost = delivery_cost;
         this->distance = distance;
+}
+
+bool Order::operator==(Order other){ // we assume orders are equal when the user's identity and company choice are the same
+                                    // we assume the user will always group his orders for one company in a single order
+
+    //name_comparison
+    std::string name=user.get_username();
+    std::string other_name=other.user.get_username();
+
+    bool a=(name==other_name);
+
+    //company_comparison
+
+    std::string comp=company.name;
+    std::string other_comp=other.company.name;
+
+    bool b=(comp==other_comp);
+
+    return a&&b;
+
 }
 
     User Order::get_user(){
@@ -174,64 +225,8 @@ Order::Order(User user,
 
 
 
-std::vector<Bucket> generate_buckets(Order new_order,
-                                   std::list<Bucket> buckets){
-    std::vector<Bucket> res;
-    std::list<Bucket>::iterator it;
-    for (it = buckets.begin(); it != buckets.end(); it ++){
-        Bucket CurrentBucket = *it;
-        if (CurrentBucket.is_compatible(new_order)){
-            res.push_back(CurrentBucket);
-        }
-    }
-    return res;
-} // generates all valid bucket combinations of existing buckets with new_order
+//---------Bucket-----------
 
-
-double array_of_one_delivery(){ // This function creates the array of all the orders concerned by the delivery, idk how to do it because linked to the database?
-    double arr = 0;
-    Coordinate c = order.get_user().get_coordinates()
-    double weight = order.get_delivery_cost() //or get_value()?
-
-};
-
-
-Coordinate distance_optimization(double array_of_one_delivery()){  //arr has elements of type (lat, lon, weight) and it is the array of all the orders concerned by this delivery
-    double lat = 0;
-    double lon = 0;
-    for(int i, array_of_one_delivery().size(), i++){
-        if(i!=()){
-            lat = lat + i[0]*i[2];
-            lon = lon + i[1]*i[2];
-        };
-
-    };
-    return Coordinate(lat/array_of_one_delivery().size(),lon/array_of_one_delivery().size());
-};
-
-
-
-
-double Coordinate::get_distance(Coordinate other){
-
-    const int R=6371; //radius of the earth in km
-    const double PI=3.14159265358;
-    // all angles converted to radians
-    double lat1=latitude*PI/180;
-    double lon1=longitude*PI/180;
-    double lat2=other.latitude*PI/180;
-    double lon2=other.longitude*PI/180;
-
-    double latDist = (lat2 - lat1);
-    double lonDist =(lon2 - lon1);
-
-    double a = sin(latDist/2) * sin(latDist/2) + cos(lat1) * cos(lat2)* sin(lonDist / 2) * sin(lonDist / 2);
-    double c = 2 * atan2(sqrt(a), sqrt(1 - a));
-    double distance = R * c;
-
-    return distance; // in km
-
-}
 Bucket::Bucket(){
     company=Company();
     std::list<Order> default_buckets; //empty list
@@ -255,33 +250,84 @@ Bucket::Bucket(Company company, std::list<Order> content,double cur_amount,doubl
     this->cur_cost=cur_cost;
 }
 
+void Bucket::find_and_remove(Order order){ //find an order equal to the input order and removes it from the bucket
+
+    std::list<Order>::iterator i;
+    std::list<Order>::iterator final;
+
+    bool found=false;
+
+    for(i=content.begin();i!=content.end();i++){
+
+        if (*i==order){
+            final=i;
+            found=true;
+            content.erase(final);
+            break;
+        }
+    }
+
+    if (found==true){ // if the order is removed, update all bucket data members
+
+        double new_amnt=cur_amount-order.get_value();
+        double new_cost=cur_cost-order.get_delivery_cost();
+        double new_max=delivery_cost(company,new_amnt);
+
+        cur_amount=new_amnt;
+        cur_cost=new_cost;
+        max_cost=new_max;
+
+        //match_delivery_cost(); //update bucket completion or redistribute delivery costs if necessary
+    }
+}
+
 
 void Bucket::add_order(Order order){
-    if(order.get_company().get_name() == company.get_name()){
+
+    if(order.get_company().name == company.name){
         //bol = True;
         //while(bol==True){
          //   for(command in bucket_content){
           //      if(radius_overlap(command,order)==False){
-         if(radius_overlap(bucket.area,order)){
-             content.append(order);
+         //if(radius_overlap(bucket.area,order)){
+             content.push_back(order);
              cur_cost+= order.get_delivery_cost();
              cur_amount+= order.get_value();
              max_cost= delivery_cost(company,cur_amount);
-             if(max_cost==cur_cost){
-                 completion = True;
-             };
-         };
-    };
-};
+             match_delivery_cost(); // update the completion state and delivery costs of each user
+             }
+         }
+
+bool  Bucket::is_compatible(Order order){
+    return true;
+}
+
+std::vector<Bucket> generate_buckets(Order new_order,
+                                   std::list<Bucket> buckets){
+    std::vector<Bucket> res;
+    std::list<Bucket>::iterator it;
+    for (it = buckets.begin(); it != buckets.end(); it ++){
+        Bucket CurrentBucket = *it;
+        if (CurrentBucket.is_compatible(new_order)){
+            res.push_back(CurrentBucket);
+        }
+    }
+    return res;
+} // generates all valid bucket combinations of existing buckets with new_order
 
 
 double delivery_cost(Company company,double amount){
-    for(int i, i<=company.options.size, i++){
-        if(amount<company.options[i][0] and amount>company.options[1]){
-            return company.options[2];
-        };
-    };
-};
+
+    int v=company.options.size();
+
+    for(int i=0; i<v; i++){
+        if(amount<company.options[i][0] and amount>company.options[i][1]){
+            return company.options[i][2];
+        }
+    }
+
+    return 0;
+}
 
 void Bucket::match_delivery_cost(){
 
@@ -301,3 +347,24 @@ void Bucket::match_delivery_cost(){
         }
       }
 }
+
+double array_of_one_delivery(){ // This function creates the array of all the orders concerned by the delivery, idk how to do it because linked to the database?
+    double arr = 0;
+    Coordinate c = order.get_user().get_coordinates();
+    double weight = order.get_delivery_cost(); //or get_value()?
+
+};
+
+
+Coordinate distance_optimization(double array_of_one_delivery()){  //arr has elements of type (lat, lon, weight) and it is the array of all the orders concerned by this delivery
+    double lat = 0;
+    double lon = 0;
+    for(int i;array_of_one_delivery().size(); i++){
+        if(i!=()){
+            lat = lat + i[0]*i[2];
+            lon = lon + i[1]*i[2];
+        };
+
+    };
+    return Coordinate(lat/array_of_one_delivery().size(),lon/array_of_one_delivery().size());
+};

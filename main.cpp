@@ -28,9 +28,9 @@ int main(int argc, char *argv[])
 
     // small test case for match_delivery cost
 
-    User user=User( ("username"),("password"),("name"),("surname"),("address"), ("email"),NY);
+    User user=User();
 
-    list<vector<double>> l;
+    vector<vector<double>> l;
     vector<double> v;
     v.push_back(1);
     v.push_back(10);
@@ -55,9 +55,44 @@ int main(int argc, char *argv[])
 
     buc.match_delivery_cost();
 
+    //test for removing and finding
+
+    list<int> content;
+    int a=2;
+    int b=3;
+    int d=1;
+
+    int val=1;
+
+    content.push_back(a);
+    content.push_back(b);
+    content.push_back(d);
+
+    std::list<int>::iterator i;
+    std::list<int>::iterator final;
+
+    cout<<"Before deletion, list size:"<<content.size()<<"\n";
+
+    for(i=content.begin();i!=content.end();i++){
+
+        if (*i==val){
+             final=i;
+             content.erase(final);
+             break;
+            }
+        }
+
+
+        for(i=content.begin();i!=content.end();i++){
+            cout<<*i<<"\n";
+            }
+
+    cout<<"After deletion, list size:"<<content.size()<<"\n";
+
+
     cout<< "Test for computing distance, distance between NY and Tokyo : " << distance << " km \n";
 
-    cout <<"Test for match_delivery cost: completion state=" << buc.completion;
+    cout <<"Test for match_delivery cost: completion state=" << buc.get_completion() <<"\n";
 
     //return a.exec();
 }
