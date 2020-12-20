@@ -1,0 +1,5 @@
+This week I implemented simple functions for the optimization such as match_delivery_cost() 
+(for re-distributing shared delivery costs and completing a bucket) and find_and_remove(order) (for deleting an order in buckets).
+
+Next week, I will start laying out the main optimization function structure, linking everything together,
+especially the willingness radius intersection, and checking the consistency of the classes and functions with respect to the execution of the algorithm.
