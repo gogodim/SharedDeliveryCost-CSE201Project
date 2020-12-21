@@ -7,10 +7,11 @@ DBO_INSTANTIATE_TEMPLATES(Notification);
 
 using namespace Wt::Dbo;
 
-Notification::Notification(int userID1, int orderID1,double costShare1,std::string deliveryLocation1,std::vector< std::pair < std::pair <std::string,std::string> , int> > otherOrders1){
-    userID = userID1;
-    orderID = orderID1;
-    costShare = costShare1;
-    deliveryLocation = deliveryLocation1;
-    otherOrders = otherOrders1;
+Notification::Notification(){
+    userID = 123;
+    orderID = 123;
+    costShare = 123;
+    deliveryLocation = "123";
+    //std::vector< std::pair < std::pair <std::string,std::string> , int > > vect;
+    otherOrders = "123";
 }

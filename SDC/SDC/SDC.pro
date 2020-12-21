@@ -4,6 +4,7 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
+        NotificationWidget.cpp \
         Session.cpp \
         main.cpp \
         notification.cpp
@@ -32,5 +33,6 @@ LIBS += -LC:/Qt/Tools/mingw730_32/i686-w64-mingw32/lib \
                 -llibwsock32
 
 HEADERS += \
+    NotificationWidget.h \
     Session.h \
     notification.h

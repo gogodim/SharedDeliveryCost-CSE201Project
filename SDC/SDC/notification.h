@@ -15,17 +15,19 @@ using namespace Wt;
 namespace dbo = Wt::Dbo;
 
 class Notification;
+typedef dbo::collection< dbo::ptr<Notification> > Notifications;
 
 class Notification
 {
 public:
-  Notification(int userID, int orderID,double costShare,std::string deliveryLocation,std::vector< std::pair < std::pair <std::string,std::string> , int> > otherOrders);
+  Notification();
 
   int userID; /* The userID of the user for which the notification is dedicated */
   int orderID;
   double costShare;
   std::string deliveryLocation;
-  std::vector< std::pair < std::pair <std::string,std::string> , int> > otherOrders;
+  //std::vector< std::pair < std::pair <std::string,std::string> , int> > otherOrders;
+  std::string otherOrders;
 
   template<class Action>
   void persist(Action& a)

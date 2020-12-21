@@ -1,3 +1,48 @@
+/*
+ * Copyright (C) 2011 Emweb bv, Herent, Belgium
+ *
+ * See the LICENSE file for terms of use.
+ */
+
+#include <Wt/WApplication.h>
+#include <Wt/WServer.h>
+
+#include "NotificationWidget.h"
+#include "Session.h"
+
+using namespace Wt;
+
+class NotificationWidget;
+
+std::unique_ptr<WApplication> createApplication(const WEnvironment& env)
+{
+  auto app = cpp14::make_unique<WApplication>(env);
+  Session session;
+  session.addNotification(111,1111,10.1,"Doma  ","otherOrders");
+  session.addNotification(111,1111,10.1,"Doma2  ","otherOrders2");
+
+  app->setTitle("Notification");
+  app->root()->addWidget(cpp14::make_unique<NotificationWidget>(2,&session));
+
+  return app;
+}
+
+int main(int argc, char **argv)
+{
+  try {
+    WServer server(argc, argv, WTHTTP_CONFIGURATION);
+
+    server.addEntryPoint(EntryPointType::Application, createApplication);
+
+    server.run();
+  } catch (WServer::Exception& e) {
+    std::cerr << e.what() << std::endl;
+  } catch (std::exception &e) {
+    std::cerr << "exception: " << e.what() << std::endl;
+  }
+}
+
+
 /*#include <Wt/WApplication.h>
 #include <Wt/WBreak.h>
 #include <Wt/WContainerWidget.h>

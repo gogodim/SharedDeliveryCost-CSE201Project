@@ -1,4 +1,5 @@
 #include "Session.h"
+#include "notification.h"
 
 #include <Wt/WApplication.h>
 #include <Wt/WLogger.h>
@@ -47,11 +48,11 @@ class UnixCryptHashFunction : public Auth::HashFunction
 
 Session::Session()
 {
-  auto sqlite3 = cpp14::make_unique<Dbo::backend::Sqlite3>(WApplication::instance()->appRoot() + "hangman.db");
+  auto sqlite3 = cpp14::make_unique<Dbo::backend::Sqlite3>(WApplication::instance()->appRoot() + "notification.db");
   sqlite3->setProperty("show-queries", "true");
   session_.setConnection(std::move(sqlite3));
 
-  session_.mapClass<Notification>("notification");
+  session_.mapClass<Notification>("Notification");
 
   dbo::Transaction transaction(session_);
   try {
@@ -73,9 +74,38 @@ dbo::ptr<Notification> Session::notification() const
     return dbo::ptr<Notification>();
 }
 
+std::vector<Notification> Session::readNotifications()
+{
+    dbo::Transaction transaction(session_);
+    std::vector<Notification> result;
+    //std::vector<User> result;
+
+    Notifications temp = session_.find<Notification>();
+
+    for (Notifications::const_iterator i = temp.begin(); i != temp.end(); ++i) {
+      dbo::ptr<Notification> notification = *i;
+      result.push_back(*notification);
+    }
+
+    transaction.commit();
+
+    return result;
+}
 
 
 
+void Session::addNotification(int userID1,int orderID1,double costShare1,std::string deliveryLocation1,std::string otherOrders1)
+{
+    dbo::Transaction transaction(session_);
 
+    std::unique_ptr<Notification> notification{new Notification()};
+    notification->costShare = costShare1;
+    notification->deliveryLocation = deliveryLocation1;
+    notification->orderID = orderID1;
+    notification->otherOrders = otherOrders1;
+    notification->userID = userID1;
+    dbo::ptr<Notification> temp = session_.add(std::move(notification));
+
+}
 
 
