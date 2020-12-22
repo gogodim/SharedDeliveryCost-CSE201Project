@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <regex>
+#include <algorithm>
 
 
 
@@ -42,7 +43,6 @@ Coordinate::Coordinate(){
 Coordinate coordinate_from_address(std::string address){
     return Coordinate(0, 0);
 }
-
 
 Coordinate address_to_coordinates(std::string address){
     return Coordinate();
@@ -277,10 +277,39 @@ void Bucket::find_and_remove(Order order){ //find an order equal to the input or
         cur_cost=new_cost;
         max_cost=new_max;
 
-        //match_delivery_cost(); //update bucket completion or redistribute delivery costs if necessary
     }
 }
 
+void Bucket::update_parameters(Order order){ //updates bucket parameters after deletion of the input order "order", the deletion is already done (bucket content updated)
+
+    double new_amnt=cur_amount-order.get_value();
+    double new_cost=cur_cost-order.get_delivery_cost();
+    double new_max=delivery_cost(company,new_amnt);
+
+    cur_amount=new_amnt;
+    cur_cost=new_cost;
+    max_cost=new_max;
+
+}
+
+void Bucket::find_and_remove_order_list(list<Order> orders){
+
+    list<Order>::iterator i;
+    list<Order>::iterator s;
+
+    for (i=orders.begin();i!=orders.end();i++){
+        Order ord=*i;
+        s=std::find(content.begin(), content.end(), ord); // return iterator at position of ord in content of bucket
+
+    if (s != content.end()){ //true if ord has been found in bucket content
+
+           content.erase(s); //remove the order in the bucket content
+           update_parameters(ord); //update data members of bucket after removal
+
+        }
+    }
+
+}
 
 void Bucket::add_order(Order order){
 

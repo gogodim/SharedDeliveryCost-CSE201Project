@@ -134,7 +134,9 @@ public:
     void append_to_content(Order order){
         content.push_back(order);
     }
-    void find_and_remove(Order order);
+    void find_and_remove(Order order); //find an order equal to the input order and removes it from the bucket
+    void find_and_remove_order_list(list<Order> orders); // remove elements in bucket content that belong to the input list "orders"
+    void update_parameters(Order order); // update bucket params after removal of input order "order" (the removal is done prior to the function call)
 
     //setters
 
