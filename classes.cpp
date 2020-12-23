@@ -304,7 +304,7 @@ void Bucket::find_and_remove_order_list(list<Order> orders){
     if (s != content.end()){ //true if ord has been found in bucket content
 
            content.erase(s); //remove the order in the bucket content
-           update_parameters(ord); //update data members of bucket after removal
+           update_parameters(ord); //update data members of bucket after removal of order
 
         }
     }
@@ -331,18 +331,24 @@ bool  Bucket::is_compatible(Order order){
     return true;
 }
 
-std::vector<Bucket> generate_buckets(Order new_order,
-                                   std::list<Bucket> buckets){
-    std::vector<Bucket> res;
-    std::list<Bucket>::iterator it;
+Bucket copy(Bucket other){ // crates a clone of the input Bucket
+
+    return Bucket( other.get_company(), other.get_content(),other.get_cur_amount(),other.get_cur_cost(),other.get_max_cost(), other.get_completion());
+}
+
+list<Bucket> generate_buckets(Order new_order,list<Bucket> buckets){ // generates all valid bucket combinations of existing buckets with new_order
+
+    list<Bucket> res;
+    list<Bucket>::iterator it;
     for (it = buckets.begin(); it != buckets.end(); it ++){
         Bucket CurrentBucket = *it;
         if (CurrentBucket.is_compatible(new_order)){
+            CurrentBucket.add_order(new_order);
             res.push_back(CurrentBucket);
         }
     }
     return res;
-} // generates all valid bucket combinations of existing buckets with new_order
+}
 
 
 double delivery_cost(Company company,double amount){
@@ -397,3 +403,76 @@ Coordinate distance_optimization(double array_of_one_delivery()){  //arr has ele
     };
     return Coordinate(lat/array_of_one_delivery().size(),lon/array_of_one_delivery().size());
 };
+
+bool compare(Bucket b1,Bucket b2){ // comparing buckets for sorting in the bucket list, "b1<b2" <=> "b1 has content length greater than b2"
+
+    list<Order> c1=b1.get_content();
+    list<Order> c2=b2.get_content();
+
+    int l1=c1.size();
+    int l2=c2.size();
+
+    if (l1>l2){
+
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
+
+tuple<bool,Bucket,list<Bucket>> processOrder(list<Bucket> bucket_list, Order new_order){
+
+
+    std::list<Bucket> buckets_to_inspect=generate_buckets(new_order, bucket_list); // generate list of buckets that can satisfy the optimization problem
+                                                                                    // these new buckets are the only interesting ones to look at, the other ones can't be complete
+
+    buckets_to_inspect.sort(compare);//sort bucket_list in decreasing order of length
+
+    std::list<Bucket>::iterator i;
+
+    Bucket optimal_buc;// will store the optimal bucket, if found
+
+    bool found=false;
+
+    for (i=buckets_to_inspect.begin();i!=buckets_to_inspect.end();i++){
+        Bucket buc=*i;
+        if (buc.get_completion()){ //take first completed bucket
+            optimal_buc=buc;
+            found=true;
+            break;
+        }
+    }
+
+    //removing orders in optimal_buc in all buckets in bucket list
+
+    tuple<bool,Bucket,list<Bucket>> tpl; //tpl is a tuple that will contain the final output
+
+    list<Order> orders_to_remove=optimal_buc.get_content();
+
+    if (found==true){ // if an optimal bucket was found, there are orders to delete
+
+     list<Bucket> new_bucket_list;
+
+    for (i=bucket_list.begin();i!=bucket_list.end();i++){
+        Bucket buc=*i;
+        buc.find_and_remove_order_list(orders_to_remove);
+        if (buc.get_content().size()>0){
+            new_bucket_list.push_back(buc);
+        }
+
+     }
+
+    tpl=make_tuple(true,optimal_buc,new_bucket_list);
+  }
+
+   else{
+
+     tpl=make_tuple(false,optimal_buc,bucket_list);
+
+    }
+
+    return tpl;
+}
+
