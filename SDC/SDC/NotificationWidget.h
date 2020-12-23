@@ -3,15 +3,17 @@
 #include <vector>
 #include <Wt/WContainerWidget.h>
 #include <Wt/WTable.h>
+#include <Wt/WPushButton.h>
+
 
 class Session;
 class Notification;
 
 
-class NotificationWidget: public Wt::WContainerWidget
+class NotificationTable: public Wt::WContainerWidget
 {
 public:
-  NotificationWidget(const int &userID,Session *session);
+  NotificationTable(const int &userID,Session *session);
 
   //Wt::Signal<int>& scoreUpdated() { return scoreUpdated_; }
 
@@ -24,5 +26,24 @@ private:
   void addToTable(Notification newNotification);
   void reloadTable();
 };
+
+class NotificationWidget: public Wt::WContainerWidget
+{
+public:
+  NotificationWidget(const int &userID,Session *session);
+
+  //Wt::Signal<int>& scoreUpdated() { return scoreUpdated_; }
+
+private:
+  Wt::WContainerWidget              *container_;
+  Wt::WPushButton                   *button_;
+  NotificationTable                 *Ntable_;
+  bool                               showed;
+  void showHide();
+
+  Session *session_;
+};
+
+
 
 #endif // NOTIFICATIONWIDGET_H

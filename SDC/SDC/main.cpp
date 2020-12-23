@@ -1,9 +1,3 @@
-/*
- * Copyright (C) 2011 Emweb bv, Herent, Belgium
- *
- * See the LICENSE file for terms of use.
- */
-
 #include <Wt/WApplication.h>
 #include <Wt/WServer.h>
 
@@ -19,10 +13,11 @@ std::unique_ptr<WApplication> createApplication(const WEnvironment& env)
   auto app = cpp14::make_unique<WApplication>(env);
   Session session;
   session.addNotification(111,1111,10.1,"Doma  ","otherOrders");
-  session.addNotification(111,1111,10.1,"Doma2  ","otherOrders2");
+  session.addNotification(112,1111,10.1,"Doma2  ","otherOrders2Additionaldescription");
 
   app->setTitle("Notification");
-  app->root()->addWidget(cpp14::make_unique<NotificationWidget>(2,&session));
+  app->useStyleSheet("CSS/style.css");
+  app->root()->addWidget(cpp14::make_unique<NotificationWidget>(112,&session));
 
   return app;
 }

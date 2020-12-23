@@ -74,11 +74,10 @@ dbo::ptr<Notification> Session::notification() const
     return dbo::ptr<Notification>();
 }
 
-std::vector<Notification> Session::readNotifications()
+std::vector<Notification> Session::readAllNotifications()
 {
     dbo::Transaction transaction(session_);
     std::vector<Notification> result;
-    //std::vector<User> result;
 
     Notifications temp = session_.find<Notification>();
 
@@ -91,7 +90,6 @@ std::vector<Notification> Session::readNotifications()
 
     return result;
 }
-
 
 
 void Session::addNotification(int userID1,int orderID1,double costShare1,std::string deliveryLocation1,std::string otherOrders1)

@@ -17,7 +17,7 @@ class Session
 public:
   Session();
   ~Session();
-  std::vector<Notification> readNotifications();
+  std::vector<Notification> readAllNotifications();
   void addNotification(int userID,int orderID,double costShare,std::string deliveryLocation,std::string otherOrders);
 private:
   mutable Dbo::Session session_;

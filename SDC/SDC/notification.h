@@ -32,6 +32,7 @@ public:
   template<class Action>
   void persist(Action& a)
   {
+    dbo::field(a, userID, "userID");
     dbo::field(a, orderID, "orderID");
     dbo::field(a, costShare, "costShare");
     dbo::field(a, deliveryLocation, "deliveryLocation");

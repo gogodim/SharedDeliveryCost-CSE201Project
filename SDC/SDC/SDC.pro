@@ -36,3 +36,6 @@ HEADERS += \
     NotificationWidget.h \
     Session.h \
     notification.h
+
+DISTFILES += \
+    CSS/style.css
