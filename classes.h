@@ -191,12 +191,17 @@ private:
 
 };
 
+Bucket copy(Bucket other);
 
-std::vector<Bucket> generate_buckets(Order new_order,std::list<Bucket> buckets); // generates all valid bucket combinations of existing buckets with new_order
+std::list<Bucket> generate_buckets(Order new_order,list<Bucket> buckets); // generates all valid bucket combinations of existing buckets with new_order
 
 bool radius_overlap(Order order1, Order order2); // True if there exists a common area between two orders/users
 
-double delivery_cost(Company company,double amount);
+double delivery_cost(Company company,double amount); // returns the delivery cost associated to an order amount, given a company
 
-
+tuple<bool,list<Bucket>> processOrder(vector<Company> companyList, vector<Bucket> bucketList, Order newOrder);
+// final optimization function, returns a triple of the form (found, optimal_buc,updated_bucket_list)
+// found==true if an optimization bundle exists,
+// optimal_buc is the bucket grouping orders satifying this optimization (it could be empty)
+// updated_bucket_list is the bucket_list obtained after removing orders of optimal_buc from buckets of bucket_list
 
