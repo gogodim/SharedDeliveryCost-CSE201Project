@@ -336,15 +336,19 @@ Bucket copy(Bucket other){ // crates a clone of the input Bucket
     return Bucket( other.get_company(), other.get_content(),other.get_cur_amount(),other.get_cur_cost(),other.get_max_cost(), other.get_completion());
 }
 
-list<Bucket> generate_buckets(Order new_order,list<Bucket> buckets){ // generates all valid bucket combinations of existing buckets with new_order
+list<Bucket> generate_buckets(Order new_order,list<Bucket>& buckets){ // generates all valid bucket combinations of existing buckets with new_order
 
-    list<Bucket> res;
+    list<Bucket> res; // res will contain new combinations of buckets with new_order
     list<Bucket>::iterator it;
     for (it = buckets.begin(); it != buckets.end(); it ++){
         Bucket CurrentBucket = *it;
         if (CurrentBucket.is_compatible(new_order)){
-            CurrentBucket.add_order(new_order);
-            res.push_back(CurrentBucket);
+
+            Bucket NewBucket=copy(CurrentBucket);// copy the current bucket and add the new_order to the copy
+            NewBucket.add_order(new_order);
+
+            buckets.push_back(NewBucket); // update bucket list with the new combination
+            res.push_back(NewBucket); // add the combination to res
         }
     }
     return res;
