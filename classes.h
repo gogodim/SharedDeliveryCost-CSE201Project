@@ -72,14 +72,13 @@ public:
     // list of vectors of doubles, each vector of the form:
     // ( minimum amount to pay, maximum amount, delivery fee for amounts in the interval [min_amount, max_mount])
 
-    Company(string name, vector<vector<double>> opts);
+    Company(string name, vector<vector<double> > opts);
     Company();
-    void set_options(vector<vector<double>> options);
+    void set_options(vector<vector<double> > options);
     void set_name(string name);
 //private:
     string name;
-
-    vector<vector<double>> options;
+    vector<vector<double> > options;
 
 };
 
