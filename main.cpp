@@ -55,7 +55,10 @@ int main(int argc, char *argv[])
 
     buc.match_delivery_cost();
 
-    //test for removing and finding
+    //test 1 for removing and finding for ints
+
+    cout<<"test 1 for removing and finding"<<"\n";
+
 
     list<int> content;
     int a=2;
@@ -82,13 +85,34 @@ int main(int argc, char *argv[])
             }
         }
 
-
         for(i=content.begin();i!=content.end();i++){
             cout<<*i<<"\n";
             }
 
     cout<<"After deletion, list size:"<<content.size()<<"\n";
 
+    //test 2 for removing and finding for ints
+
+    cout<<"test 2 for removing and finding"<<"\n";
+
+    list<int> numbers={1,2,3,4,5,6,7,8,9,10};
+    list<int> to_remove={7,2,11,1};
+
+    cout<<"Before deletion, list size:"<<numbers.size()<<"\n";
+
+    list<int>::iterator t;
+    list<int>::iterator s;
+
+    for (t=to_remove.begin();t!=to_remove.end();t++){
+        int key=*t;
+        s=std::find(numbers.begin(), numbers.end(), key); // return iterator at position of key in numbers
+
+    if (s != numbers.end()){ //true if key has been found in numbers
+           numbers.erase(s); //remove the key in numbers
+        }
+    }
+
+    cout<<"After deletion, list size:"<<numbers.size()<<"\n";
 
     cout<< "Test for computing distance, distance between NY and Tokyo : " << distance << " km \n";
 
