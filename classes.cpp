@@ -185,6 +185,7 @@ Order::Order(User user,
         this->value = value;
         this->delivery_cost = delivery_cost;
         this->distance = distance;
+        to_pay=0;
 }
 
 bool Order::operator==(Order other){ // we assume orders are equal when the user's identity and company choice are the same
@@ -250,35 +251,35 @@ Bucket::Bucket(Company company, std::list<Order> content,double cur_amount,doubl
     this->cur_cost=cur_cost;
 }
 
-void Bucket::find_and_remove(Order order){ //find an order equal to the input order and removes it from the bucket
+//void Bucket::find_and_remove(Order order){ //find an order equal to the input order and removes it from the bucket
 
-    std::list<Order>::iterator i;
-    std::list<Order>::iterator final;
+//    std::list<Order>::iterator i;
+//    std::list<Order>::iterator final;
 
-    bool found=false;
+//    bool found=false;
 
-    for(i=content.begin();i!=content.end();i++){
+//    for(i=content.begin();i!=content.end();i++){
 
-        if (*i==order){
-            final=i;
-            found=true;
-            content.erase(final);
-            break;
-        }
-    }
+//        if (*i==order){
+//            final=i;
+//            found=true;
+//            content.erase(final);
+//            break;
+//        }
+//    }
 
-    if (found==true){ // if the order is removed, update all bucket data members
+//    if (found==true){ // if the order is removed, update all bucket data members
 
-        double new_amnt=cur_amount-order.get_value();
-        double new_cost=cur_cost-order.get_delivery_cost();
-        double new_max=delivery_cost(company,new_amnt);
+//        double new_amnt=cur_amount-order.get_value();
+//        double new_cost=cur_cost-order.get_delivery_cost();
+//        double new_max=delivery_cost(company,new_amnt);
 
-        cur_amount=new_amnt;
-        cur_cost=new_cost;
-        max_cost=new_max;
+//        cur_amount=new_amnt;
+//        cur_cost=new_cost;
+//        max_cost=new_max;
 
-    }
-}
+//    }
+//}
 
 void Bucket::update_parameters(Order order){ //updates bucket parameters after deletion of the input order "order", the deletion is already done (bucket content updated)
 
@@ -323,12 +324,19 @@ void Bucket::add_order(Order order){
              cur_cost+= order.get_delivery_cost();
              cur_amount+= order.get_value();
              max_cost= delivery_cost(company,cur_amount);
-             match_delivery_cost(); // update the completion state and delivery costs of each user
+             match_delivery_cost(); // update the completion state and amount each user has to pay
              }
          }
 
 bool  Bucket::is_compatible(Order order){
-    return true;
+
+    if(order.get_company().name == company.name){
+
+        return true;
+    }
+    else{
+        return false;
+    }
 }
 
 Bucket copy(Bucket other){ // crates a clone of the input Bucket
@@ -382,7 +390,8 @@ void Bucket::match_delivery_cost(){
         list<Order>::iterator i;
 
         for(i=content.begin();i!=content.end(); ++i) {
-            i->delivery_cost-=idv;
+            i->to_pay=i->delivery_cost-idv;
+
         }
       }
 }

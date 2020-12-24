@@ -100,6 +100,7 @@ public:
 
 //private:
     User user;
+    double to_pay; //final amount to pay for the delivery (once the optimization is solved)
     Company company;
     double value;
     double delivery_cost;
@@ -193,7 +194,7 @@ private:
 
 Bucket copy(Bucket other);
 
-std::list<Bucket> generate_buckets(Order new_order,list<Bucket> buckets); // generates all valid bucket combinations of existing buckets with new_order
+std::list<Bucket> generate_buckets(Order new_order,list<Bucket>& buckets); // generates all valid bucket combinations of existing buckets with new_order
 
 bool radius_overlap(Order order1, Order order2); // True if there exists a common area between two orders/users
 
