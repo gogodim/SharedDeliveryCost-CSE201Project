@@ -15,8 +15,6 @@ class NotificationTable: public Wt::WContainerWidget
 public:
   NotificationTable(const int &userID,Session *session);
 
-  //Wt::Signal<int>& scoreUpdated() { return scoreUpdated_; }
-
 private:
   Wt::WText                 *title_;
   Wt::WTable                *table_;
@@ -32,18 +30,24 @@ class NotificationWidget: public Wt::WContainerWidget
 public:
   NotificationWidget(const int &userID,Session *session);
 
-  //Wt::Signal<int>& scoreUpdated() { return scoreUpdated_; }
-
 private:
   Wt::WContainerWidget              *container_;
   Wt::WPushButton                   *button_;
   NotificationTable                 *Ntable_;
   bool                               showed;
   void showHide();
+  Wt::WTable createTableOrder(std::string otherOrders);
 
   Session *session_;
 };
 
+class OtherOrdersTable: public Wt::WContainerWidget
+{
+public:
+  OtherOrdersTable(std::string otherOrders);
 
+private:
+  Wt::WTable                *table_;
+};
 
 #endif // NOTIFICATIONWIDGET_H

@@ -31,7 +31,7 @@ NotificationTable::NotificationTable(const int &userID,Session *session)
             table_->elementAt(counter, 0)->addWidget(std::make_unique<Wt::WText>(std::to_string(notifications[i].orderID)));
             table_->elementAt(counter, 1)->addWidget(std::make_unique<Wt::WText>(std::to_string(notifications[i].costShare)+"$"));
             table_->elementAt(counter, 2)->addWidget(std::make_unique<Wt::WText>(notifications[i].deliveryLocation));
-            table_->elementAt(counter, 3)->addWidget(std::make_unique<Wt::WText>(notifications[i].otherOrders));
+            table_->elementAt(counter, 3)->addWidget(std::make_unique<OtherOrdersTable>(notifications[i].otherOrders));
             counter++;
         }
     }
@@ -61,6 +61,48 @@ void NotificationWidget::showHide()
     {
         this->showed=true;
         this->Ntable_->show();
+
     }
 }
+
+std::vector< std::vector<std::string> > splitt(std::string otherOrders)
+{
+    std::vector< std::vector<std::string> > for_return;
+    std::string delimiter = " ";
+    std::string delimiter2 = ",";
+    size_t pos = 0;
+    std::string token;
+    while ((pos = otherOrders.find(delimiter)) != std::string::npos) {
+        token = otherOrders.substr(0, pos);
+        size_t pos_temp = 0;
+        std::vector<std::string> tokens;
+        while((pos_temp = token.find(delimiter2)) != std::string::npos) {
+            tokens.push_back(token.substr(0, pos_temp));
+            token.erase(0, pos_temp + delimiter2.length());
+        }
+        for_return.push_back(tokens);
+        otherOrders.erase(0, pos + delimiter.length());
+    }
+    return for_return;
+}
+
+OtherOrdersTable::OtherOrdersTable(std::string otherOrders)
+{
+    table_ = addWidget(cpp14::make_unique<Wt::WTable>());
+    table_->addStyleClass("tableNotifications");
+    table_->setHeaderCount(1);
+    std::string header[3] = {"Username","Contact","Their part"};
+    for (int i=0;i<3;i++){
+        table_->elementAt(0, i)->addWidget(std::make_unique<Wt::WText>(header[i]));
+    }
+    std::vector< std::vector<std::string> > splitted = splitt(otherOrders);
+
+    for (int i = 0; i < splitted.size(); i++)
+    {
+        for (int j=0; j < 3; j++){
+            table_->elementAt(i+1, j)->addWidget(std::make_unique<Wt::WText>(splitted[i][j]));
+        }
+    }
+}
+
 

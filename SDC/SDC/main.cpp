@@ -12,9 +12,12 @@ std::unique_ptr<WApplication> createApplication(const WEnvironment& env)
 {
   auto app = cpp14::make_unique<WApplication>(env);
   Session session;
-  session.addNotification(111,1111,10.1,"Doma  ","otherOrders");
-  session.addNotification(112,1111,10.1,"Doma2  ","otherOrders2Additionaldescription");
-
+  //*
+  session.addNotification(111,1000,10.1,"Address 0","username1,contact1,pays1, username2,contact2,pays2, ");
+  session.addNotification(112,1001,100,"Address 1","username1,contact1,pays1, username2,contact2,pays2, ");
+  session.addNotification(112,1002,40.4,"Address 2","username1,contact1,pays1, username2,contact2,pays2, ");
+  session.addNotification(112,1003,200,"Address 3","username3,contact3,pays3, ");
+  //*/
   app->setTitle("Notification");
   app->useStyleSheet("CSS/style.css");
   app->root()->addWidget(cpp14::make_unique<NotificationWidget>(112,&session));
