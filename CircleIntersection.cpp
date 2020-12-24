@@ -51,8 +51,9 @@ std::vector<Coordinate> get_intersection(Order Order1, Order Order2)
 	Coordinate Intersection1= convert_to_coordinates(c4);
 	Coordinate Intersection2= convert_to_coordinates(c5);
 	std::vector<Coordinate> vect;
-		    vect.push_back(Intersection1);    		    vect.push_back(Intersection2);
-	return vect;
+              vect.push_back(Intersection1); 
+              vect.push_back(Intersection2);
+              return vect;
 }
 
 
