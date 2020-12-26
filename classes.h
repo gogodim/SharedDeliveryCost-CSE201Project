@@ -8,7 +8,6 @@
 using namespace std;
 
 
-
 class Coordinate{
 public:
     Coordinate();
@@ -124,8 +123,10 @@ class Bucket{
 public:
     Bucket();
     Bucket(Company company, list<Order> content,double bucket_cur_amount,double bucket_cur_cost,double bucket_max_cost,bool bucket_completion);
-    bool is_compatible(Order order);
+    tuple<bool,Coordinate> is_compatible(Order new_order);
+
     void add_order(Order order); // adds valid order in bucket_content and updates all data members accordingly
+
     void match_delivery_cost();//Checks if the contribution of delivery cost of the new order doesn't overflow the max_cost, and distribute the cost
                                // Function is applied after the order has been added to the bucket, to redistribute the cost in the case of an overflow
                               //and update the bucket completion
@@ -156,6 +157,10 @@ public:
         cur_amount=v;
     }
 
+    void set_intersection_point(Coordinate coord){
+        intersection_point=coord;
+    }
+
     //getters
 
     std::list<Order> get_content(){
@@ -180,6 +185,11 @@ public:
         return cur_amount;
     }
 
+    Coordinate get_intersectio_point(){
+
+        return intersection_point;
+    }
+
 private:
 
     Company company; // company of the bucket (in one bucket, there can only be one company)
@@ -188,7 +198,7 @@ private:
     double cur_cost; // current sum of delivery cost contributions of each user
     double max_cost; // total amount of delivery cost to pay (based on the company, and the current amount to pay for the orders)
     bool completion; // true if the optimization is complete, i.e bucket_max_cost==bucket_cur_cost
-
+    Coordinate intersection_point;
 };
 
 Bucket copy(Bucket other);
@@ -205,3 +215,22 @@ tuple<bool,list<Bucket>> processOrder(vector<Company> companyList, vector<Bucket
 // optimal_buc is the bucket grouping orders satifying this optimization (it could be empty)
 // updated_bucket_list is the bucket_list obtained after removing orders of optimal_buc from buckets of bucket_list
 
+
+//----------------Circle Intersection------------------------
+
+struct boolPoint
+{
+   Coordinate p;
+   bool has_intersection;
+};
+
+
+double* convert_to_meters(Coordinate C);
+
+Coordinate convert_to_coordinates(double* array);
+
+std::vector<Coordinate> get_intersection(Order Order1, Order Order2);
+
+boolPoint check_if_bucket (std::vector <Order> order_vector);
+
+bool check_if_inside(Order Order1, Order Order2);

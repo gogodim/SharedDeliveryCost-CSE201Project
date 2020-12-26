@@ -1,12 +1,17 @@
 
 
-# include "classes.h"
 # include <math.h>
 #include <iostream>
 #include <string>
 #include <regex>
+# include "classes.h"
 
-struct boolPoint {    Coordinate p;   bool has_intersection;};
+
+struct boolPoint
+{
+   Coordinate p;
+   bool has_intersection;
+};
 
 
 double* convert_to_meters(Coordinate C);
