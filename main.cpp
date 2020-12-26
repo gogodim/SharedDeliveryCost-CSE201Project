@@ -19,14 +19,14 @@ int main(int argc, char *argv[])
 {
     //QCoreApplication a(argc, argv);
 
-    // small test case for distance computing with coords of type (lat,lon)
+    //-------------------small test case for distance computing with coords of type (lat,lon)--------------
 
     Coordinate NY=Coordinate(40.7128,-74.0060);
     Coordinate Tokyo=Coordinate(35.6895,139.6917);
     double distance=NY.get_distance(Tokyo);
 
 
-    // small test case for match_delivery cost
+    //----------------------------small test case for match_delivery cost-------------------------------
 
     User user=User();
 
@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
 
     buc.match_delivery_cost();
 
-    //test 1 for removing and finding for ints
+    //-----------------------------test 1 for removing and finding for ints----------------------------------
 
     cout<<"test 1 for removing and finding"<<"\n";
 
@@ -91,7 +91,7 @@ int main(int argc, char *argv[])
 
     cout<<"After deletion, list size:"<<content.size()<<"\n";
 
-    //test 2 for removing and finding for ints
+    //--------------------test 2 for removing and finding for ints----------------------------
 
     cout<<"test 2 for removing and finding"<<"\n";
 
@@ -112,12 +112,13 @@ int main(int argc, char *argv[])
         }
     }
 
+
     cout<<"After deletion, list size:"<<numbers.size()<<"\n";
 
     cout<< "Test for computing distance, distance between NY and Tokyo : " << distance << " km \n";
 
     cout <<"Test for match_delivery cost: completion state=" << buc.get_completion() <<"\n";
 
-    //return a.exec();
+//    return a.exec();
 }
 

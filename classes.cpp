@@ -7,7 +7,8 @@
 
 
 
-//---------Coordinate-----------
+
+//--------------------------Coordinate-------------------------------
 
 
 //Coordinate Constructor
@@ -73,7 +74,7 @@ double Coordinate::get_distance(Coordinate other){
 }
 
 
-//---------User-----------
+//-----------------------------User--------------------------------
 
 //functions necessary for user
 bool check_valid_email(std::string email){
@@ -154,7 +155,7 @@ void User::set_coordinates(Coordinate coordinates){
 };
 
 
-//---------Company-----------
+//-------------------------Company-------------------------------
 
 Company::Company(std::string name, std::vector<std::vector<double>> opts){
     this->name = name;
@@ -185,6 +186,7 @@ Order::Order(User user,
         this->value = value;
         this->delivery_cost = delivery_cost;
         this->distance = distance;
+        to_pay=0;
 }
 
 bool Order::operator==(Order other){ // we assume orders are equal when the user's identity and company choice are the same
@@ -225,7 +227,7 @@ bool Order::operator==(Order other){ // we assume orders are equal when the user
 
 
 
-//---------Bucket-----------
+//---------------------Bucket--------------------------
 
 Bucket::Bucket(){
     company=Company();
@@ -250,35 +252,35 @@ Bucket::Bucket(Company company, std::list<Order> content,double cur_amount,doubl
     this->cur_cost=cur_cost;
 }
 
-void Bucket::find_and_remove(Order order){ //find an order equal to the input order and removes it from the bucket
+//void Bucket::find_and_remove(Order order){ //find an order equal to the input order and removes it from the bucket
 
-    std::list<Order>::iterator i;
-    std::list<Order>::iterator final;
+//    std::list<Order>::iterator i;
+//    std::list<Order>::iterator final;
 
-    bool found=false;
+//    bool found=false;
 
-    for(i=content.begin();i!=content.end();i++){
+//    for(i=content.begin();i!=content.end();i++){
 
-        if (*i==order){
-            final=i;
-            found=true;
-            content.erase(final);
-            break;
-        }
-    }
+//        if (*i==order){
+//            final=i;
+//            found=true;
+//            content.erase(final);
+//            break;
+//        }
+//    }
 
-    if (found==true){ // if the order is removed, update all bucket data members
+//    if (found==true){ // if the order is removed, update all bucket data members
 
-        double new_amnt=cur_amount-order.get_value();
-        double new_cost=cur_cost-order.get_delivery_cost();
-        double new_max=delivery_cost(company,new_amnt);
+//        double new_amnt=cur_amount-order.get_value();
+//        double new_cost=cur_cost-order.get_delivery_cost();
+//        double new_max=delivery_cost(company,new_amnt);
 
-        cur_amount=new_amnt;
-        cur_cost=new_cost;
-        max_cost=new_max;
+//        cur_amount=new_amnt;
+//        cur_cost=new_cost;
+//        max_cost=new_max;
 
-    }
-}
+//    }
+//}
 
 void Bucket::update_parameters(Order order){ //updates bucket parameters after deletion of the input order "order", the deletion is already done (bucket content updated)
 
@@ -313,7 +315,6 @@ void Bucket::find_and_remove_order_list(list<Order> orders){
 
 void Bucket::add_order(Order order){
 
-    if(order.get_company().name == company.name){
         //bol = True;
         //while(bol==True){
          //   for(command in bucket_content){
@@ -323,12 +324,55 @@ void Bucket::add_order(Order order){
              cur_cost+= order.get_delivery_cost();
              cur_amount+= order.get_value();
              max_cost= delivery_cost(company,cur_amount);
-             match_delivery_cost(); // update the completion state and delivery costs of each user
-             }
+             match_delivery_cost(); // update the completion state and amount each user has to pay
+
          }
 
-bool  Bucket::is_compatible(Order order){
-    return true;
+tuple<bool,Coordinate>  Bucket::is_compatible(Order new_order){
+
+    //----------- checking company---------------
+
+    Coordinate coord;
+
+    tuple<bool,Coordinate> tpl=make_tuple(false,coord);
+
+    if(new_order.get_company().name == company.name){ // if the order is from the same company as the bucket
+
+        //----------- checking intersection---------------
+
+        bool inter; // inter will be true if the intersection exists
+
+        list<Order> new_content(content); // copy of bucket content
+
+        new_content.push_back(new_order); // new_content adds the new_order to it
+
+        vector<Order> order_vector;
+        order_vector.reserve(new_content.size());
+        copy(begin(new_content), end(new_content), back_inserter(order_vector)); // converts new_content to vector type
+
+
+        boolPoint bp=check_if_bucket(order_vector); // return an intersection point based on the addition of the new order
+
+        inter=bp.has_intersection; //  sets inter
+
+        if (inter){ // if inter is true <=> the intersection point exists
+
+            coord=bp.p; // coord will be used in generate_buckets to set the bucket intersection point
+
+            tpl=make_tuple(inter,coord);
+
+            return tpl;
+        }
+
+        else{
+            return tpl;
+        }
+    }
+
+    else{
+
+        return tpl;
+    }
 }
 
 Bucket copy(Bucket other){ // crates a clone of the input Bucket
@@ -342,10 +386,19 @@ list<Bucket> generate_buckets(Order new_order,list<Bucket>& buckets){ // generat
     list<Bucket>::iterator it;
     for (it = buckets.begin(); it != buckets.end(); it ++){
         Bucket CurrentBucket = *it;
-        if (CurrentBucket.is_compatible(new_order)){
+
+        tuple<bool, Coordinate> tpl=CurrentBucket.is_compatible(new_order);
+
+        bool compat=get<0>(tpl); // get first entry of tuple (true if there exists an intersection)
+
+        if (compat){
 
             Bucket NewBucket=copy(CurrentBucket);// copy the current bucket and add the new_order to the copy
-            NewBucket.add_order(new_order);
+
+            Coordinate coord=get<1>(tpl); //get second entry of tuple (coordinate of intersection_point)
+
+            NewBucket.add_order(new_order); // update NewBucket by adding the new_order
+            NewBucket.set_intersection_point(coord);
 
             buckets.push_back(NewBucket); // update bucket list with the new combination
             res.push_back(NewBucket); // add the combination to res
@@ -382,31 +435,32 @@ void Bucket::match_delivery_cost(){
         list<Order>::iterator i;
 
         for(i=content.begin();i!=content.end(); ++i) {
-            i->delivery_cost-=idv;
+            i->to_pay=i->delivery_cost-idv;
+
         }
       }
 }
 
-double array_of_one_delivery(){ // This function creates the array of all the orders concerned by the delivery, idk how to do it because linked to the database?
-    double arr = 0;
-    Coordinate c = order.get_user().get_coordinates();
-    double weight = order.get_delivery_cost(); //or get_value()?
+//double array_of_one_delivery(){ // This function creates the array of all the orders concerned by the delivery, idk how to do it because linked to the database?
+//    double arr = 0;
+//    Coordinate c = order.get_user().get_coordinates();
+//    double weight = order.get_delivery_cost(); //or get_value()?
 
-};
+//};
 
 
-Coordinate distance_optimization(double array_of_one_delivery()){  //arr has elements of type (lat, lon, weight) and it is the array of all the orders concerned by this delivery
-    double lat = 0;
-    double lon = 0;
-    for(int i;array_of_one_delivery().size(); i++){
-        if(i!=()){
-            lat = lat + i[0]*i[2];
-            lon = lon + i[1]*i[2];
-        };
+//Coordinate distance_optimization(double array_of_one_delivery()){  //arr has elements of type (lat, lon, weight) and it is the array of all the orders concerned by this delivery
+//    double lat = 0;
+//    double lon = 0;
+//    for(int i;array_of_one_delivery().size(); i++){
+//        if(i!=()){
+//            lat = lat + i[0]*i[2];
+//            lon = lon + i[1]*i[2];
+//        };
 
-    };
-    return Coordinate(lat/array_of_one_delivery().size(),lon/array_of_one_delivery().size());
-};
+//    };
+//    return Coordinate(lat/array_of_one_delivery().size(),lon/array_of_one_delivery().size());
+//};
 
 bool compare(Bucket b1,Bucket b2){ // comparing buckets for sorting in the bucket list, "b1<b2" <=> "b1 has content length greater than b2"
 
@@ -473,10 +527,121 @@ tuple<bool,Bucket,list<Bucket>> processOrder(list<Bucket> bucket_list, Order new
 
    else{
 
-     tpl=make_tuple(false,optimal_buc,bucket_list);
+     tpl=make_tuple(false,optimal_buc,bucket_list); // in this case, optimal buc is empty
 
     }
 
     return tpl;
 }
 
+//------------------Circle Intersection--------------------
+
+
+double* convert_to_meters(Coordinate C)
+{
+    double y=C.get_latitude()*111000;
+    double x=C.get_longitude()*111000*cos(C.get_latitude()*M_PI/180);
+    static double array [2] = { x, y };
+    return array;
+}
+
+ Coordinate convert_to_coordinates(double* array)
+{
+    double latitude=array[1]/111000;
+    double longitude=array[0]/(111000*cos(latitude*M_PI/180));
+    return Coordinate (latitude, longitude);
+}
+
+std::vector<Coordinate> get_intersection(Order Order1, Order Order2)
+
+{
+    Coordinate C1= Order1.get_user().get_coordinates();
+    Coordinate C2= Order2.get_user().get_coordinates();
+    double* c1= convert_to_meters(C1);
+    double* c2= convert_to_meters(C2);
+    double r1=Order1.get_distance();
+    double r2=Order2.get_distance();
+    double d= C1.get_distance(C2);
+    if (d > r1+ r2)
+        return std::vector<Coordinate>();
+
+    double a=(r1*r1-r2*r2+d*d)/(2*d);
+    double h=sqrt(r1*r1-a*a);
+    double b=d-a;
+    double c3x= c1[0] + a*( c2[0] - c1[0] )/d;
+    double c3y= c1[1] + a*( c2[1] - c1[1] )/d;
+    double c4x = c3x + h*(c2[1] -c1[1]) /d;
+    double c4y = c3y - h*( c2[0] - c1[0] )/d;
+    double c5x = c3x - h*(c2[1] -c1[1]) /d;
+    double c5y = c3y + h*( c2[0] - c1[0] )/d;
+    double c4[2]={c4x, c4y};
+    double c5[2]={c5x, c5y};
+
+    Coordinate Intersection1= convert_to_coordinates(c4);
+    Coordinate Intersection2= convert_to_coordinates(c5);
+    std::vector<Coordinate> vect;
+              vect.push_back(Intersection1);
+              vect.push_back(Intersection2);
+              return vect;
+}
+
+bool check_if_inside(Order Order1, Order Order2){
+    Coordinate C1= Order1.get_user().get_coordinates();
+    Coordinate C2= Order2.get_user().get_coordinates();
+    double* c1= convert_to_meters(C1);
+    double* c2= convert_to_meters(C2);
+    double r1=Order1.get_distance();
+    double r2=Order2.get_distance();
+    double d= C1.get_distance(C2);
+    if (d<=abs(r1-r2))
+        return true;
+    return false;
+}
+
+
+boolPoint check_if_bucket (std::vector <Order> order_vector)
+{
+    struct boolPoint p3 = {Coordinate(), false};
+    int count0=0;
+    for (int i = 0; i < order_vector.size(); i++){
+        Order order1 = order_vector[i];
+        for (int j = i+1; j < order_vector.size(); j++){
+            Order order2 = order_vector[j];
+            std::vector <Coordinate> intersection_vector=get_intersection(order1, order2);
+            if (intersection_vector.size()== 0 && !check_if_inside(order1, order2))
+                return p3;
+            if (intersection_vector.size()== 0 && check_if_inside(order1, order2))
+            {
+                count0++;
+                continue;
+            }
+            Coordinate intersection1=intersection_vector[0];
+            Coordinate intersection2=intersection_vector[1];
+            int count1= 0;
+            int count2=0;
+            for (int k = 0; k < order_vector.size(); k++)
+            {
+                if (intersection1.get_distance(order_vector[k].get_user().get_coordinates()) <= order_vector[k].get_distance())
+                        count1++;
+                if (intersection2.get_distance(order_vector[k].get_user().get_coordinates()) <= order_vector[k].get_distance())
+                        count2++;
+            }
+            if (order_vector.size()==count1)
+            {
+                struct boolPoint p1 = {intersection1, true};
+                return p1;
+            }
+            if (order_vector.size()==count2)
+            {
+                struct boolPoint p2 = {intersection2, true};
+                return p2;
+            }
+
+    }}
+    if (count0==(order_vector.size()*order_vector.size()-order_vector.size())/2)
+    {
+        struct boolPoint p4 = {order_vector[0].get_user().get_coordinates(), true};
+                return p4;
+    }
+    return p3;
+}
