@@ -33,8 +33,8 @@ Database::Database()
 bool Database::add_user(const User* user){
     if (!Database::find_user(user)){
         dbo::Transaction transaction(session);
-        std::cerr << "Add user " << user->name << " with email of " << user->email << std::endl;
         std::unique_ptr<User> userptr = std::make_unique<User>(*user);
+        std::cerr << "Add user " << userptr->get_username()<< " with email of " << userptr->get_email() << std::endl;
         dbo::ptr<User> userPtr = session.add(std::move(userptr));
         return true;
     }
@@ -43,7 +43,8 @@ bool Database::add_user(const User* user){
 
 bool Database::find_user(const User* user){
     dbo::Transaction transaction(session);
-    dbo::ptr<User> u = session.find<User>().where("name = ?").bind(user->name);
+    std::unique_ptr<User> userptr = std::make_unique<User>(*user);
+    dbo::ptr<User> u = session.find<User>().where("name = ?").bind(userptr->get_username());
     std::cerr << "Return" << u << std::endl;
     if(!u){
        std::cout<<"False"<<std::endl;

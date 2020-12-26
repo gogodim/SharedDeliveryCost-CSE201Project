@@ -5,9 +5,15 @@ CONFIG -= qt
 #QT += gui widgets xml
 
 SOURCES += \
+        Bucket.cpp \
+        Company.cpp \
+        Coordinate.cpp \
         Database.cpp \
+        Order.cpp \
         OrderPage.cpp \
-        main.cpp
+        User.cpp \
+        main.cpp \
+        registerpage.cpp
 
 INCLUDEPATH += C:/Boost/include/boost-1_67 \
                C:/wt-4.4.0/src \
@@ -32,8 +38,14 @@ LIBS  +=  -LC:/Qt/Tools/mingw730_64/i686-w64-mingw32/lib  \
                 -llibwsock32
 
 HEADERS += \
+    Bucket.h \
+    Company.h \
+    Coordinate.h \
     Database.h \
-    OrderPage.h
+    Order.h \
+    OrderPage.h \
+    User.h \
+    registerpage.h
 
 DISTFILES += \
     css/shared.css \

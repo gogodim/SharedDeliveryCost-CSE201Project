@@ -97,11 +97,10 @@ OrderPage::OrderPage(): WContainerWidget(){
 
 void OrderPage::Login(){
     User* user{new User()};
-    user->password = (passwordEdit_->text()).toUTF8() ;
-    user->email    = (emailEdit_->text()).toUTF8() ;
-    user->location = (locationEdit_->text()).toUTF8() ;
-    user->name     = (nameEdit_->text()).toUTF8() ;
+    user->set_password((passwordEdit_->text()).toUTF8());
+    user->set_email((emailEdit_->text()).toUTF8());
+    user->set_address((locationEdit_->text()).toUTF8());
+    user->set_username((nameEdit_->text()).toUTF8());
 
-    //confirm_->setText("Confirm input\n name: " + user->name + " email: "+ user->password + "location: " + user->location + user->email);
     database->add_user(user);
 }
