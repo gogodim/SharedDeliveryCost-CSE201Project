@@ -25,7 +25,8 @@ private:
     Wt::WText                      *confirm_;
     std::unique_ptr<Database>      database;
 
-    void greet();
+    void Login();
+    //void Register();
 };
 
 

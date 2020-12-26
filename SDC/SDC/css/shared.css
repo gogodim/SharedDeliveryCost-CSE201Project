@@ -1,0 +1,29 @@
+.login-page{
+    margin-top: 50ex;
+    margin-bottom: 100ex;
+}
+.login-image{
+    width: 150px;
+    height: 100px;
+}
+.login-box{
+    background-color: #5b5dd88c;
+    border: 1px solid black;
+    margin-top: 10ex;
+    margin-bottom: 10ex;
+}
+
+.login-element{
+    background-color: #d9e2ebe1;
+    min-height: 30px;
+    height: 30px;
+    width: 50px;
+    text-align: center;
+    padding: 3px;
+}
+.login-edit{
+    height: 30px;
+    width: 50px;
+    text-align: center;
+    padding: 3px;
+}
