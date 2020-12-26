@@ -13,10 +13,10 @@ std::unique_ptr<WApplication> createApplication(const WEnvironment& env){
     
     //Load needy string from ResourceBundle
     app->setTitle("Shared Delivery Cost");
-    app->messageResourceBundle().use(app->docRoot() + "\\" + "string");
+    app->messageResourceBundle().use(app->docRoot() + "\\string");
 
     //Load css
-    app->useStyleSheet("shared.css");
+    app->useStyleSheet("css/shared.css");
 
     app->root()->addWidget(cpp14::make_unique<OrderPage>());
 

@@ -1,60 +1,54 @@
 #include "Database.h"
 
 #include <Wt/WApplication.h>
+#include <fstream>
 
 using namespace Wt;
 
 Database::Database()
 {
-    //std::unique_ptr<dbo::backend::Sqlite3> sqlite3{new dbo::backend::Sqlite3("blog.db")};
+    /* check if .db file exists*/
+    std::string path = WApplication::instance()->docRoot() + "\\SDC.db";
+    std::ifstream db(path, std::ifstream::in);
+
+    /*create or open .db file*/
     std::unique_ptr<dbo::backend::Sqlite3> sqlite3 =
             cpp14::make_unique<dbo::backend::Sqlite3>(WApplication::instance()->docRoot() + "\\SDC.db");
-    //
-    //std::unique_ptr<dbo::backend::Sqlite3> sqlite3(new dbo::backend::Sqlite3(":memory:"));
     sqlite3->setProperty("show-queries", "true");
-
     session.setConnection(std::move(sqlite3));
-    //std::cout<<"1: "<<session.tableName<User>()<<std::endl;
 
+    /* load user class from table*/
     session.mapClass<User>("user");
-    //session.createTables();
-    //std::cout<<"2: "<<session.tableName<User>()<<std::endl;
-    //std::string path = WApplication::instance()->docRoot() + "\\SDC.db";
-    //std::ifstream db(path);
-    //if(db.fail()){
-        //std::cout<<"Create .db file in: "<<WApplication::instance()->docRoot()<<std::endl;
 
-    //}
-
-//    dbo::Transaction transaction(session);
-
-//    std::unique_ptr<User> user{new User()};
-//    user->name = "Joe";
-//    user->password = "Secret";
-//    user->role = Role::Visitor;
-//    user->karma = 13;
-//    dbo::ptr<User> userPtr = session.add(std::move(user));
-
-//    dbo::ptr<User> joe = session.find<User>().where("name = ?").bind("Joe");
-//    std::cerr << "Joe has karma: " << joe->karma << std::endl;
-//    dbo::ptr<User> joe2 = session.query< dbo::ptr<User> >
-//      ("select u from user u").where("name = ?").bind("Joe");
-//    int count = session.query<int>("select count(1) from user").where("name = ?").bind("Joe");
-//    std::cout<<"Count: "<<count<<std::endl;
-
-//      typedef dbo::collection< dbo::ptr<User> > Users;
-//      Users users = session.find<User>();
-//      std::cerr << "We have " << users.size() << " users:" << std::endl;
-//      for (const dbo::ptr<User> &user : users)
-//          std::cerr << " user " << user->name
-//                    << " with karma of " << user->karma << std::endl;
-
+    /* if there isn't a .db, create and add a default user to the database*/
+    if(db.fail()){
+        session.createTables();
+        dbo::Transaction transaction(session);
+        std::unique_ptr<User> user{new User()};
+        dbo::ptr<User> userPtr = session.add(std::move(user));
+    }
 
 }
-bool Database::add_user(std::unique_ptr<User> user){
-    session.mapClass<User>("user");
+
+bool Database::add_user(const User* user){
+    if (!Database::find_user(user)){
+        dbo::Transaction transaction(session);
+        std::cerr << "Add user " << user->name << " with email of " << user->email << std::endl;
+        std::unique_ptr<User> userptr = std::make_unique<User>(*user);
+        dbo::ptr<User> userPtr = session.add(std::move(userptr));
+        return true;
+    }
+    return false;
+}
+
+bool Database::find_user(const User* user){
     dbo::Transaction transaction(session);
-    std::cerr << "Add user " << user->name << " with karma of " << user->karma << std::endl;
-    dbo::ptr<User> userPtr = session.add(std::move(user));
+    dbo::ptr<User> u = session.find<User>().where("name = ?").bind(user->name);
+    std::cerr << "Return" << u << std::endl;
+    if(!u){
+       std::cout<<"False"<<std::endl;
+       return false;
+    }
+    std::cout<<"True"<<std::endl;
     return true;
 }

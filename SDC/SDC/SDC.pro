@@ -1,8 +1,8 @@
 TEMPLATE = app
 CONFIG += console c++14
 CONFIG -= app_bundle
-#CONFIG -= qt
-QT += core
+CONFIG -= qt
+#QT += gui widgets xml
 
 SOURCES += \
         Database.cpp \
@@ -34,4 +34,15 @@ LIBS  +=  -LC:/Qt/Tools/mingw730_64/i686-w64-mingw32/lib  \
 HEADERS += \
     Database.h \
     OrderPage.h
+
+DISTFILES += \
+    css/shared.css \
+    css/shared.css \
+    images/logo.png \
+    resources/form.css \
+    resources/html4_default.css \
+    resources/moz-transitions.css \
+    resources/transitions.css \
+    resources/webkit-transitions.css \
+    shared.css
 
