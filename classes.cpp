@@ -41,16 +41,6 @@ Coordinate::Coordinate(){
         this->longitude = longitude;
     }
 
-Coordinate coordinate_from_address(std::string address){
-    return Coordinate(0, 0);
-}
-
-Coordinate address_to_coordinates(std::string address){
-    return Coordinate();
-}
-std::string coordinate_to_address(Coordinate coordinate){
-    return "";
-}
 
 double Coordinate::get_distance(Coordinate other){
 
@@ -76,28 +66,19 @@ double Coordinate::get_distance(Coordinate other){
 
 //-----------------------------User--------------------------------
 
-//functions necessary for user
-bool check_valid_email(std::string email){
-    return regex_match(email, std::regex("(\\w+)(\\.|_)?(\\w*)@(\\w+)(\\.(\\w+))+"));
-}
-
-bool check_valid_address(std::string address){
-    return true;
-}
-
 //User Constructor
 User::User(){
     username = "Default User";
     name = "";
     surname = "";
     email = "";
-    address = "";
+    address = Coordinate();
 }
 User::User(std::string username,
            std::string password,
            std::string name,
            std::string surname,
-           std::string address,
+           Coordinate address,
            std::string email){
     this->username = username;
     this->name = name;
@@ -105,7 +86,6 @@ User::User(std::string username,
     this->email = email;
     this->address = address;
     this->password = password;
-    set_coordinates(coordinate_from_address(address));
 };
 
 // User, Gettters
@@ -121,14 +101,11 @@ std::string User::get_name(){
 std::string User::get_surname(){
     return surname;
 };
-std::string User::get_address(){
+Coordinate User::get_address(){
     return address;
 };
 std::string User::get_email(){
     return email;
-};
-Coordinate User::get_coordinates(){
-    return coordinates;
 };
 
 //User, Setters
@@ -144,14 +121,11 @@ void User::set_name(std::string name){
 void User::set_surname(std::string surname){
     this->surname = surname;
 };
-void User::set_address(std::string address){
+void User::set_address(Coordinate address){
     this->address = address;
 };
 void User::set_email(std::string email){
     this->email = email;
-};
-void User::set_coordinates(Coordinate coordinates){
-    this->coordinates = coordinates;
 };
 
 
