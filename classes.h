@@ -71,9 +71,11 @@ public:
 
     Company(string name, vector<vector<double> > opts);
     Company();
+    std::string get_name();
+    vector<vector<double>> get_options();
     void set_options(vector<vector<double> > options);
     void set_name(string name);
-//private:
+private:
     string name;
     vector<vector<double> > options;
 
@@ -85,36 +87,32 @@ public:
           Company company,
           double value,
           double delivery_cost,
-          double distance);
+          double distance,
+          Coordinate address = Coordinate());
     User get_user();
     Company get_company();
     double get_value();
     double get_delivery_cost();
     double get_distance();
+    double get_to_pay();
+    void set_to_pay(double amount);
     bool operator==(Order other);
 
 
-//private:
+private:
     User user;
     double to_pay; //final amount to pay for the delivery (once the optimization is solved)
     Company company;
     double value;
     double delivery_cost;
     double distance;
-
+    Coordinate address;
 };
 
-bool check_valid_email(std::string email);
-
-bool check_valid_address(std::string address);
-
-Coordinate convert_to_coordinates(std::string address);
 
 double array_of_one_delivery();
 
 Coordinate distance_optimization(double array);
-
-Coordinate convert_to_coordinates(std::string address);
 
 
 class Bucket{
