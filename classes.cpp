@@ -96,7 +96,7 @@ User::User(std::string username,
            std::string password,
            std::string name,
            std::string surname,
-           std::string address,
+           Coordinate address,
            std::string email){
     this->username = username;
     this->name = name;
@@ -104,7 +104,6 @@ User::User(std::string username,
     this->email = email;
     this->address = address;
     this->password = password;
-    set_coordinates(coordinate_from_address(address));
 };
 
 // User, Gettters
@@ -120,14 +119,11 @@ std::string User::get_name(){
 std::string User::get_surname(){
     return surname;
 };
-std::string User::get_address(){
+Coordinate User::get_address(){
     return address;
 };
 std::string User::get_email(){
     return email;
-};
-Coordinate User::get_coordinates(){
-    return coordinates;
 };
 
 //User, Setters
@@ -143,14 +139,11 @@ void User::set_name(std::string name){
 void User::set_surname(std::string surname){
     this->surname = surname;
 };
-void User::set_address(std::string address){
+void User::set_address(Coordinate address){
     this->address = address;
 };
 void User::set_email(std::string email){
     this->email = email;
-};
-void User::set_coordinates(Coordinate coordinates){
-    this->coordinates = coordinates;
 };
 
 
