@@ -60,9 +60,11 @@ double Coordinate::get_distance(Coordinate other){
 
     double a = sin(latDist/2) * sin(latDist/2) + cos(lat1) * cos(lat2)* sin(lonDist / 2) * sin(lonDist / 2);
     double c = 2 * atan2(sqrt(a), sqrt(1 - a));
-    double distance = R * c;
+    double distance = R * c; // in km
 
-    return distance; // in km
+    distance=distance*1000; // distance is now in meters
+
+    return distance; // in meters
 
 }
 
@@ -169,7 +171,7 @@ Order::Order(User user,
         this->company = company;
         this->value = value;
         this->delivery_cost = delivery_cost;
-        this->distance = distance;
+        this->distance = distance; // in meters
         to_pay = 0;
         if (address == Coordinate()){ //if another address isn't given, we use the default address
             this->address = user.get_address();}
@@ -187,7 +189,6 @@ bool Order::operator==(Order other){ // we assume orders are equal when the user
     bool a=(name==other_name);
 
     //company_comparison
-
     std::string comp= company.get_name();
     std::string other_comp=other.company.get_name();
 
@@ -230,11 +231,12 @@ Bucket::Bucket(){
     max_cost=0;
     cur_amount=0;
     cur_cost=0;
+    intersection_point=Coordinate();
 
 }
 
 Bucket::Bucket(Company company, std::list<Order> content,double cur_amount,double cur_cost,
-               double max_cost,bool completion){
+               double max_cost,bool completion,Coordinate inter){
 
 
     this->company=company;
@@ -243,6 +245,7 @@ Bucket::Bucket(Company company, std::list<Order> content,double cur_amount,doubl
     this->max_cost=max_cost;
     this->cur_amount=cur_amount;
     this->cur_cost=cur_cost;
+    this->intersection_point=inter;
 }
 
 //void Bucket::find_and_remove(Order order){ //find an order equal to the input order and removes it from the bucket
@@ -306,13 +309,9 @@ void Bucket::find_and_remove_order_list(list<Order> orders){
 
 }
 
-void Bucket::add_order(Order order){
+void Bucket::add_order(Order order,Coordinate inter){
 
-        //bol = True;
-        //while(bol==True){
-         //   for(command in bucket_content){
-          //      if(radius_overlap(command,order)==False){
-         //if(radius_overlap(bucket.area,order)){
+             intersection_point=inter; // sets new intersection point
              content.push_back(order);
              cur_cost+= order.get_delivery_cost();
              cur_amount+= order.get_value();
@@ -370,13 +369,24 @@ tuple<bool,Coordinate>  Bucket::is_compatible(Order new_order){
 
 Bucket copy(Bucket other){ // crates a clone of the input Bucket
 
-    return Bucket( other.get_company(), other.get_content(),other.get_cur_amount(),other.get_cur_cost(),other.get_max_cost(), other.get_completion());
+    return Bucket( other.get_company(), other.get_content(),other.get_cur_amount(),other.get_cur_cost(),other.get_max_cost(), other.get_completion(),other.get_intersection_point());
 }
 
 list<Bucket> generate_buckets(Order new_order,list<Bucket>& buckets){ // generates all valid bucket combinations of existing buckets with new_order
 
     list<Bucket> res; // res will contain new combinations of buckets with new_order
     list<Bucket>::iterator it;
+
+    // first, we create and add the bucket made only of new_order
+
+     Bucket B=Bucket();
+     B.add_order(new_order); // adds new_order to an empty bucket B (with no intersection)
+
+     buckets.push_back(B);
+     res.push_back(B);
+
+     // iterate through existing list of buckets to see if new_order can be added
+
     for (it = buckets.begin(); it != buckets.end(); it ++){
         Bucket CurrentBucket = *it;
 
@@ -390,8 +400,7 @@ list<Bucket> generate_buckets(Order new_order,list<Bucket>& buckets){ // generat
 
             Coordinate coord=get<1>(tpl); //get second entry of tuple (coordinate of intersection_point)
 
-            NewBucket.add_order(new_order); // update NewBucket by adding the new_order
-            NewBucket.set_intersection_point(coord);
+            NewBucket.add_order(new_order,coord); // update NewBucket by adding the new_order
 
             buckets.push_back(NewBucket); // update bucket list with the new combination
             res.push_back(NewBucket); // add the combination to res
@@ -472,7 +481,6 @@ bool compare(Bucket b1,Bucket b2){ // comparing buckets for sorting in the bucke
     }
 }
 
-
 tuple<bool,Bucket,list<Bucket>> processOrder(list<Bucket> bucket_list, Order new_order){
 
 
@@ -527,7 +535,7 @@ tuple<bool,Bucket,list<Bucket>> processOrder(list<Bucket> bucket_list, Order new
     return tpl;
 }
 
-//------------------Circle Intersection--------------------
+//------------------Circle Intersection-------------------- (all distances are in meters)
 
 
 double* convert_to_meters(Coordinate C)
@@ -546,6 +554,7 @@ double* convert_to_meters(Coordinate C)
 }
 
 std::vector<Coordinate> get_intersection(Order Order1, Order Order2)
+// this function is the mathematical way to get the intersection of the radius between two orders, this is necessary in order for the next one to be able to take in a vector of orders, and say wether or not they can all fit in one bucket.
 
 {
     Coordinate C1= Order1.get_user().get_address();
@@ -579,6 +588,7 @@ std::vector<Coordinate> get_intersection(Order Order1, Order Order2)
 }
 
 bool check_if_inside(Order Order1, Order Order2){
+// this one simply checks if an order is inside another order when there is no intersection.
     Coordinate C1= Order1.get_user().get_address();
     Coordinate C2= Order2.get_user().get_address();
     double* c1= convert_to_meters(C1);
@@ -593,6 +603,9 @@ bool check_if_inside(Order Order1, Order Order2){
 
 
 boolPoint check_if_bucket (std::vector <Order> order_vector)
+// This function takes in a vector of orders, so a potential bucket, and says whether or not they could all fit in a bucket, and returns the intersection where to deliver if it is true.
+//If it its false it will return an empty coordinate and false.
+//In order to check if an other order can be added to a bucket we could simply take the vector and pushback the new order. And say if check_if_bucket then its good.
 {
     struct boolPoint p3 = {Coordinate(), false};
     int count0=0;

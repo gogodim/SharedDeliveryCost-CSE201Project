@@ -12,7 +12,7 @@ class Coordinate{
 public:
     Coordinate();
     Coordinate(double lat,double lo);
-    double get_distance(Coordinate other);
+    double get_distance(Coordinate other); // in m
     double get_latitude();
     double get_longitude();
     void set_latitude(double latitude);
@@ -87,7 +87,7 @@ public:
           Company company,
           double value,
           double delivery_cost,
-          double distance,
+          double distance, // in meters
           Coordinate address = Coordinate());
     User get_user();
     Company get_company();
@@ -118,19 +118,17 @@ Coordinate distance_optimization(double array);
 class Bucket{
 public:
     Bucket();
-    Bucket(Company company, list<Order> content,double bucket_cur_amount,double bucket_cur_cost,double bucket_max_cost,bool bucket_completion);
+    Bucket(Company company, list<Order> content,double bucket_cur_amount,double bucket_cur_cost,double bucket_max_cost,bool bucket_completion, Coordinate inter);
     tuple<bool,Coordinate> is_compatible(Order new_order);
 
-    void add_order(Order order); // adds valid order in bucket_content and updates all data members accordingly
+    void add_order(Order order,Coordinate inter=Coordinate()); // adds valid order in bucket_content and updates all data members accordingly
+                                                  // also updates the intersection_point with inter
 
     void match_delivery_cost();//Checks if the contribution of delivery cost of the new order doesn't overflow the max_cost, and distribute the cost
                                // Function is applied after the order has been added to the bucket, to redistribute the cost in the case of an overflow
                               //and update the bucket completion
 
-    // functions to modify bucket content
-    void append_to_content(Order order){
-        content.push_back(order);
-    }
+
     void find_and_remove(Order order); //find an order equal to the input order and removes it from the bucket
     void find_and_remove_order_list(list<Order> orders); // remove elements in bucket content that belong to the input list "orders"
     void update_parameters(Order order); // update bucket params after removal of input order "order" (the removal is done prior to the function call)
@@ -181,7 +179,7 @@ public:
         return cur_amount;
     }
 
-    Coordinate get_intersectio_point(){
+    Coordinate get_intersection_point(){
 
         return intersection_point;
     }
@@ -198,6 +196,8 @@ private:
 };
 
 Bucket copy(Bucket other);
+
+bool compare(Bucket b1,Bucket b2);
 
 std::list<Bucket> generate_buckets(Order new_order,list<Bucket>& buckets); // generates all valid bucket combinations of existing buckets with new_order
 
@@ -219,6 +219,7 @@ struct boolPoint
    Coordinate p;
    bool has_intersection;
 };
+
 
 
 double* convert_to_meters(Coordinate C);
