@@ -11,15 +11,16 @@
 
 
 //Coordinate Constructor
+Coordinate::Coordinate(){
+    latitude = 0;
+    longitude = 0;
+    }
 Coordinate::Coordinate(double latitude,
                        double longitude){
     this->latitude = latitude;
     this->longitude = longitude;
     }
-Coordinate::Coordinate(){
-    latitude = 0;
-    longitude = 0;
-    }
+
 //Coordinate, Getters
     double Coordinate::get_latitude(){
         return latitude;
@@ -40,16 +41,6 @@ Coordinate::Coordinate(){
         this->longitude = longitude;
     }
 
-Coordinate coordinate_from_address(std::string address){
-    return Coordinate(0, 0);
-}
-
-Coordinate address_to_coordinates(std::string address){
-    return Coordinate();
-}
-std::string coordinate_to_address(Coordinate coordinate){
-    return "";
-}
 
 double Coordinate::get_distance(Coordinate other){
 
@@ -72,6 +63,10 @@ double Coordinate::get_distance(Coordinate other){
 
 }
 
+bool Coordinate::operator==(Coordinate other){ // two coords are equal when lat = long
+    return ((get_latitude() == other.get_latitude()) && (get_longitude() == other.get_longitude()));
+}
+
 
 //---------User-----------
 
@@ -80,7 +75,7 @@ bool check_valid_email(std::string email){
     return regex_match(email, std::regex("(\\w+)(\\.|_)?(\\w*)@(\\w+)(\\.(\\w+))+"));
 }
 
-bool check_valid_address(std::string address){
+bool check_valid_address(Coordinate address){
     return true;
 }
 
@@ -90,8 +85,9 @@ User::User(){
     name = "";
     surname = "";
     email = "";
-    address = "";
+    address = Coordinate(0,0);
 }
+
 User::User(std::string username,
            std::string password,
            std::string name,
@@ -172,18 +168,18 @@ Order::Order(User user,
              Company company,
              double value,
              double delivery_cost,
-             double distance
-             Coordinate other_address = Coordinate(){
+             double distance,
+             Coordinate address){
         this->user = user;
         this->company = company;
         this->value = value;
         this->delivery_cost = delivery_cost;
         this->distance = distance;
-        if (other_address == Coordinate()){ //if another address isn't given, we use the default address
-            address = user.get_address()}
-        }
-        else {address = other_address
-        }
+        if (address == Coordinate()){ //if another address isn't given, we use the default address
+            this->address = user.get_address();}
+        else {
+            this->address = address;}
+}
 
 bool Order::operator==(Order other){ // we assume orders are equal when the user's identity and company choice are the same
                                     // we assume the user will always group his orders for one company in a single order
@@ -370,7 +366,7 @@ void Bucket::match_delivery_cost(){
 
     double difference=cur_cost-max_cost;
 
-    if (difference>=0){ //the bucket is overflowing, conditions are met, we just need to redistribute the shared delivery cost
+    if (difference >= 0){ //the bucket is overflowing, conditions are met, we just need to redistribute the shared delivery cost
 
         completion=true;
         cur_cost-=difference;
@@ -380,14 +376,14 @@ void Bucket::match_delivery_cost(){
         list<Order>::iterator i;
 
         for(i=content.begin();i!=content.end(); ++i) {
-            i->delivery_cost-=idv;
+            i-> delivery_cost -=idv;
         }
       }
 }
 
 double array_of_one_delivery(){ // This function creates the array of all the orders concerned by the delivery, idk how to do it because linked to the database?
     double arr = 0;
-    Coordinate c = order.get_user().get_coordinates();
+    Coordinate c = order.address
     double weight = order.get_delivery_cost(); //or get_value()?
 
 };
