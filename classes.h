@@ -19,6 +19,7 @@ public:
     void set_longitude(double longitude);
     void set_coordinate(double latitude,
                             double longitude);
+    bool operator==(Coordinate other);
 private:
     double latitude; //given in degrees (western latitudes are negative angles)
     double longitude; // given in degrees (southern longtidues are negative angles)
@@ -34,33 +35,30 @@ public:
          std::string password,
          std::string name,
          std::string surname,
-         std::string adresss,
+         Coordinate adresss,
          std::string email);
 
     std::string get_username();
     std::string get_password();
     std::string get_name();
     std::string get_surname();
-    std::string get_address();
+    Coordinate get_address();
     std::string get_email();
-    Coordinate get_coordinates();
 
     void set_username(std::string n);
     void set_password(std::string n);
     void set_name(std::string n);
     void set_surname(std::string n);
-    void set_address(std::string n);
+    void set_address(Coordinate n);
     void set_email(std::string n);
-    void set_coordinates(Coordinate coord);
 
-private:  
+private:
     std::string username;
     std::string password;
     std::string name;
     std::string surname;
-    std::string address;
+    Coordinate address;
     std::string email;
-    Coordinate coordinates;
 
 };
 
