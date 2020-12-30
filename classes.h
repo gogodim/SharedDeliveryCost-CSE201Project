@@ -7,8 +7,6 @@
 #endif // CLASSES_H
 using namespace std;
 
-
-
 class Coordinate{
 public:
     Coordinate();
@@ -20,12 +18,12 @@ public:
     void set_longitude(double longitude);
     void set_coordinate(double latitude,
                             double longitude);
+    bool operator==(Coordinate other);
 private:
     double latitude; //given in degrees (western latitudes are negative angles)
     double longitude; // given in degrees (southern longtidues are negative angles)
 };
 
-Coordinate coordinate_from_address(std::string address);
 
 class User{
 public:
@@ -35,7 +33,7 @@ public:
          std::string password,
          std::string name,
          std::string surname,
-         Coordinate adresss,
+         Coordinate address,
          std::string email);
 
     std::string get_username();
@@ -52,14 +50,13 @@ public:
     void set_email(std::string n);
     void set_address(Coordinate coord);
 
-private:  
+private:
     std::string username;
     std::string password;
     std::string name;
     std::string surname;
-    std::string address;
+    Coordinate address;
     std::string email;
-    Coordinate coordinates;
 
 };
 
@@ -86,35 +83,35 @@ public:
           Company company,
           double value,
           double delivery_cost,
-          double distance);
+          double distance,
+          Coordinate address = Coordinate());
     User get_user();
     Company get_company();
     double get_value();
     double get_delivery_cost();
     double get_distance();
+    Coordinate get_address();
     bool operator==(Order other);
 
 
-//private:
+private:
     User user;
     Company company;
     double value;
     double delivery_cost;
     double distance;
+    Coordinate address;
 
 };
 
 bool check_valid_email(std::string email);
 
-bool check_valid_address(std::string address);
-
-Coordinate convert_to_coordinates(std::string address);
+bool check_valid_address(Coordinate address);
 
 double array_of_one_delivery();
 
 Coordinate distance_optimization(double array);
 
-Coordinate convert_to_coordinates(std::string address);
 
 
 class Bucket{
