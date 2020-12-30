@@ -41,6 +41,9 @@ Coordinate::Coordinate(){
         this->longitude = longitude;
     }
 
+bool Coordinate::operator==(Coordinate other){ // two coords are equal when lat = long
+        return ((get_latitude() == other.get_latitude()) && (get_longitude() == other.get_longitude()));
+    }
 
 double Coordinate::get_distance(Coordinate other){
 
@@ -140,6 +143,13 @@ Company::Company(){
     this->options = std::vector<std::vector<double>>();
 }
 
+std::string Company::get_name(){
+    return name;
+}
+vector<vector<double> > Company::get_options(){
+    return options;
+}
+
 void Company::set_options(std::vector<std::vector<double>> options){
     this->options = options;
 }
@@ -149,18 +159,22 @@ void Company::set_name(std::string name){
 
 //---------Order-----------
 
-
 Order::Order(User user,
              Company company,
              double value,
              double delivery_cost,
-             double distance){
+             double distance,
+             Coordinate address){
         this->user = user;
         this->company = company;
         this->value = value;
         this->delivery_cost = delivery_cost;
         this->distance = distance;
-        to_pay=0;
+        to_pay = 0;
+        if (address == Coordinate()){ //if another address isn't given, we use the default address
+            this->address = user.get_address();}
+        else {
+            this->address = address;}
 }
 
 bool Order::operator==(Order other){ // we assume orders are equal when the user's identity and company choice are the same
@@ -174,8 +188,8 @@ bool Order::operator==(Order other){ // we assume orders are equal when the user
 
     //company_comparison
 
-    std::string comp=company.name;
-    std::string other_comp=other.company.name;
+    std::string comp= company.get_name();
+    std::string other_comp=other.company.get_name();
 
     bool b=(comp==other_comp);
 
@@ -198,8 +212,13 @@ bool Order::operator==(Order other){ // we assume orders are equal when the user
     double Order::get_distance(){
         return distance;
     };
+    double Order::get_to_pay(){
+        return to_pay;
+    }
 
-
+    void Order::set_to_pay(double amount){
+        to_pay = amount;
+    }
 
 //---------------------Bucket--------------------------
 
@@ -310,7 +329,7 @@ tuple<bool,Coordinate>  Bucket::is_compatible(Order new_order){
 
     tuple<bool,Coordinate> tpl=make_tuple(false,coord);
 
-    if(new_order.get_company().name == company.name){ // if the order is from the same company as the bucket
+    if(new_order.get_company().get_name() == company.get_name()){ // if the order is from the same company as the bucket
 
         //----------- checking intersection---------------
 
@@ -384,11 +403,11 @@ list<Bucket> generate_buckets(Order new_order,list<Bucket>& buckets){ // generat
 
 double delivery_cost(Company company,double amount){
 
-    int v=company.options.size();
+    int v = company.get_options().size();
 
     for(int i=0; i<v; i++){
-        if(amount<company.options[i][0] and amount>company.options[i][1]){
-            return company.options[i][2];
+        if(amount < company.get_options()[i][0] and amount > company.get_options()[i][1]){
+            return company.get_options()[i][2];
         }
     }
 
@@ -408,8 +427,8 @@ void Bucket::match_delivery_cost(){
 
         list<Order>::iterator i;
 
-        for(i=content.begin();i!=content.end(); ++i) {
-            i->to_pay=i->delivery_cost-idv;
+        for(i = content.begin(); i != content.end(); ++i) {
+            i->set_to_pay(i->get_delivery_cost() - idv);
 
         }
       }
@@ -529,8 +548,8 @@ double* convert_to_meters(Coordinate C)
 std::vector<Coordinate> get_intersection(Order Order1, Order Order2)
 
 {
-    Coordinate C1= Order1.get_user().get_coordinates();
-    Coordinate C2= Order2.get_user().get_coordinates();
+    Coordinate C1= Order1.get_user().get_address();
+    Coordinate C2= Order2.get_user().get_address();
     double* c1= convert_to_meters(C1);
     double* c2= convert_to_meters(C2);
     double r1=Order1.get_distance();
@@ -560,8 +579,8 @@ std::vector<Coordinate> get_intersection(Order Order1, Order Order2)
 }
 
 bool check_if_inside(Order Order1, Order Order2){
-    Coordinate C1= Order1.get_user().get_coordinates();
-    Coordinate C2= Order2.get_user().get_coordinates();
+    Coordinate C1= Order1.get_user().get_address();
+    Coordinate C2= Order2.get_user().get_address();
     double* c1= convert_to_meters(C1);
     double* c2= convert_to_meters(C2);
     double r1=Order1.get_distance();
@@ -577,9 +596,9 @@ boolPoint check_if_bucket (std::vector <Order> order_vector)
 {
     struct boolPoint p3 = {Coordinate(), false};
     int count0=0;
-    for (int i = 0; i < order_vector.size(); i++){
+    for (int i = 0; i < int(order_vector.size()); i++){
         Order order1 = order_vector[i];
-        for (int j = i+1; j < order_vector.size(); j++){
+        for (int j = i+1; j < int(order_vector.size()); j++){
             Order order2 = order_vector[j];
             std::vector <Coordinate> intersection_vector=get_intersection(order1, order2);
             if (intersection_vector.size()== 0 && !check_if_inside(order1, order2))
@@ -593,19 +612,19 @@ boolPoint check_if_bucket (std::vector <Order> order_vector)
             Coordinate intersection2=intersection_vector[1];
             int count1= 0;
             int count2=0;
-            for (int k = 0; k < order_vector.size(); k++)
+            for (int k = 0; k < int(order_vector.size()); k++)
             {
-                if (intersection1.get_distance(order_vector[k].get_user().get_coordinates()) <= order_vector[k].get_distance())
+                if (intersection1.get_distance(order_vector[k].get_user().get_address()) <= order_vector[k].get_distance())
                         count1++;
-                if (intersection2.get_distance(order_vector[k].get_user().get_coordinates()) <= order_vector[k].get_distance())
+                if (intersection2.get_distance(order_vector[k].get_user().get_address()) <= order_vector[k].get_distance())
                         count2++;
             }
-            if (order_vector.size()==count1)
+            if (int(order_vector.size())==count1)
             {
                 struct boolPoint p1 = {intersection1, true};
                 return p1;
             }
-            if (order_vector.size()==count2)
+            if (int(order_vector.size())==count2)
             {
                 struct boolPoint p2 = {intersection2, true};
                 return p2;
@@ -614,7 +633,7 @@ boolPoint check_if_bucket (std::vector <Order> order_vector)
     }}
     if (count0==(order_vector.size()*order_vector.size()-order_vector.size())/2)
     {
-        struct boolPoint p4 = {order_vector[0].get_user().get_coordinates(), true};
+        struct boolPoint p4 = {order_vector[0].get_user().get_address(), true};
                 return p4;
     }
     return p3;
