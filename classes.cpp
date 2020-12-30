@@ -216,6 +216,9 @@ bool Order::operator==(Order other){ // we assume orders are equal when the user
     double Order::get_distance(){
         return distance;
     };
+    Coordinate Order::get_address(){
+        return address;
+    }
 
 
 
@@ -473,4 +476,3 @@ tuple<bool,Bucket,list<Bucket>> processOrder(list<Bucket> bucket_list, Order new
 
     return tpl;
 }
-
