@@ -172,13 +172,18 @@ Order::Order(User user,
              Company company,
              double value,
              double delivery_cost,
-             double distance){
+             double distance
+             Coordinate other_address = Coordinate(){
         this->user = user;
         this->company = company;
         this->value = value;
         this->delivery_cost = delivery_cost;
         this->distance = distance;
-}
+        if (other_address == Coordinate()){ //if another address isn't given, we use the default address
+            address = user.get_address()}
+        }
+        else {address = other_address
+        }
 
 bool Order::operator==(Order other){ // we assume orders are equal when the user's identity and company choice are the same
                                     // we assume the user will always group his orders for one company in a single order
