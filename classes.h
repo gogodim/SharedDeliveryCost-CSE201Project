@@ -35,24 +35,22 @@ public:
          std::string password,
          std::string name,
          std::string surname,
-         std::string adresss,
+         Coordinate adresss,
          std::string email);
 
     std::string get_username();
     std::string get_password();
     std::string get_name();
     std::string get_surname();
-    std::string get_address();
     std::string get_email();
-    Coordinate get_coordinates();
+    Coordinate get_address();
 
     void set_username(std::string n);
     void set_password(std::string n);
     void set_name(std::string n);
     void set_surname(std::string n);
-    void set_address(std::string n);
     void set_email(std::string n);
-    void set_coordinates(Coordinate coord);
+    void set_address(Coordinate coord);
 
 private:  
     std::string username;
