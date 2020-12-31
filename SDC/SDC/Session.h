@@ -11,7 +11,9 @@
 
 using namespace Wt;
 
-
+/*
+Represents all the functions needed for one session.
+*/
 class Session
 {
 public:

@@ -9,7 +9,9 @@
 class Session;
 class Notification;
 
-
+/*
+Represents only the table with all the notifications.
+*/
 class NotificationTable: public Wt::WContainerWidget
 {
 public:
@@ -25,6 +27,9 @@ private:
   void reloadTable();
 };
 
+/*
+Represents the whole notification widget with the notification button and the notification table.
+*/
 class NotificationWidget: public Wt::WContainerWidget
 {
 public:
@@ -41,6 +46,9 @@ private:
   Session *session_;
 };
 
+/*
+Class for representing the small tables inside the big table to show the info of the other users ordering with the given user.
+*/
 class OtherOrdersTable: public Wt::WContainerWidget
 {
 public:

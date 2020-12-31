@@ -50,6 +50,9 @@ NotificationWidget::NotificationWidget(const int &userID,Session *session)
 
 }
 
+/*
+Function to show and hide the table alternatively with each click on the button.
+*/
 void NotificationWidget::showHide()
 {
     if(this->showed==true)
@@ -65,6 +68,9 @@ void NotificationWidget::showHide()
     }
 }
 
+/*
+Function to split the other order string into something more useful.
+*/
 std::vector< std::vector<std::string> > splitt(std::string otherOrders)
 {
     std::vector< std::vector<std::string> > for_return;
@@ -100,7 +106,8 @@ OtherOrdersTable::OtherOrdersTable(std::string otherOrders)
     for (int i = 0; i < splitted.size(); i++)
     {
         for (int j=0; j < 3; j++){
-            table_->elementAt(i+1, j)->addWidget(std::make_unique<Wt::WText>(splitted[i][j]));
+            if (j==2) table_->elementAt(i+1, j)->addWidget(std::make_unique<Wt::WText>(splitted[i][j]+"$"));
+            else table_->elementAt(i+1, j)->addWidget(std::make_unique<Wt::WText>(splitted[i][j]));
         }
     }
 }

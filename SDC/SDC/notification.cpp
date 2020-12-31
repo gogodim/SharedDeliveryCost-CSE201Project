@@ -13,5 +13,5 @@ Notification::Notification(){
     costShare = 0;
     deliveryLocation = "";
     //std::vector< std::pair < std::pair <std::string,std::string> , int > > vect;
-    otherOrders = "";//"username1,contact1,pays1 username2,contact2,pays2 ..."
+    otherOrders = "";//format: "username1,contact1,pays1 username2,contact2,pays2 ..."
 }
