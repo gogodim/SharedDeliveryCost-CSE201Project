@@ -16,6 +16,10 @@ class RegisterPage: public WContainerWidget{
 
 public:
     RegisterPage();
+    void Register();
+    void Go_Login();
+    bool Check_Valid_Email(std::string email);
+    bool Check_Valid_Address(std::string address);
 
 private:
     Wt::WLineEdit                  *usernameEdit_;
@@ -26,10 +30,7 @@ private:
     Wt::WLineEdit                  *passwordEdit_;
     Wt::WLineEdit                  *locationEdit_;
     Wt::WText                      *confirm_;
-    std::unique_ptr<Database>      database;
-
-    void Register();
-    void Go_Login();
+    std::unique_ptr<Database>      database;   
 };
 
 #endif // REGISTERPAGE_H

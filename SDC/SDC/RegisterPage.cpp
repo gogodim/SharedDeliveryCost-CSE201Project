@@ -133,3 +133,12 @@ void RegisterPage::Go_Login(){
     this->removeFromParent();
     WApplication::instance()->root()->addWidget(cpp14::make_unique<OrderPage>());
 }
+
+//functions necessary for user
+bool RegisterPage::Check_Valid_Email(std::string email){
+    return regex_match(email, std::regex("(\\w+)(\\.|_)?(\\w*)@(\\w+)(\\.(\\w+))+"));
+}
+
+bool RegisterPage::Check_Valid_Address(std::string address){
+    return true;
+}

@@ -2,14 +2,7 @@
 #include "Order.h"
 #include <regex>
 
-//functions necessary for user
-bool check_valid_email(std::string email){
-    return regex_match(email, std::regex("(\\w+)(\\.|_)?(\\w*)@(\\w+)(\\.(\\w+))+"));
-}
 
-bool check_valid_address(std::string address){
-    return true;
-}
 
 //User Constructor
 User::User(){
