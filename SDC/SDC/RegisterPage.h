@@ -1,5 +1,5 @@
-#ifndef ORDERPAGE_H
-#define ORDERPAGE_H
+#ifndef REGISTERPAGE_H
+#define REGISTERPAGE_H
 
 #include <Wt/WApplication.h>
 #include <Wt/WBreak.h>
@@ -12,22 +12,24 @@
 
 using namespace Wt;
 
-class OrderPage: public WContainerWidget{
+class RegisterPage: public WContainerWidget{
 
 public:
-    OrderPage();
+    RegisterPage();
 
 private:
+    Wt::WLineEdit                  *usernameEdit_;
     Wt::WLineEdit                  *nameEdit_;
+    Wt::WLineEdit                  *surnameEdit_;
+
     Wt::WLineEdit                  *emailEdit_;
     Wt::WLineEdit                  *passwordEdit_;
     Wt::WLineEdit                  *locationEdit_;
     Wt::WText                      *confirm_;
     std::unique_ptr<Database>      database;
 
-    void Login();
-    void Go_Register();
+    void Register();
+    void Go_Login();
 };
 
-
-#endif // ORDERPAGE_H
+#endif // REGISTERPAGE_H

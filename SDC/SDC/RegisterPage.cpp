@@ -8,15 +8,14 @@
 #include <Wt/WHBoxLayout.h>
 #include <Wt/WVBoxLayout.h>
 
+#include <Wt/WVBoxLayout.h>
 
-#include "OrderPage.h"
-#include "RegisterPage.h"
 #include "Database.h"
+#include "RegisterPage.h"
+#include "OrderPage.h"
 
-using namespace Wt;
-
-OrderPage::OrderPage(): WContainerWidget(){
-
+RegisterPage::RegisterPage(): WContainerWidget()
+{
     this->setStyleClass("login-page");
 
     /*Login layout*/
@@ -71,17 +70,16 @@ OrderPage::OrderPage(): WContainerWidget(){
     auto button = hbox->addWidget(Wt::cpp14::make_unique<Wt::WPushButton>("Confirm")); // create a button
     button->setMargin(5, Wt::Side::Left);
     addWidget(Wt::cpp14::make_unique<Wt::WBreak>());
-    button->clicked().connect(this, &OrderPage::Login);
+    button->clicked().connect(this, &RegisterPage::Register);
     confirm_ = vbox->addWidget(Wt::cpp14::make_unique<Wt::WText>());
 
-    /*Register button*/
-    button = hbox->addWidget(Wt::cpp14::make_unique<Wt::WPushButton>("Register")); // create a button
+    /*Login button*/
+    button = hbox->addWidget(Wt::cpp14::make_unique<Wt::WPushButton>("Login")); // create a button
     button->setMargin(5, Wt::Side::Left);
     addWidget(Wt::cpp14::make_unique<Wt::WBreak>());
-    button->clicked().connect(this, &OrderPage::Go_Register);
+    button->clicked().connect(this, &RegisterPage::Go_Login);
 
-
-    /*Login Page*/
+    /*Register Page*/
     hbox = this->setLayout(Wt::cpp14::make_unique<Wt::WHBoxLayout>());
     auto logo = Wt::cpp14::make_unique<WImage>("images/logo.png");
     logo->setStyleClass("login-image");
@@ -94,28 +92,35 @@ OrderPage::OrderPage(): WContainerWidget(){
 
     //addWidget(Wt::cpp14::make_unique<WText>("Enter your name, SVP? "));
 
-    locationEdit_->enterPressed().connect(std::bind(&OrderPage::Login, this));
+    locationEdit_->enterPressed().connect(std::bind(&RegisterPage::Register, this));
 
     database = Wt::cpp14::make_unique<Database>();
 
 }
 
-void OrderPage::Login(){
+void RegisterPage::Register(){
+    /*User* user{new User()};
+    user->set_password((passwordEdit_->text()).toUTF8());
+    user->set_email((emailEdit_->text()).toUTF8());
+    user->set_address((locationEdit_->text()).toUTF8());
+    user->set_username((nameEdit_->text()).toUTF8());
+    bool find_flag = database->find_user(user);*/
     User* user{new User()};
     user->set_password((passwordEdit_->text()).toUTF8());
     user->set_email((emailEdit_->text()).toUTF8());
     user->set_address((locationEdit_->text()).toUTF8());
     user->set_username((nameEdit_->text()).toUTF8());
     bool find_flag = database->find_user(user);
-    if(find_flag){
-        confirm_->setText("Login Successful");
+    if(!find_flag){
+        confirm_->setText("Register Successful");
+        database->add_user(user);
     }
     else{
-        confirm_->setText("Cannot find the user" + nameEdit_->text());
+        confirm_->setText("There is already a username: " + nameEdit_->text());
     }
 }
 
-void OrderPage::Go_Register(){
+void RegisterPage::Go_Login(){
     /*User* user{new User()};
     user->set_password((passwordEdit_->text()).toUTF8());
     user->set_email((emailEdit_->text()).toUTF8());
@@ -125,7 +130,6 @@ void OrderPage::Go_Register(){
 
     /*Change Container too RegisterPage*/
     std::move(database);
-
     this->removeFromParent();
-    WApplication::instance()->root()->addWidget(cpp14::make_unique<RegisterPage>());
+    WApplication::instance()->root()->addWidget(cpp14::make_unique<OrderPage>());
 }

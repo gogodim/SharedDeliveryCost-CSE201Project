@@ -22,6 +22,7 @@ Database::Database()
 
     /* if there isn't a .db, create and add a default user to the database*/
     if(db.fail()){
+        std::cout<<"Create a new database in" + path << std::endl;
         session.createTables();
         dbo::Transaction transaction(session);
         std::unique_ptr<User> user{new User()};
@@ -44,7 +45,7 @@ bool Database::add_user(const User* user){
 bool Database::find_user(const User* user){
     dbo::Transaction transaction(session);
     std::unique_ptr<User> userptr = std::make_unique<User>(*user);
-    dbo::ptr<User> u = session.find<User>().where("name = ?").bind(userptr->get_username());
+    dbo::ptr<User> u = session.find<User>().where("username = ?").bind(userptr->get_username());
     std::cerr << "Return" << u << std::endl;
     if(!u){
        std::cout<<"False"<<std::endl;

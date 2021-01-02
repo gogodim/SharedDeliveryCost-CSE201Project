@@ -11,9 +11,9 @@ SOURCES += \
         Database.cpp \
         Order.cpp \
         OrderPage.cpp \
+        RegisterPage.cpp \
         User.cpp \
-        main.cpp \
-        registerpage.cpp
+        main.cpp
 
 INCLUDEPATH += C:/Boost/include/boost-1_67 \
                C:/wt-4.4.0/src \
@@ -44,8 +44,8 @@ HEADERS += \
     Database.h \
     Order.h \
     OrderPage.h \
-    User.h \
-    registerpage.h
+    RegisterPage.h \
+    User.h
 
 DISTFILES += \
     css/shared.css \

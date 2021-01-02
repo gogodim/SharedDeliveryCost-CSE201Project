@@ -51,6 +51,8 @@ public:
     void persist(Action& a)
     {
         dbo::field(a, username, "username");
+        dbo::field(a, name,     "name");
+        dbo::field(a, surname,  "surname");
         dbo::field(a, password, "password");
         dbo::field(a, email,    "email");
         dbo::field(a, address,  "address");
