@@ -1,0 +1,4 @@
+During the holidays I finished implementing the optimization function processOrder as well as intermediate functions such as is_compatible. 
+I also started testing these functions.
+
+This week, I will focus on debugging and improving the code, as well as providing details on the input-output type for the wt team (for the merging of our two parts).
