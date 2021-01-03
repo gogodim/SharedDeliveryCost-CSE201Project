@@ -11,6 +11,7 @@ SOURCES += \
         Database.cpp \
         Order.cpp \
         OrderPage.cpp \
+        RegisterPage.cpp \
         User.cpp \
         main.cpp \
         registerpage.cpp \
@@ -54,7 +55,9 @@ HEADERS += \
     registerpage.h \
     NotificationWidget.h \
     Session.h \
-    notification.h
+    notification.h \
+    RegisterPage.h \
+
 DISTFILES += \
     css/shared.css \
     css/shared.css \

@@ -8,15 +8,15 @@
 #include <Wt/WHBoxLayout.h>
 #include <Wt/WVBoxLayout.h>
 
+//#include <boost/regex.hpp>
+#include <regex>
 
-#include "OrderPage.h"
-#include "RegisterPage.h"
 #include "Database.h"
+#include "RegisterPage.h"
+#include "OrderPage.h"
 
-using namespace Wt;
-
-OrderPage::OrderPage(): WContainerWidget(){
-
+RegisterPage::RegisterPage(): WContainerWidget()
+{
     this->setStyleClass("login-page");
 
     /*Login layout*/
@@ -33,18 +33,36 @@ OrderPage::OrderPage(): WContainerWidget(){
     auto text = Wt::cpp14::make_unique<Wt::WText>("Username");
     text->setStyleClass("login-element");
     hbox->addWidget(std::move(text));
+    usernameEdit_ = hbox->addWidget(Wt::cpp14::make_unique<Wt::WLineEdit>());
+    usernameEdit_->setStyleClass("login-edit");
+    usernameEdit_->setFocus();
+
+    /*name input*/
+    hbox = vbox->addLayout(Wt::cpp14::make_unique<Wt::WHBoxLayout>());
+    text = Wt::cpp14::make_unique<Wt::WText>("Name");
+    text->setStyleClass("login-element");
+    hbox->addWidget(std::move(text));
     nameEdit_ = hbox->addWidget(Wt::cpp14::make_unique<Wt::WLineEdit>());
     nameEdit_->setStyleClass("login-edit");
     nameEdit_->setFocus();
 
-    /*email input
+    /*surname input*/
+    hbox = vbox->addLayout(Wt::cpp14::make_unique<Wt::WHBoxLayout>());
+    text = Wt::cpp14::make_unique<Wt::WText>("Surame");
+    text->setStyleClass("login-element");
+    hbox->addWidget(std::move(text));
+    surnameEdit_ = hbox->addWidget(Wt::cpp14::make_unique<Wt::WLineEdit>());
+    surnameEdit_->setStyleClass("login-edit");
+    surnameEdit_->setFocus();
+
+    /*email input*/
     hbox = vbox->addLayout(Wt::cpp14::make_unique<Wt::WHBoxLayout>());
     text = Wt::cpp14::make_unique<Wt::WText>("Email");
     text->setStyleClass("login-element");
     hbox->addWidget(std::move(text));
     emailEdit_ = hbox->addWidget(Wt::cpp14::make_unique<Wt::WLineEdit>());
     emailEdit_->setStyleClass("login-edit");
-    emailEdit_->setFocus();*/
+    emailEdit_->setFocus();
 
     /*password input*/
     hbox = vbox->addLayout(Wt::cpp14::make_unique<Wt::WHBoxLayout>());
@@ -56,32 +74,33 @@ OrderPage::OrderPage(): WContainerWidget(){
     passwordEdit_->setStyleClass("login-edit");
     passwordEdit_->setFocus();
 
-    /*address input
+
+    /*address input*/
     hbox = vbox->addLayout(Wt::cpp14::make_unique<Wt::WHBoxLayout>());
     text = Wt::cpp14::make_unique<Wt::WText>("Address");
     text->setStyleClass("login-element");
     hbox->addWidget(std::move(text));
     locationEdit_ = hbox->addWidget(Wt::cpp14::make_unique<Wt::WLineEdit>());
     locationEdit_->setStyleClass("login-edit");
-    locationEdit_->setFocus();*/
+    locationEdit_->setFocus();
 
 
     hbox = vbox->addLayout(Wt::cpp14::make_unique<Wt::WHBoxLayout>());
 
-    /*Register button*/
-    auto button = hbox->addWidget(Wt::cpp14::make_unique<Wt::WPushButton>("Register")); // create a button
+    /*Login button*/
+    auto button = hbox->addWidget(Wt::cpp14::make_unique<Wt::WPushButton>("Login")); // create a button
     button->setMargin(5, Wt::Side::Left);
     addWidget(Wt::cpp14::make_unique<Wt::WBreak>());
-    button->clicked().connect(this, &OrderPage::Go_Register);
+    button->clicked().connect(this, &RegisterPage::Go_Login);
 
     /*Confirm button*/
     button = hbox->addWidget(Wt::cpp14::make_unique<Wt::WPushButton>("Confirm")); // create a button
     button->setMargin(5, Wt::Side::Left);
     addWidget(Wt::cpp14::make_unique<Wt::WBreak>());
-    button->clicked().connect(this, &OrderPage::Login);
+    button->clicked().connect(this, &RegisterPage::Register);
     confirm_ = vbox->addWidget(Wt::cpp14::make_unique<Wt::WText>());
 
-    /*Login Page*/
+    /*Register Page*/
     hbox = this->setLayout(Wt::cpp14::make_unique<Wt::WHBoxLayout>());
     auto logo = Wt::cpp14::make_unique<WImage>("images/logo.png");
     logo->setStyleClass("login-image");
@@ -94,35 +113,51 @@ OrderPage::OrderPage(): WContainerWidget(){
 
     //addWidget(Wt::cpp14::make_unique<WText>("Enter your name, SVP? "));
 
-    passwordEdit_->enterPressed().connect(std::bind(&OrderPage::Login, this));
+    locationEdit_->enterPressed().connect(std::bind(&RegisterPage::Register, this));
 
     database = Wt::cpp14::make_unique<Database>();
 
 }
 
-void OrderPage::Login(){
+void RegisterPage::Register(){
     User* user{new User()};
     user->set_password((passwordEdit_->text()).toUTF8());
-    user->set_username((nameEdit_->text()).toUTF8());
+    user->set_email((emailEdit_->text()).toUTF8());
+    user->set_address((locationEdit_->text()).toUTF8());
+    user->set_username((usernameEdit_->text()).toUTF8());
+    user->set_name((nameEdit_->text()).toUTF8());
+    user->set_surname((surnameEdit_->text()).toUTF8());
 
     bool find_flag = database->find_user(user);
-    if(find_flag){
-        bool valid_flag = database->valid_user(user);
-        if(valid_flag){
-            confirm_->setText("Login Successful");
+    bool email_flag = this->Check_Valid_Email(user->get_email());
+    if(!find_flag){
+        if(email_flag){
+            confirm_->setText("Wrong Email");
         }
         else{
-            confirm_->setText("Wrong Password");
+            confirm_->setText("Register Successful");
+            database->add_user(user);
         }
+
     }
     else{
-        confirm_->setText("Cannot find the user" + nameEdit_->text());
+        confirm_->setText("There is already a username: " + nameEdit_->text() +
+                          ". Please check again.");
     }
 }
 
-void OrderPage::Go_Register(){
+void RegisterPage::Go_Login(){
+    /*Change Container too RegisterPage*/
     std::move(database);
-
     this->removeFromParent();
-    WApplication::instance()->root()->addWidget(cpp14::make_unique<RegisterPage>());
+    WApplication::instance()->root()->addWidget(cpp14::make_unique<OrderPage>());
+}
+
+//functions necessary for user
+bool RegisterPage::Check_Valid_Email(std::string email){
+    return regex_match(email, std::regex("(\\w+)(\\.|_)?(\\w*)@(\\w+)(\\.(\\w+))+"));
+}
+
+bool RegisterPage::Check_Valid_Address(std::string address){
+    return true;
 }
