@@ -8,7 +8,6 @@
 #include <Wt/WHBoxLayout.h>
 #include <Wt/WVBoxLayout.h>
 #include "NotificationWidget.h"
-#include "Session.h"
 
 #include "OrderPage.h"
 #include "RegisterPage.h"
@@ -97,9 +96,9 @@ OrderPage::OrderPage(): WContainerWidget(){
 
     passwordEdit_->enterPressed().connect(std::bind(&OrderPage::Login, this));
 
-    Database database;
+    //Database database;
 
-    database.addNotification("  G",1000,10.1,"Address 0","username1,contact1,pays1, username2,contact2,pays2, ");
+    //database.addNotification("G",1000,10.1,"Address 0","username1,contact1,pays1, username2,contact2,pays2, ");
 
 
 }

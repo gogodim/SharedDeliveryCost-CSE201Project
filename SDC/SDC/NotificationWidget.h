@@ -6,7 +6,6 @@
 #include <Wt/WPushButton.h>
 
 
-//class Session;
 class Database;
 class Notification;
 

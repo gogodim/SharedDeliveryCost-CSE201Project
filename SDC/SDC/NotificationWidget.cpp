@@ -7,7 +7,6 @@
 #include <Wt/WText.h>
 #include <Wt/WAny.h>
 
-//#include "Session.h"
 #include "Database.h"
 
 using namespace Wt;

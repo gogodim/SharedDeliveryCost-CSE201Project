@@ -1,15 +1,10 @@
 #include <Wt/Dbo/Dbo.h>
 #include <Wt/Dbo/backend/Sqlite3.h>
 #include <string>
-#include "Session.h"
 #include "notification.h"
-
 #include <Wt/WApplication.h>
 #include <Wt/WLogger.h>
-#include "Session.h"
 #include "Database.h"
-
-#include <Wt/WApplication.h>
 #include <fstream>
 
 using namespace Wt;
