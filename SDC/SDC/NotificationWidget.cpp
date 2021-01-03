@@ -7,12 +7,14 @@
 #include <Wt/WText.h>
 #include <Wt/WAny.h>
 
-#include "Session.h"
+//#include "Session.h"
+#include "Database.h"
 
 using namespace Wt;
 
-NotificationTable::NotificationTable(const int &userID,Session *session)
+NotificationTable::NotificationTable(const std::string &username,Database *session)
 {
+    std::cout<<"HEREEE";
     std::vector<Notification> notifications = session->readAllNotifications();
     //title_ = addWidget(std::make_unique<Wt::WText>());
     //title_->addStyleClass("title");
@@ -27,7 +29,7 @@ NotificationTable::NotificationTable(const int &userID,Session *session)
 
     int counter = 1;
     for (int i=0;i<notifications.size();i++){
-        if (notifications[i].userID==userID){
+        if (notifications[i].username==username){
             table_->elementAt(counter, 0)->addWidget(std::make_unique<Wt::WText>(std::to_string(notifications[i].orderID)));
             table_->elementAt(counter, 1)->addWidget(std::make_unique<Wt::WText>(std::to_string(notifications[i].costShare)+"$"));
             table_->elementAt(counter, 2)->addWidget(std::make_unique<Wt::WText>(notifications[i].deliveryLocation));
@@ -38,12 +40,12 @@ NotificationTable::NotificationTable(const int &userID,Session *session)
 
 }
 
-NotificationWidget::NotificationWidget(const int &userID,Session *session)
+NotificationWidget::NotificationWidget(const std::string &username,Database *session)
 {
     //Wt::WPushButton *button = addWidget(std::make_unique<Wt::WPushButton>("Greet me."));
     button_ = addWidget(std::make_unique<Wt::WPushButton>("Notifications"));
     button_->addStyleClass("buttonNotifications");
-    Ntable_ = addWidget(std::make_unique<NotificationTable>(userID,&*session));
+    Ntable_ = addWidget(std::make_unique<NotificationTable>(username,&*session));
     Ntable_->hide();
     showed = false;
     button_->clicked().connect(this,&NotificationWidget::showHide);

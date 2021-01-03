@@ -21,7 +21,7 @@ private:
     Wt::WLineEdit                  *nameEdit_;
     Wt::WLineEdit                  *passwordEdit_;
     Wt::WText                      *confirm_;
-    std::unique_ptr<Database>      database;
+    Database      database;
 
     void Login();
     void Go_Register();

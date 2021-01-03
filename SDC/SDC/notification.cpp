@@ -8,7 +8,7 @@ DBO_INSTANTIATE_TEMPLATES(Notification);
 using namespace Wt::Dbo;
 
 Notification::Notification(){
-    userID = 0;
+    username = "";
     orderID = 0;
     costShare = 0;
     deliveryLocation = "";

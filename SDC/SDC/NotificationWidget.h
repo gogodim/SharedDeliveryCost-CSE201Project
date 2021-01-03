@@ -6,7 +6,8 @@
 #include <Wt/WPushButton.h>
 
 
-class Session;
+//class Session;
+class Database;
 class Notification;
 
 /*
@@ -15,13 +16,13 @@ Represents only the table with all the notifications.
 class NotificationTable: public Wt::WContainerWidget
 {
 public:
-  NotificationTable(const int &userID,Session *session);
+  NotificationTable(const std::string &username,Database *session);
 
 private:
   Wt::WText                 *title_;
   Wt::WTable                *table_;
 
-  Session *session_;
+  Database      *session_;
 
   void addToTable(Notification newNotification);
   void reloadTable();
@@ -33,7 +34,7 @@ Represents the whole notification widget with the notification button and the no
 class NotificationWidget: public Wt::WContainerWidget
 {
 public:
-  NotificationWidget(const int &userID,Session *session);
+  NotificationWidget(const std::string &username,Database *session);
 
 private:
   Wt::WContainerWidget              *container_;
@@ -42,8 +43,8 @@ private:
   bool                               showed;
   void showHide();
   Wt::WTable createTableOrder(std::string otherOrders);
+  Database      *session_;
 
-  Session *session_;
 };
 
 /*

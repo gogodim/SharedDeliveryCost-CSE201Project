@@ -7,7 +7,8 @@
 #include <Wt/WBorderLayout.h>
 #include <Wt/WHBoxLayout.h>
 #include <Wt/WVBoxLayout.h>
-
+#include "NotificationWidget.h"
+#include "Session.h"
 
 #include "OrderPage.h"
 #include "RegisterPage.h"
@@ -96,7 +97,10 @@ OrderPage::OrderPage(): WContainerWidget(){
 
     passwordEdit_->enterPressed().connect(std::bind(&OrderPage::Login, this));
 
-    database = Wt::cpp14::make_unique<Database>();
+    Database database;
+
+    database.addNotification("  G",1000,10.1,"Address 0","username1,contact1,pays1, username2,contact2,pays2, ");
+
 
 }
 
@@ -104,12 +108,17 @@ void OrderPage::Login(){
     User* user{new User()};
     user->set_password((passwordEdit_->text()).toUTF8());
     user->set_username((nameEdit_->text()).toUTF8());
-
-    bool find_flag = database->find_user(user);
+    bool find_flag = database.find_user(user);
     if(find_flag){
-        bool valid_flag = database->valid_user(user);
+        bool valid_flag = database.valid_user(user);
         if(valid_flag){
             confirm_->setText("Login Successful");
+            //std::move(database);
+            this->hide();
+            //this->removeFromParent();
+            WApplication::instance()->useStyleSheet("CSS/style.css");
+            WApplication::instance()->root()->addWidget(Wt::cpp14::make_unique<NotificationWidget>(user->get_username(),&database));
+
         }
         else{
             confirm_->setText("Wrong Password");

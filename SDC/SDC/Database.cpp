@@ -1,9 +1,20 @@
+#include <Wt/Dbo/Dbo.h>
+#include <Wt/Dbo/backend/Sqlite3.h>
+#include <string>
+#include "Session.h"
+#include "notification.h"
+
+#include <Wt/WApplication.h>
+#include <Wt/WLogger.h>
+#include "Session.h"
 #include "Database.h"
 
 #include <Wt/WApplication.h>
 #include <fstream>
 
 using namespace Wt;
+namespace dbo = Wt::Dbo;
+
 
 Database::Database()
 {
@@ -20,14 +31,21 @@ Database::Database()
     /* load user class from table*/
     session.mapClass<User>("user");
 
+    session.mapClass<Notification>("Notification");
+
     /* if there isn't a .db, create and add a default user to the database*/
-    if(db.fail()){
-        std::cout<<"Create a new database in" + path << std::endl;
-        session.createTables();
-        dbo::Transaction transaction(session);
-        std::unique_ptr<User> user{new User()};
-        dbo::ptr<User> userPtr = session.add(std::move(user));
+    dbo::Transaction transaction(session);
+    try {
+      std::cout<<"Create a new database in" + path << std::endl;
+      session.createTables();
+      dbo::Transaction transaction(session);
+      std::unique_ptr<User> user{new User()};
+      dbo::ptr<User> userPtr = session.add(std::move(user));
+      log("info") << "Database created";
+    } catch (...) {
+      log("info") << "Using existing database";
     }
+    transaction.commit();
 
 }
 
@@ -70,3 +88,41 @@ bool Database::valid_user(const User* user){
     }
     return false;
 }
+
+
+dbo::ptr<Notification> Database::notification() const
+{
+    return dbo::ptr<Notification>();
+}
+
+std::vector<Notification> Database::readAllNotifications()
+{
+    dbo::Transaction transaction(session);
+    std::vector<Notification> result;
+
+    Notifications temp = session.find<Notification>();
+
+    for (Notifications::const_iterator i = temp.begin(); i != temp.end(); ++i) {
+      dbo::ptr<Notification> notification = *i;
+      result.push_back(*notification);
+    }
+
+    transaction.commit();
+
+    return result;
+}
+
+void Database::addNotification(std::string username1,int orderID1,double costShare1,std::string deliveryLocation1,std::string otherOrders1)
+{
+    dbo::Transaction transaction(session);
+
+    std::unique_ptr<Notification> notification{new Notification()};
+    notification->costShare = costShare1;
+    notification->deliveryLocation = deliveryLocation1;
+    notification->orderID = orderID1;
+    notification->otherOrders = otherOrders1;
+    notification->username = username1;
+    dbo::ptr<Notification> temp = session.add(std::move(notification));
+
+}
+

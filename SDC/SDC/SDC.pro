@@ -14,10 +14,7 @@ SOURCES += \
         RegisterPage.cpp \
         User.cpp \
         main.cpp \
-        registerpage.cpp \
         NotificationWidget.cpp \
-        Session.cpp \
-        main1.cpp \
         notification.cpp
 
 
@@ -52,9 +49,7 @@ HEADERS += \
     Order.h \
     OrderPage.h \
     User.h \
-    registerpage.h \
     NotificationWidget.h \
-    Session.h \
     notification.h \
     RegisterPage.h \
 

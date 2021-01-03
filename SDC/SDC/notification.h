@@ -25,9 +25,9 @@ class Notification
 public:
   Notification();
 
-  int userID; // The userID of the user for whom the notification is dedicated
+  std::string username; // The username of the user for whom the notification is dedicated
   int orderID; // The orderID of the order for which the notification is dedicated
-  double costShare; // The amount that the user with userID needs to pay for the order with orderID
+  double costShare; // The amount that the user with username needs to pay for the order with orderID
   std::string deliveryLocation; // The location at which thet order should be delivered
   //std::vector< std::pair < std::pair <std::string,std::string> , int> > otherOrders;
   std::string otherOrders; //String that needs to be decomposed and contains information about the other users with which the user needs to share the order
@@ -36,7 +36,7 @@ public:
   template<class Action>
   void persist(Action& a)
   {
-    dbo::field(a, userID, "userID");
+    dbo::field(a, username, "username");
     dbo::field(a, orderID, "orderID");
     dbo::field(a, costShare, "costShare");
     dbo::field(a, deliveryLocation, "deliveryLocation");
