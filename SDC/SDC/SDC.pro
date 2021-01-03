@@ -6,7 +6,7 @@ CONFIG -= qt
 SOURCES += \
         NotificationWidget.cpp \
         Session.cpp \
-        main.cpp \
+        main1.cpp \
         notification.cpp
 
 
