@@ -54,3 +54,19 @@ bool Database::find_user(const User* user){
     std::cout<<"True"<<std::endl;
     return true;
 }
+
+bool Database::valid_user(const User* user){
+    dbo::Transaction transaction(session);
+    std::unique_ptr<User> userptr = std::make_unique<User>(*user);
+    dbo::ptr<User> u = session.find<User>().where("username = ?").bind(userptr->get_username());
+    std::cerr << "Return" << u << std::endl;
+    if(!u){
+       //std::cout<<"False"<<std::endl;
+       return false;
+    }
+    //std::cout<<"True"<<std::endl;
+    else if(u->get_password() == userptr->get_password()){
+        return true;
+    }
+    return false;
+}

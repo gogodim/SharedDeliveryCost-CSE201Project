@@ -1,7 +1,5 @@
 #include "User.h"
 #include "Order.h"
-#include <regex>
-
 
 
 //User Constructor
@@ -50,6 +48,11 @@ std::string User::get_email(){
 Coordinate User::get_coordinates(){
     return this->coordinates;
 };
+
+std::string User::get_password() const{
+    return this->password;
+}
+
 
 //User, Setters
 void User::set_username(std::string username){

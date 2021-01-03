@@ -30,21 +30,21 @@ OrderPage::OrderPage(): WContainerWidget(){
 
     /*username input*/
     auto hbox = vbox->addLayout(Wt::cpp14::make_unique<Wt::WHBoxLayout>());
-    auto text = Wt::cpp14::make_unique<Wt::WText>("Name");
+    auto text = Wt::cpp14::make_unique<Wt::WText>("Username");
     text->setStyleClass("login-element");
     hbox->addWidget(std::move(text));
     nameEdit_ = hbox->addWidget(Wt::cpp14::make_unique<Wt::WLineEdit>());
     nameEdit_->setStyleClass("login-edit");
     nameEdit_->setFocus();
 
-    /*email input*/
+    /*email input
     hbox = vbox->addLayout(Wt::cpp14::make_unique<Wt::WHBoxLayout>());
     text = Wt::cpp14::make_unique<Wt::WText>("Email");
     text->setStyleClass("login-element");
     hbox->addWidget(std::move(text));
     emailEdit_ = hbox->addWidget(Wt::cpp14::make_unique<Wt::WLineEdit>());
     emailEdit_->setStyleClass("login-edit");
-    emailEdit_->setFocus();
+    emailEdit_->setFocus();*/
 
     /*password input*/
     hbox = vbox->addLayout(Wt::cpp14::make_unique<Wt::WHBoxLayout>());
@@ -56,30 +56,30 @@ OrderPage::OrderPage(): WContainerWidget(){
     passwordEdit_->setStyleClass("login-edit");
     passwordEdit_->setFocus();
 
-    /*address input*/
+    /*address input
     hbox = vbox->addLayout(Wt::cpp14::make_unique<Wt::WHBoxLayout>());
     text = Wt::cpp14::make_unique<Wt::WText>("Address");
     text->setStyleClass("login-element");
     hbox->addWidget(std::move(text));
     locationEdit_ = hbox->addWidget(Wt::cpp14::make_unique<Wt::WLineEdit>());
     locationEdit_->setStyleClass("login-edit");
-    locationEdit_->setFocus();
+    locationEdit_->setFocus();*/
 
 
     hbox = vbox->addLayout(Wt::cpp14::make_unique<Wt::WHBoxLayout>());
-    /*Confirm button*/
-    auto button = hbox->addWidget(Wt::cpp14::make_unique<Wt::WPushButton>("Confirm")); // create a button
-    button->setMargin(5, Wt::Side::Left);
-    addWidget(Wt::cpp14::make_unique<Wt::WBreak>());
-    button->clicked().connect(this, &OrderPage::Login);
-    confirm_ = vbox->addWidget(Wt::cpp14::make_unique<Wt::WText>());
 
     /*Register button*/
-    button = hbox->addWidget(Wt::cpp14::make_unique<Wt::WPushButton>("Register")); // create a button
+    auto button = hbox->addWidget(Wt::cpp14::make_unique<Wt::WPushButton>("Register")); // create a button
     button->setMargin(5, Wt::Side::Left);
     addWidget(Wt::cpp14::make_unique<Wt::WBreak>());
     button->clicked().connect(this, &OrderPage::Go_Register);
 
+    /*Confirm button*/
+    button = hbox->addWidget(Wt::cpp14::make_unique<Wt::WPushButton>("Confirm")); // create a button
+    button->setMargin(5, Wt::Side::Left);
+    addWidget(Wt::cpp14::make_unique<Wt::WBreak>());
+    button->clicked().connect(this, &OrderPage::Login);
+    confirm_ = vbox->addWidget(Wt::cpp14::make_unique<Wt::WText>());
 
     /*Login Page*/
     hbox = this->setLayout(Wt::cpp14::make_unique<Wt::WHBoxLayout>());
@@ -94,7 +94,7 @@ OrderPage::OrderPage(): WContainerWidget(){
 
     //addWidget(Wt::cpp14::make_unique<WText>("Enter your name, SVP? "));
 
-    locationEdit_->enterPressed().connect(std::bind(&OrderPage::Login, this));
+    passwordEdit_->enterPressed().connect(std::bind(&OrderPage::Login, this));
 
     database = Wt::cpp14::make_unique<Database>();
 
@@ -103,12 +103,17 @@ OrderPage::OrderPage(): WContainerWidget(){
 void OrderPage::Login(){
     User* user{new User()};
     user->set_password((passwordEdit_->text()).toUTF8());
-    user->set_email((emailEdit_->text()).toUTF8());
-    user->set_address((locationEdit_->text()).toUTF8());
     user->set_username((nameEdit_->text()).toUTF8());
+
     bool find_flag = database->find_user(user);
     if(find_flag){
-        confirm_->setText("Login Successful");
+        bool valid_flag = database->valid_user(user);
+        if(valid_flag){
+            confirm_->setText("Login Successful");
+        }
+        else{
+            confirm_->setText("Wrong Password");
+        }
     }
     else{
         confirm_->setText("Cannot find the user" + nameEdit_->text());
@@ -116,14 +121,6 @@ void OrderPage::Login(){
 }
 
 void OrderPage::Go_Register(){
-    /*User* user{new User()};
-    user->set_password((passwordEdit_->text()).toUTF8());
-    user->set_email((emailEdit_->text()).toUTF8());
-    user->set_address((locationEdit_->text()).toUTF8());
-    user->set_username((nameEdit_->text()).toUTF8());
-    database->add_user(user);*/
-
-    /*Change Container too RegisterPage*/
     std::move(database);
 
     this->removeFromParent();

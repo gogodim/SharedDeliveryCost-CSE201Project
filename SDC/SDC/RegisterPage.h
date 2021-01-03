@@ -28,6 +28,9 @@ private:
 
     Wt::WLineEdit                  *emailEdit_;
     Wt::WLineEdit                  *passwordEdit_;
+    Wt::WLineEdit                  *PostCodeEdit_;
+    Wt::WLineEdit                  *CityEdit_;
+    Wt::WLineEdit                  *StreetNoEdit_;
     Wt::WLineEdit                  *locationEdit_;
     Wt::WText                      *confirm_;
     std::unique_ptr<Database>      database;   

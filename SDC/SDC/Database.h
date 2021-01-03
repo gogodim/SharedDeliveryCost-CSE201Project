@@ -15,6 +15,7 @@ public:
     Database();
     bool add_user(const User*);
     bool find_user(const User*);
+    bool valid_user(const User*);
 private:
     dbo::Session session;
 };
