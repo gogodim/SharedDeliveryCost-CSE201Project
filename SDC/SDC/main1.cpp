@@ -25,6 +25,7 @@ std::unique_ptr<WApplication> createApplication(const WEnvironment& env)
   return app;
 }
 /*
+ * This is just so we have a change here
 int main(int argc, char **argv)
 {
   try {
