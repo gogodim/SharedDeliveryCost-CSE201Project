@@ -17,8 +17,7 @@ class Session{
 /*
 Represents all the functions needed for one session.
 */
-class Session
-{
+
 public:
 
   Session();

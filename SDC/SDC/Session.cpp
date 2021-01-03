@@ -7,7 +7,7 @@
 
 #include <Wt/WApplication.h>
 #include <Wt/WLogger.h>
-#include "Session.h
+#include "Session.h"
 
 using namespace Wt;
 

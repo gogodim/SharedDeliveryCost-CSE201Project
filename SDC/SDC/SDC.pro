@@ -13,7 +13,7 @@ SOURCES += \
         OrderPage.cpp \
         User.cpp \
         main.cpp \
-        registerpage.cpp
+        registerpage.cpp \
         NotificationWidget.cpp \
         Session.cpp \
         main1.cpp \
@@ -38,8 +38,8 @@ LIBS += -LC:/Boost/lib \
                 -llibboost_filesystem-mgw73-mt-x64-1_67 \
                 -llibboost_system-mgw73-mt-x64-1_67
 
-LIBS  +=  -LC:/Qt/Tools/mingw730_64/i686-w64-mingw32/lib  \
 #LIBS += -LC:/Qt/Tools/mingw730_32/i686-w64-mingw32/lib \
+LIBS  +=  -LC:/Qt/Tools/mingw730_64/i686-w64-mingw32/lib  \
                 -llibws2_32 \
                 -llibwsock32
 
@@ -51,8 +51,8 @@ HEADERS += \
     Order.h \
     OrderPage.h \
     User.h \
-    registerpage.h
-	NotificationWidget.h \
+    registerpage.h \
+    NotificationWidget.h \
     Session.h \
     notification.h
 DISTFILES += \
@@ -64,5 +64,5 @@ DISTFILES += \
     resources/moz-transitions.css \
     resources/transitions.css \
     resources/webkit-transitions.css \
-    shared.css
+    shared.css \
     CSS/style.css
