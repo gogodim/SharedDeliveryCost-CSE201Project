@@ -121,7 +121,7 @@ public:
     Bucket(Company company, list<Order> content,double bucket_cur_amount,double bucket_cur_cost,double bucket_max_cost,bool bucket_completion, Coordinate inter);
     tuple<bool,Coordinate> is_compatible(Order new_order);
 
-    void add_order(Order order,Coordinate inter=Coordinate()); // adds valid order in bucket_content and updates all data members accordingly
+    void add_order(Order& order,Coordinate inter=Coordinate()); // adds valid order in bucket_content and updates all data members accordingly
                                                   // also updates the intersection_point with inter
 
     void match_delivery_cost();//Checks if the contribution of delivery cost of the new order doesn't overflow the max_cost, and distribute the cost
@@ -132,7 +132,7 @@ public:
     void find_and_remove(Order order); //find an order equal to the input order and removes it from the bucket
     void find_and_remove_order_list(list<Order> orders); // remove elements in bucket content that belong to the input list "orders"
     void update_parameters(Order order); // update bucket params after removal of input order "order" (the removal is done prior to the function call)
-
+    void print();
     //setters
 
     void set_company(Company comp){
@@ -195,6 +195,8 @@ private:
     Coordinate intersection_point;
 };
 
+void print_bucket_list(list<Bucket> buc_list);
+
 Bucket copy(Bucket other);
 
 bool compare(Bucket b1,Bucket b2);
@@ -205,7 +207,7 @@ bool radius_overlap(Order order1, Order order2); // True if there exists a commo
 
 double delivery_cost(Company company,double amount); // returns the delivery cost associated to an order amount, given a company
 
-tuple<bool,list<Bucket>> processOrder(vector<Company> companyList, vector<Bucket> bucketList, Order newOrder);
+tuple<bool,Bucket,list<Bucket>> processOrder(list<Bucket> bucketList, Order newOrder);
 // final optimization function, returns a triple of the form (found, optimal_buc,updated_bucket_list)
 // found==true if an optimization bundle exists,
 // optimal_buc is the bucket grouping orders satifying this optimization (it could be empty)

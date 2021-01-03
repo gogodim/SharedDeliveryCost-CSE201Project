@@ -113,7 +113,7 @@ int main(int argc, char *argv[])
 //    }
 
 
-    //--------------------test for sorting in decreasing order of length------------------------
+//    //--------------------test for sorting in decreasing order of length------------------------
 
     Bucket b1=Bucket();
 
@@ -125,10 +125,10 @@ int main(int argc, char *argv[])
 
     Bucket b5=Bucket();
 
-    vector<double> vect1={0,10,2};
-    vector<double> vect2={10,30,3};
-    vector<double> vect3={30,70,4};
-    vector<double> vect4={70,200,4};
+    vector<double> vect1={0,10,1};
+    vector<double> vect2={10,30,1};
+    vector<double> vect3={30,70,0.5};
+    vector<double> vect4={70,200,0.5};
 
     vector<vector<double>> opts;
 
@@ -146,23 +146,24 @@ int main(int argc, char *argv[])
     User Haruhi;
     User Noah;
 
-    John=User(("Kyon"),("shdgfhsd"),("John"),("Smith"),Coordinate(54,87),("john.smith@gmail.com"));
+    John=User(("Kyon"),("shdgfhsd"),("John"),("Smith"),Coordinate(48.710542,2.214975),("john.smith@gmail.com"));
 
-    Yuki=User(("NGT"),("gehihrgus"),("Yuki"),("Nagato"),Coordinate(23,34),("yuki.nagato@gmail.com"));
+    Yuki=User(("NGT"),("gehihrgus"),("Yuki"),("Nagato"),Coordinate(48.710444,2.215033),("yuki.nagato@gmail.com"));
 
-    Haruhi=User(("HS"),("fhzuifzef"),("Haruhi"),("Suzumiya"),Coordinate(89,23),("haruhi.suzumiya@gmail.com"));
+    Haruhi=User(("HS"),("fhzuifzef"),("Haruhi"),("Suzumiya"),Coordinate(48.712644,2.215800),("haruhi.suzumiya@gmail.com"));
 
-    Noah=User(("Noix"),("feuihfrf"),("Noah"),("Russoto"),Coordinate(92,13),("noah.rb@gmail.com"));
+    Noah=User(("Noix"),("feuihfrf"),("Noah"),("Russotto"),Coordinate(92,13),("noah.rb@gmail.com"));
 
     //Order(User user, Company company,double value,double delivery_cost,double distance,Coordinate address)
 
-    Order ord1=Order(John,X,24,3,20);
-    Order ord2=Order(Yuki,X,16,2,30);
-    Order ord3=Order(Haruhi,X,57,5,10);
-    Order ord4=Order(Noah,X,5,1,100);
+    Order ord1=Order(John,X,24,0.2,300);
+    Order ord2=Order(Yuki,X,16,0.2,300);
+    Order ord3=Order(Haruhi,X,57,0.2,300);
+    Order ord4=Order(Noah,X,5,1,500);
 
-    b1.add_order(ord1); // b1 has John + Yuki
+    b1.add_order(ord1); // b1 has John + Yuki + Haruhi
     b1.add_order(ord2);
+    b1.add_order(ord3);
     b2.add_order(ord2); // b2 has Yuki
     b3.add_order(ord3); // b3 has Haruhi
     b4.add_order(ord3); // b4 has Yuki + Haruhi
@@ -174,33 +175,7 @@ int main(int argc, char *argv[])
 
     list<Bucket>::iterator iter;
 
-    int cnt=0;
-
-    iter=B_list.begin();
-
-    for (iter=B_list.begin();iter!=B_list.end();iter++){
-
-        cnt+=1;
-
-        Bucket buc=*iter;
-
-        cout << "Bucket " << cnt;
-
-        cout << "\n" << "Start" << "\n";
-
-        list<Order> ord_list=buc.get_content();
-
-        list<Order>::iterator iter2;
-
-        for (iter2=ord_list.begin();iter2!=ord_list.end();iter2++){
-
-            Order order=*iter2;
-            cout << "User:" << order.get_user().get_name() << "\n";
-        }
-
-        cout << "End" << "\n";
-
-    }
+    //print_bucket_list(B_list);
 
     //---------------------test for removal of orders in optimal bucket----------------------------
 
@@ -221,44 +196,59 @@ int main(int argc, char *argv[])
         }
     }
 
-        cout<<"Order removal in bucket list"<<"\n";
-
-        cnt=0;
-
-        for (iter=new_bucket_list.begin();iter!=new_bucket_list.end();iter++){
-
-            cnt+=1;
-
-            Bucket buc=*iter;
-
-            cout << "Bucket " << cnt;
-
-            cout << "\n" << "Start" << "\n";
-
-            list<Order> ord_list=buc.get_content();
-
-            list<Order>::iterator iter2;
-
-            for (iter2=ord_list.begin();iter2!=ord_list.end();iter2++){
-
-                Order order=*iter2;
-                cout << "User:" << order.get_user().get_name() << "\n";
-            }
-
-            cout << "End" << "\n";
-
-        }
+    //print_bucket_list(new_bucket_list);
 
 
     //---------------------------test for circle intersection------------------------------------
 
+        Coordinate c1=Coordinate(48.712644,2.215800); // 103 avenue Henri Becquerel
+
+        Coordinate c2=Coordinate(48.710542,2.214975); // 79 bv des Maréchaux
+
+        Coordinate c3=Coordinate(48.712137,2.218609); // ENSTA dorms
+
+        Coordinate c4=Coordinate(48.710444,2.215033); // 78 bv des Maréchaux
+
+        double d=c1.get_distance(c4); // 230 meters
+
+        //cout << d << "\n";
+
+        list<Bucket> dflt;
+
+        tuple<bool,Bucket,list<Bucket>> tpl=processOrder(dflt,ord1); // Yuki's order
+
+        cout<< "optimization: "<<get<0>(tpl)<<"\n";
+        cout<< "optimization bucket:";
+        get<1>(tpl).print();
+        cout<< "remaining buckets:"<<"\n";
+        print_bucket_list(get<2>(tpl));
+
+        list<Bucket> dflt2=get<2>(tpl);
+
+        tuple<bool,Bucket,list<Bucket>> tpl2=processOrder(dflt2,ord2); // adding John's order
+
+        cout<< "optimization: "<<get<0>(tpl2)<<"\n";
+        cout<< "optimization bucket:";
+        get<1>(tpl2).print();
+        cout<< "remaining buckets:"<<"\n";
+        print_bucket_list(get<2>(tpl2));
+
+        dflt=get<2>(tpl2);
+
+        tpl=processOrder(dflt,ord3); // adding Haruhi's order
+
+        cout<< "optimization: "<<get<0>(tpl)<<"\n";
+        cout<< "optimization bucket:";
+        get<1>(tpl).print();
+        cout<< "remaining buckets:"<<"\n";
+        print_bucket_list(get<2>(tpl));
 
     //--------------------------final run with complete example----------------------------------
 
 
     //cout<<"After deletion, list size:"<<numbers.size()<<"\n";
 
-    //cout<< "Test for computing distance, distance between NY and Tokyo : " << distance << " km \n";
+    //cout<< "Test for computing distance, distance between NY and Tokyo : " << distance << " m \n";
 
     //cout <<"Test for match_delivery cost: completion state=" << buc.get_completion() <<"\n";
 

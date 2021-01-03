@@ -167,12 +167,12 @@ Order::Order(User user,
              double delivery_cost,
              double distance,
              Coordinate address){
+        to_pay=0;
         this->user = user;
         this->company = company;
         this->value = value;
         this->delivery_cost = delivery_cost;
         this->distance = distance; // in meters
-        to_pay = 0;
         if (address == Coordinate()){ //if another address isn't given, we use the default address
             this->address = user.get_address();}
         else {
@@ -194,7 +194,11 @@ bool Order::operator==(Order other){ // we assume orders are equal when the user
 
     bool b=(comp==other_comp);
 
-    return a&&b;
+    //address comparison
+
+    bool c=(address==other.address);
+
+    return a&&b&&c;
 
 }
 
@@ -246,6 +250,20 @@ Bucket::Bucket(Company company, std::list<Order> content,double cur_amount,doubl
     this->cur_amount=cur_amount;
     this->cur_cost=cur_cost;
     this->intersection_point=inter;
+}
+
+void Bucket::print(){
+
+    list<Order>::iterator iter2;
+
+    cout << "Current cost:"<< cur_cost << "\n";
+    cout << "Max cost:"<< max_cost << "\n";
+
+    for (iter2=content.begin();iter2!=content.end();iter2++){
+
+        Order order=*iter2;
+        cout << "User " << order.get_user().get_name() << " will pay "<< order.get_to_pay() << "\n";
+    }
 }
 
 //void Bucket::find_and_remove(Order order){ //find an order equal to the input order and removes it from the bucket
@@ -300,7 +318,7 @@ void Bucket::find_and_remove_order_list(list<Order> orders){
         s=std::find(content.begin(), content.end(), ord); // return iterator at position of ord in content of bucket
 
     if (s != content.end()){ //true if ord has been found in bucket content
-
+           ord.set_to_pay(0);
            content.erase(s); //remove the order in the bucket content
            update_parameters(ord); //update data members of bucket after removal of order
 
@@ -309,16 +327,49 @@ void Bucket::find_and_remove_order_list(list<Order> orders){
 
 }
 
-void Bucket::add_order(Order order,Coordinate inter){
+void Bucket::match_delivery_cost(){
+
+    double difference=cur_cost-max_cost;
+
+    if (difference>=0){ //the bucket is overflowing, conditions are met, we just need to redistribute the shared delivery cost
+
+        completion=true;
+        cur_cost-=difference;
+
+        double idv=difference/content.size(); // the difference will be removed in equal parts (idv) among the users
+
+        list<Order>::iterator i;
+
+        for(i = content.begin(); i != content.end(); ++i) { // we iterate through the orders of the bucket
+
+            Order ord=*i;
+
+            double q=ord.get_delivery_cost() - idv; // remove the individual difference
+
+            // q will be the final cost to pay for the order, if q is positive
+
+            if (q>=0){
+
+                ord.set_to_pay(q);
+            }
+            else{
+                ord.set_to_pay(0);
+            }
+
+        }
+      }
+}
+
+void Bucket::add_order(Order& order,Coordinate inter){
 
              intersection_point=inter; // sets new intersection point
              content.push_back(order);
+             company=order.get_company();
              cur_cost+= order.get_delivery_cost();
              cur_amount+= order.get_value();
              max_cost= delivery_cost(company,cur_amount);
-             match_delivery_cost(); // update the completion state and amount each user has to pay
-
-         }
+             match_delivery_cost();
+}
 
 tuple<bool,Coordinate>  Bucket::is_compatible(Order new_order){
 
@@ -367,6 +418,26 @@ tuple<bool,Coordinate>  Bucket::is_compatible(Order new_order){
     }
 }
 
+
+void print_bucket_list(list<Bucket> buc_list){
+
+    int cnt=0;
+
+    list<Bucket>::iterator iter;
+
+    for (iter=buc_list.begin();iter!=buc_list.end();iter++){
+
+                cnt+=1;
+
+                Bucket buc=*iter;
+
+                cout << "Bucket " << cnt << " :";
+
+                buc.print();
+
+            }
+}
+
 Bucket copy(Bucket other){ // crates a clone of the input Bucket
 
     return Bucket( other.get_company(), other.get_content(),other.get_cur_amount(),other.get_cur_cost(),other.get_max_cost(), other.get_completion(),other.get_intersection_point());
@@ -381,13 +452,11 @@ list<Bucket> generate_buckets(Order new_order,list<Bucket>& buckets){ // generat
 
      Bucket B=Bucket();
      B.add_order(new_order); // adds new_order to an empty bucket B (with no intersection)
-
-     buckets.push_back(B);
      res.push_back(B);
 
      // iterate through existing list of buckets to see if new_order can be added
 
-    for (it = buckets.begin(); it != buckets.end(); it ++){
+    for (it = buckets.begin(); it != buckets.end(); it++){
         Bucket CurrentBucket = *it;
 
         tuple<bool, Coordinate> tpl=CurrentBucket.is_compatible(new_order);
@@ -402,9 +471,13 @@ list<Bucket> generate_buckets(Order new_order,list<Bucket>& buckets){ // generat
 
             NewBucket.add_order(new_order,coord); // update NewBucket by adding the new_order
 
-            buckets.push_back(NewBucket); // update bucket list with the new combination
+            //buckets.push_back(NewBucket); // update bucket list with the new combination
             res.push_back(NewBucket); // add the combination to res
         }
+    }
+
+    for (it = res.begin(); it != res.end(); it++){ // update initial bucket list with the new combinations
+        buckets.push_back(*it);
     }
     return res;
 }
@@ -415,7 +488,7 @@ double delivery_cost(Company company,double amount){
     int v = company.get_options().size();
 
     for(int i=0; i<v; i++){
-        if(amount < company.get_options()[i][0] and amount > company.get_options()[i][1]){
+        if(amount > company.get_options()[i][0] and amount < company.get_options()[i][1]){
             return company.get_options()[i][2];
         }
     }
@@ -423,25 +496,6 @@ double delivery_cost(Company company,double amount){
     return 0;
 }
 
-void Bucket::match_delivery_cost(){
-
-    double difference=cur_cost-max_cost;
-
-    if (difference>=0){ //the bucket is overflowing, conditions are met, we just need to redistribute the shared delivery cost
-
-        completion=true;
-        cur_cost-=difference;
-
-        double idv=difference/content.size();
-
-        list<Order>::iterator i;
-
-        for(i = content.begin(); i != content.end(); ++i) {
-            i->set_to_pay(i->get_delivery_cost() - idv);
-
-        }
-      }
-}
 
 //double array_of_one_delivery(){ // This function creates the array of all the orders concerned by the delivery, idk how to do it because linked to the database?
 //    double arr = 0;
