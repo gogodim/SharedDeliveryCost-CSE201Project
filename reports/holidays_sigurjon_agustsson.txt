@@ -1,0 +1,2 @@
+During the holidays I have been working on the "create new order" functionality. After initial hurdles I have mostly finished the layout.
+This week I want to finalize the styling and need to connect it to the database to register the orders. 
