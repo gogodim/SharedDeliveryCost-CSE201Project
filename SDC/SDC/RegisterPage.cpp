@@ -129,9 +129,9 @@ void RegisterPage::Register(){
     user->set_surname((surnameEdit_->text()).toUTF8());
 
     bool find_flag = database->find_user(user);
-    bool email_flag = this->Check_Valid_Email(user->get_email());
+    bool email_flag = Check_Valid_Email(user->get_email());
     if(!find_flag){
-        if(email_flag){
+        if(!email_flag){
             confirm_->setText("Wrong Email");
         }
         else{
@@ -155,7 +155,9 @@ void RegisterPage::Go_Login(){
 
 //functions necessary for user
 bool RegisterPage::Check_Valid_Email(std::string email){
-    return regex_match(email, std::regex("(\\w+)(\\.|_)?(\\w*)@(\\w+)(\\.(\\w+))+"));
+    bool res = regex_match(email, std::regex("(\\w+)(\\.|_)?(\\w*)@(\\w+)(\\.(\\w+))+"));
+    //std::cout<< "Email Status:" << res << std::endl;
+    return res;
 }
 
 bool RegisterPage::Check_Valid_Address(std::string address){
