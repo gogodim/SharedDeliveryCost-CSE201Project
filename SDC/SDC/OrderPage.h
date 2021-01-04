@@ -19,14 +19,12 @@ public:
 
 private:
     Wt::WLineEdit                  *nameEdit_;
-    Wt::WLineEdit                  *emailEdit_;
     Wt::WLineEdit                  *passwordEdit_;
-    Wt::WLineEdit                  *locationEdit_;
     Wt::WText                      *confirm_;
-    std::unique_ptr<Database>      database;
+    Database      database;
 
     void Login();
-    //void Register();
+    void Go_Register();
 };
 
 

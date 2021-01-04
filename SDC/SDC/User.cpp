@@ -1,15 +1,7 @@
 #include "User.h"
 #include "Order.h"
-#include <regex>
-
-//functions necessary for user
-bool check_valid_email(std::string email){
-    return regex_match(email, std::regex("(\\w+)(\\.|_)?(\\w*)@(\\w+)(\\.(\\w+))+"));
-}
-
-bool check_valid_address(std::string address){
-    return true;
-}
+#include <string>
+#include "Database.h"
 
 //User Constructor
 User::User(){
@@ -58,12 +50,19 @@ Coordinate User::get_coordinates(){
     return this->coordinates;
 };
 
+std::string User::get_password() const{
+    return this->password;
+}
+
+
 //User, Setters
 void User::set_username(std::string username){
     this->username = username;
 }
+std::hash <std::string> hash;
+
 void User::set_password(std::string password){
-    this->password = password;
+    this->password = std::to_string(hash(password));
 };
 void User::set_name(std::string name){
     this->name = name;

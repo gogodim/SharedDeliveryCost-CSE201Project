@@ -6,6 +6,7 @@
 #include <string>
 #include "Coordinate.h"
 #include "User.h"
+#include "notification.h"
 
 namespace dbo = Wt::Dbo;
 
@@ -15,8 +16,14 @@ public:
     Database();
     bool add_user(const User*);
     bool find_user(const User*);
-private:
+    bool valid_user(const User*);
+    std::vector<Notification> readAllNotifications();
+    void addNotification(std::string username,int orderID,double costShare,std::string deliveryLocation,std::string otherOrders);
     dbo::Session session;
+
+private:
+    mutable Dbo::Session session_;
+    dbo::ptr<Notification> notification() const;
 
 };
 

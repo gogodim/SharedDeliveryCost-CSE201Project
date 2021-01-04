@@ -21,6 +21,8 @@ public:
         this->surname     = u.surname;
         this->email       = u.email;
         this->address     = u.address;
+        //Three element: 91120, Palaiseau, Avenue Henri Becquerel 103
+
         this->coordinates = u.coordinates;
     };
     User(std::string username,
@@ -39,6 +41,8 @@ public:
     std::string get_email();
     Coordinate get_coordinates();
 
+    std::string get_password()const;
+
     void set_username(std::string n);
     void set_password(std::string n);
     void set_name(std::string n);
@@ -46,11 +50,16 @@ public:
     void set_address(std::string n);
     void set_email(std::string n);
     void set_coordinates(Coordinate coord);
+    void Address2Coordinate(std::string address);
+    void Coordinate2Address(Coordinate coord);
+
 
     template<class Action>
     void persist(Action& a)
     {
         dbo::field(a, username, "username");
+        dbo::field(a, name,     "name");
+        dbo::field(a, surname,  "surname");
         dbo::field(a, password, "password");
         dbo::field(a, email,    "email");
         dbo::field(a, address,  "address");
@@ -75,8 +84,6 @@ private:
 /*bool check_valid_email(std::string email);
 
 bool check_valid_address(std::string address);
-
-Coordinate convert_to_coordinates(std::string address);
 
 double array_of_one_delivery();
 

@@ -1,9 +1,14 @@
-#include "Database.h"
-
+#include <Wt/Dbo/Dbo.h>
+#include <Wt/Dbo/backend/Sqlite3.h>
+#include <string>
+#include "notification.h"
 #include <Wt/WApplication.h>
+#include <Wt/WLogger.h>
+#include "Database.h"
 #include <fstream>
-
 using namespace Wt;
+namespace dbo = Wt::Dbo;
+
 
 Database::Database()
 {
@@ -20,13 +25,21 @@ Database::Database()
     /* load user class from table*/
     session.mapClass<User>("user");
 
+    session.mapClass<Notification>("Notification");
+
     /* if there isn't a .db, create and add a default user to the database*/
-    if(db.fail()){
-        session.createTables();
-        dbo::Transaction transaction(session);
-        std::unique_ptr<User> user{new User()};
-        dbo::ptr<User> userPtr = session.add(std::move(user));
+    dbo::Transaction transaction(session);
+    try {
+      std::cout<<"Create a new database in" + path << std::endl;
+      session.createTables();
+      dbo::Transaction transaction(session);
+      std::unique_ptr<User> user{new User()};
+      dbo::ptr<User> userPtr = session.add(std::move(user));
+      log("info") << "Database created";
+    } catch (...) {
+      log("info") << "Using existing database";
     }
+    transaction.commit();
 
 }
 
@@ -44,7 +57,7 @@ bool Database::add_user(const User* user){
 bool Database::find_user(const User* user){
     dbo::Transaction transaction(session);
     std::unique_ptr<User> userptr = std::make_unique<User>(*user);
-    dbo::ptr<User> u = session.find<User>().where("name = ?").bind(userptr->get_username());
+    dbo::ptr<User> u = session.find<User>().where("username = ?").bind(userptr->get_username());
     std::cerr << "Return" << u << std::endl;
     if(!u){
        std::cout<<"False"<<std::endl;
@@ -53,3 +66,57 @@ bool Database::find_user(const User* user){
     std::cout<<"True"<<std::endl;
     return true;
 }
+
+bool Database::valid_user(const User* user){
+    dbo::Transaction transaction(session);
+    std::unique_ptr<User> userptr = std::make_unique<User>(*user);
+    dbo::ptr<User> u = session.find<User>().where("username = ?").bind(userptr->get_username());
+    std::cerr << "Return" << u << std::endl;
+    if(!u){
+       //std::cout<<"False"<<std::endl;
+       return false;
+    }
+    //std::cout<<"True"<<std::endl;
+    else if(u->get_password() == userptr->get_password()){
+        return true;
+    }
+    return false;
+}
+
+
+dbo::ptr<Notification> Database::notification() const
+{
+    return dbo::ptr<Notification>();
+}
+
+std::vector<Notification> Database::readAllNotifications()
+{
+    dbo::Transaction transaction(session);
+    std::vector<Notification> result;
+
+    Notifications temp = session.find<Notification>();
+
+    for (Notifications::const_iterator i = temp.begin(); i != temp.end(); ++i) {
+      dbo::ptr<Notification> notification = *i;
+      result.push_back(*notification);
+    }
+
+    transaction.commit();
+
+    return result;
+}
+
+void Database::addNotification(std::string username1,int orderID1,double costShare1,std::string deliveryLocation1,std::string otherOrders1)
+{
+    dbo::Transaction transaction(session);
+
+    std::unique_ptr<Notification> notification{new Notification()};
+    notification->costShare = costShare1;
+    notification->deliveryLocation = deliveryLocation1;
+    notification->orderID = orderID1;
+    notification->otherOrders = otherOrders1;
+    notification->username = username1;
+    dbo::ptr<Notification> temp = session.add(std::move(notification));
+
+}
+

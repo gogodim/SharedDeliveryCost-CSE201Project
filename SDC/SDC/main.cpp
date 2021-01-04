@@ -3,7 +3,7 @@
 #include <iostream>
 
 #include "OrderPage.h"
-#include "Session.h"
+#include "Database.h"
 
 using namespace Wt;
 
@@ -17,7 +17,6 @@ std::unique_ptr<WApplication> createApplication(const WEnvironment& env){
 
     //Load css
     app->useStyleSheet("css/shared.css");
-
     app->root()->addWidget(cpp14::make_unique<OrderPage>());
 
     return app;

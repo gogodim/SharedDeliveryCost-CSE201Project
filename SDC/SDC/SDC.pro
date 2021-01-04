@@ -11,9 +11,12 @@ SOURCES += \
         Database.cpp \
         Order.cpp \
         OrderPage.cpp \
+        RegisterPage.cpp \
         User.cpp \
         main.cpp \
-        registerpage.cpp
+        NotificationWidget.cpp \
+        notification.cpp
+
 
 INCLUDEPATH += C:/Boost/include/boost-1_67 \
                C:/wt-4.4.0/src \
@@ -26,12 +29,13 @@ LIBS += -LC:/wt-4.4.0/src/http -llibwthttp \
 
 LIBS += -lole32
 
-LIBS  +=  -LC:/Boost/lib \
+LIBS += -LC:/Boost/lib \
                 -llibboost_locale-mgw73-mt-x64-1_67 \
                 -llibboost_thread-mgw73-mt-x64-1_67 \
                 -llibboost_program_options-mgw73-mt-x64-1_67 \
                 -llibboost_filesystem-mgw73-mt-x64-1_67 \
                 -llibboost_system-mgw73-mt-x64-1_67
+#LIBS += -LC:/Qt/Tools/mingw730_32/i686-w64-mingw32/lib \
 
 LIBS  +=  -LC:/Qt/Tools/mingw730_64/i686-w64-mingw32/lib  \
                 -llibws2_32 \
@@ -45,7 +49,10 @@ HEADERS += \
     Order.h \
     OrderPage.h \
     User.h \
-    registerpage.h
+    NotificationWidget.h \
+    notification.h \
+    RegisterPage.h \
+    notification.h
 
 DISTFILES += \
     css/shared.css \
@@ -56,5 +63,5 @@ DISTFILES += \
     resources/moz-transitions.css \
     resources/transitions.css \
     resources/webkit-transitions.css \
-    shared.css
-
+    shared.css \
+    CSS/style.css
