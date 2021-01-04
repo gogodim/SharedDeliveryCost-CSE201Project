@@ -1,0 +1,1 @@
+I finished the intersection function, it calcultaes whether orders intersect and returns the intersection point. This is essential for the creation of buckets. 
