@@ -1,6 +1,7 @@
 #include "User.h"
 #include "Order.h"
-
+#include <string>
+#include "Database.h"
 
 //User Constructor
 User::User(){
@@ -58,8 +59,10 @@ std::string User::get_password() const{
 void User::set_username(std::string username){
     this->username = username;
 }
+std::hash <std::string> hash;
+
 void User::set_password(std::string password){
-    this->password = password;
+    this->password = std::to_string(hash(password));
 };
 void User::set_name(std::string name){
     this->name = name;

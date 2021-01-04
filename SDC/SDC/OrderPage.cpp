@@ -8,7 +8,6 @@
 #include <Wt/WHBoxLayout.h>
 #include <Wt/WVBoxLayout.h>
 #include "NotificationWidget.h"
-
 #include "OrderPage.h"
 #include "RegisterPage.h"
 #include "Database.h"

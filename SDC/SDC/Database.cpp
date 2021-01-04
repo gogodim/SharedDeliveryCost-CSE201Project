@@ -6,7 +6,6 @@
 #include <Wt/WLogger.h>
 #include "Database.h"
 #include <fstream>
-
 using namespace Wt;
 namespace dbo = Wt::Dbo;
 
