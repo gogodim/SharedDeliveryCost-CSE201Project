@@ -1,0 +1,4 @@
+I worked on the Notification Class from start to end, now it's in a working state including the css formating. 
+Also worked on merging two out of the 2 front-end parts, now the log-in and the notification are merged and coordinated together to share the DB.
+Worked on hashing passwords.
+Will work on merging the 3rd front-end part so we can finally merge with the non-wt team.
