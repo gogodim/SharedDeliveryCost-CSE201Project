@@ -71,6 +71,9 @@ bool check_if_inside(Order Order1, Order Order2){
 
 
 boolPoint check_if_bucket (std::vector <Order> order_vector)
+    \\ Here I determine whether a bucket is valid by using for loops. Every time I take two initial orders, and calculate their intersections. Then,for each intersection I check
+    \\ whether it is in every other circle. If it is, it means it is valid, and therefore I will return True and the adress, otherwise I continue, and finish by saying false and returning a 0 address.
+    \\ I check whether the intersection is in every circle by comparing the sizes of a vector which contains all of the orders to a number to which I add one every time an order commprises an intersection.    
 {
     struct boolPoint p3 = {Coordinate(), false};
     int count0=0;
