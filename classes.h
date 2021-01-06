@@ -97,11 +97,11 @@ public:
     double get_to_pay();
     void set_to_pay(double amount);
     bool operator==(Order other);
-
+    double to_pay;
 
 private:
     User user;
-    double to_pay; //final amount to pay for the delivery (once the optimization is solved)
+    //final amount to pay for the delivery (once the optimization is solved)
     Company company;
     double value;
     double delivery_cost;
@@ -121,7 +121,7 @@ public:
     Bucket(Company company, list<Order> content,double bucket_cur_amount,double bucket_cur_cost,double bucket_max_cost,bool bucket_completion, Coordinate inter);
     tuple<bool,Coordinate> is_compatible(Order new_order);
 
-    void add_order(Order& order,Coordinate inter=Coordinate()); // adds valid order in bucket_content and updates all data members accordingly
+    void add_order(Order order,Coordinate inter=Coordinate()); // adds valid order in bucket_content and updates all data members accordingly
                                                   // also updates the intersection_point with inter
 
     void match_delivery_cost();//Checks if the contribution of delivery cost of the new order doesn't overflow the max_cost, and distribute the cost
@@ -216,12 +216,20 @@ tuple<bool,Bucket,list<Bucket>> processOrder(list<Bucket> bucketList, Order newO
 
 //----------------Circle Intersection------------------------
 
-struct boolPoint
-{
-   Coordinate p;
-   bool has_intersection;
-};
+//struct boolPoint
+//{
+//   Coordinate p;
+//   bool has_intersection;
+//};
 
+class boolPoint{
+
+public:
+    boolPoint();
+    boolPoint(Coordinate p,bool has_intersection);
+    Coordinate p;
+    bool has_intersection;
+};
 
 
 double* convert_to_meters(Coordinate C);

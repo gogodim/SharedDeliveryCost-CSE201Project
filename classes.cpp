@@ -254,15 +254,31 @@ Bucket::Bucket(Company company, std::list<Order> content,double cur_amount,doubl
 
 void Bucket::print(){
 
+    if(content.size()>0){
+
     list<Order>::iterator iter2;
 
-    cout << "Current cost:"<< cur_cost << "\n";
+    cout << "\n"<<"Current cost:"<< cur_cost << "\n";
     cout << "Max cost:"<< max_cost << "\n";
+
+    if(intersection_point==Coordinate(0,0)){
+
+    cout << "Meeting point: nowhere"<<"\n";
+
+    }
+    else{
+    cout << "Meeting point:"<< "with lat " << intersection_point.get_latitude() << " and lon "<<intersection_point.get_longitude()<<"\n";
+    }
 
     for (iter2=content.begin();iter2!=content.end();iter2++){
 
         Order order=*iter2;
         cout << "User " << order.get_user().get_name() << " will pay "<< order.get_to_pay() << "\n";
+    }
+
+    }
+    else{
+         cout<<"Empty Bucket"<<"\n";
     }
 }
 
@@ -318,7 +334,7 @@ void Bucket::find_and_remove_order_list(list<Order> orders){
         s=std::find(content.begin(), content.end(), ord); // return iterator at position of ord in content of bucket
 
     if (s != content.end()){ //true if ord has been found in bucket content
-           ord.set_to_pay(0);
+
            content.erase(s); //remove the order in the bucket content
            update_parameters(ord); //update data members of bucket after removal of order
 
@@ -350,17 +366,19 @@ void Bucket::match_delivery_cost(){
 
             if (q>=0){
 
-                ord.set_to_pay(q);
+                i->to_pay=q;
+                //ord.set_to_pay(q);
             }
             else{
-                ord.set_to_pay(0);
+                i->to_pay=0;
+                //ord.set_to_pay(0);
             }
 
         }
       }
 }
 
-void Bucket::add_order(Order& order,Coordinate inter){
+void Bucket::add_order(Order order,Coordinate inter){
 
              intersection_point=inter; // sets new intersection point
              content.push_back(order);
@@ -375,9 +393,8 @@ tuple<bool,Coordinate>  Bucket::is_compatible(Order new_order){
 
     //----------- checking company---------------
 
-    Coordinate coord;
 
-    tuple<bool,Coordinate> tpl=make_tuple(false,coord);
+    tuple<bool,Coordinate> tpl=make_tuple(false,Coordinate());
 
     if(new_order.get_company().get_name() == company.get_name()){ // if the order is from the same company as the bucket
 
@@ -385,14 +402,15 @@ tuple<bool,Coordinate>  Bucket::is_compatible(Order new_order){
 
         bool inter; // inter will be true if the intersection exists
 
-        list<Order> new_content(content); // copy of bucket content
-
-        new_content.push_back(new_order); // new_content adds the new_order to it
-
         vector<Order> order_vector;
-        order_vector.reserve(new_content.size());
-        copy(begin(new_content), end(new_content), back_inserter(order_vector)); // converts new_content to vector type
+        list<Order>::iterator i;
 
+        for (i=content.begin();i!=content.end();i++){
+
+            order_vector.push_back(*i);
+        }
+
+        order_vector.push_back(new_order); // create order vector that contains the current bucket content + new order
 
         boolPoint bp=check_if_bucket(order_vector); // return an intersection point based on the addition of the new order
 
@@ -400,11 +418,11 @@ tuple<bool,Coordinate>  Bucket::is_compatible(Order new_order){
 
         if (inter){ // if inter is true <=> the intersection point exists
 
-            coord=bp.p; // coord will be used in generate_buckets to set the bucket intersection point
+            Coordinate coord=bp.p; // coord will be used in generate_buckets to set the bucket intersection point
 
-            tpl=make_tuple(inter,coord);
+            tuple<bool,Coordinate> tpl2=make_tuple(inter,coord);
 
-            return tpl;
+            return tpl2;
         }
 
         else{
@@ -471,7 +489,6 @@ list<Bucket> generate_buckets(Order new_order,list<Bucket>& buckets){ // generat
 
             NewBucket.add_order(new_order,coord); // update NewBucket by adding the new_order
 
-            //buckets.push_back(NewBucket); // update bucket list with the new combination
             res.push_back(NewBucket); // add the combination to res
         }
     }
@@ -592,6 +609,18 @@ tuple<bool,Bucket,list<Bucket>> processOrder(list<Bucket> bucket_list, Order new
 //------------------Circle Intersection-------------------- (all distances are in meters)
 
 
+boolPoint::boolPoint(){
+
+    has_intersection=false;
+    p=Coordinate();
+
+}
+
+boolPoint::boolPoint(Coordinate s, bool has_inter){
+    p=s;
+    has_intersection=has_inter;
+}
+
 double* convert_to_meters(Coordinate C)
 {
     double y=C.get_latitude()*111000;
@@ -661,7 +690,8 @@ boolPoint check_if_bucket (std::vector <Order> order_vector)
 //If it its false it will return an empty coordinate and false.
 //In order to check if an other order can be added to a bucket we could simply take the vector and pushback the new order. And say if check_if_bucket then its good.
 {
-    struct boolPoint p3 = {Coordinate(), false};
+    //struct boolPoint p3 = {Coordinate(), false};
+    boolPoint p3=boolPoint();
     int count0=0;
     for (int i = 0; i < int(order_vector.size()); i++){
         Order order1 = order_vector[i];
@@ -688,20 +718,23 @@ boolPoint check_if_bucket (std::vector <Order> order_vector)
             }
             if (int(order_vector.size())==count1)
             {
-                struct boolPoint p1 = {intersection1, true};
+                //struct boolPoint p1 = {intersection1, true};
+                boolPoint p1=boolPoint(intersection1,true);
                 return p1;
             }
             if (int(order_vector.size())==count2)
             {
-                struct boolPoint p2 = {intersection2, true};
+                //struct boolPoint p2 = {intersection2, true};
+                boolPoint p2=boolPoint(intersection2,true);
                 return p2;
             }
 
     }}
     if (count0==(order_vector.size()*order_vector.size()-order_vector.size())/2)
     {
-        struct boolPoint p4 = {order_vector[0].get_user().get_address(), true};
-                return p4;
+        //struct boolPoint p4 = {order_vector[0].get_user().get_address(), true};
+        boolPoint p4=boolPoint(order_vector[0].get_user().get_address(), true);
+        return p4;
     }
     return p3;
 }
