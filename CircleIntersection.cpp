@@ -64,8 +64,8 @@ bool check_if_inside(Order Order1, Order Order2){
 	// this one simply checks if an order is inside another order when there is no intersection. 
 	Coordinate C1= Order1.get_user().get_coordinates();	
 	Coordinate C2= Order2.get_user().get_coordinates();
-	double* c1= convert_to_meters(C1);
-	double* c2= convert_to_meters(C2);
+	//double* c1= convert_to_meters(C1);
+	//double* c2= convert_to_meters(C2);
 	double r1=Order1.get_distance();
 	double r2=Order2.get_distance();
 	double d= C1.get_distance(C2);
