@@ -9,12 +9,12 @@
 
 
 
-//double* convert_to_meters(Coordinate C)
+double* convert_to_meters(Coordinate C)
 {
-	//double y=C.get_latitude()*111000;
-	//double x=C.get_longitude()*111000*cos(C.get_latitude()*M_PI/180);
-	//static double array [2] = { x, y };
-	//return array;
+	double y=C.get_latitude()*111000;
+	double x=C.get_longitude()*111000*cos(C.get_latitude()*M_PI/180);
+	static double array [2] = { x, y };
+	return array;
 }
 
  Coordinate convert_to_coordinates(double* array)
@@ -27,14 +27,10 @@
 std::vector<Coordinate> get_intersection(Order Order1, Order Order2)
 // this function is the mathematical way to get the intersection of the radius between two orders, this is necessary in order for the next one to be able to take in a vector of orders, and say wether or not they can all fit in one bucket.
 {
-	Coordinate C1= Order1.get_user().get_coordinates();	
-	Coordinate C2= Order2.get_user().get_coordinates();
-	//double* c1= convert_to_meters(C1);
-	//double* c2= convert_to_meters(C2);
-	double y=C1.get_latitude()*111000;
-	double x=C1.get_longitude()*111000*cos(C1.get_latitude()*M_PI/180);
-	double y1=C2.get_latitude()*111000;
-	double x1=C2.get_longitude()*111000*cos(C2.get_latitude()*M_PI/180);
+ 	Coordinate C1= Order1.get_user().get_coordinates();	
+ 	Coordinate C2= Order2.get_user().get_coordinates();
+	double* c1= convert_to_meters(C1);
+	double* c2= convert_to_meters(C2);
 	double r1=Order1.get_distance();
 	double r2=Order2.get_distance();
 	double d= C1.get_distance(C2);
@@ -43,36 +39,35 @@ std::vector<Coordinate> get_intersection(Order Order1, Order Order2)
 	double a=(r1*r1-r2*r2+d*d)/(2*d);
 	double h=sqrt(r1*r1-a*a);
 	double b=d-a;
-	double c3x= x + a*( x1 - x )/d;
-	double c3y= y + a*( y1 - y )/d;
-	double c4x = c3x + h*(y1 -y) /d;
-	double c4y = c3y - h*( x1 - x )/d;
-	double c5x = c3x - h*(y1 -y) /d;
-	double c5y = c3y + h*(  x1 - x )/d;
+	double c3x= c1[0] + a*( c2[0] - c1[0] )/d;
+	double c3y= c1[1] + a*( c2[1] - c1[1] )/d;
+	double c4x = c3x + h*(c2[1] -c1[1]) /d;
+	double c4y = c3y - h*( c2[0] - c1[0] )/d;
+	double c5x = c3x - h*(c2[1] -c1[1]) /d;
+	double c5y = c3y + h*( c2[0] - c1[0] )/d;
 	double c4[2]={c4x, c4y};
 	double c5[2]={c5x, c5y};
-
 	Coordinate Intersection1= convert_to_coordinates(c4);
 	Coordinate Intersection2= convert_to_coordinates(c5);
 	std::vector<Coordinate> vect;
               vect.push_back(Intersection1); 
               vect.push_back(Intersection2);
-              return vect;
-}
+               return vect;
+ }
 
-bool check_if_inside(Order Order1, Order Order2){
-	// this one simply checks if an order is inside another order when there is no intersection. 
-	Coordinate C1= Order1.get_user().get_coordinates();	
-	Coordinate C2= Order2.get_user().get_coordinates();
-	//double* c1= convert_to_meters(C1);
-	//double* c2= convert_to_meters(C2);
-	double r1=Order1.get_distance();
-	double r2=Order2.get_distance();
-	double d= C1.get_distance(C2);
-	if (d<=abs(r1-r2))
-		return true;
-	return false;
-}
+ bool check_if_inside(Order Order1, Order Order2){
+ 	// this one simply checks if an order is inside another order when there is no intersection. 
+ 	Coordinate C1= Order1.get_user().get_coordinates();	
+ 	Coordinate C2= Order2.get_user().get_coordinates();
+ 	double* c1= convert_to_meters(C1);
+ 	double* c2= convert_to_meters(C2);
+ 	double r1=Order1.get_distance();
+ 	double r2=Order2.get_distance();
+ 	double d= C1.get_distance(C2);
+ 	if (d<=abs(r1-r2))
+ 		return true;
+ 	return false;
+ }
 
 boolPoint check_if_bucket (std::vector <Order> order_vector)
 	// This function takes in a vector of orders, so a potential bucket, and says whether or not they could all fit in a bucket, and returns the intersection where to deliver if it is true.
