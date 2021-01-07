@@ -34,7 +34,7 @@ std::vector<Coordinate> get_intersection(Order Order1, Order Order2)
 	double y=C1.get_latitude()*111000;
 	double x=C1.get_longitude()*111000*cos(C1.get_latitude()*M_PI/180);
 	double y1=C2.get_latitude()*111000;
-	double x2=C2.get_longitude()*111000*cos(C2.get_latitude()*M_PI/180);
+	double x1=C2.get_longitude()*111000*cos(C2.get_latitude()*M_PI/180);
 	double r1=Order1.get_distance();
 	double r2=Order2.get_distance();
 	double d= C1.get_distance(C2);
