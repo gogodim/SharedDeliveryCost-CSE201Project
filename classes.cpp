@@ -621,6 +621,7 @@ boolPoint::boolPoint(Coordinate s, bool has_inter){
     has_intersection=has_inter;
 }
 
+
 double* convert_to_meters(Coordinate C)
 {
     double y=C.get_latitude()*111000;
@@ -642,23 +643,29 @@ std::vector<Coordinate> get_intersection(Order Order1, Order Order2)
 {
     Coordinate C1= Order1.get_user().get_address();
     Coordinate C2= Order2.get_user().get_address();
-    double* c1= convert_to_meters(C1);
-    double* c2= convert_to_meters(C2);
+    //double* c1= convert_to_meters(C1);
+    double y1=C1.get_latitude()*111000;
+    double x1=C1.get_longitude()*111000*cos(C1.get_latitude()*M_PI/180);
+    double y2=C2.get_latitude()*111000;
+    double x2=C2.get_longitude()*111000*cos(C2.get_latitude()*M_PI/180);
+
+    //double* c2= convert_to_meters(C2);
     double r1=Order1.get_distance();
     double r2=Order2.get_distance();
     double d= C1.get_distance(C2);
     if (d > r1+ r2)
         return std::vector<Coordinate>();
-
+    if (d<=abs(r1-r2))
+        return std::vector<Coordinate>();
     double a=(r1*r1-r2*r2+d*d)/(2*d);
     double h=sqrt(r1*r1-a*a);
     double b=d-a;
-    double c3x= c1[0] + a*( c2[0] - c1[0] )/d;
-    double c3y= c1[1] + a*( c2[1] - c1[1] )/d;
-    double c4x = c3x + h*(c2[1] -c1[1]) /d;
-    double c4y = c3y - h*( c2[0] - c1[0] )/d;
-    double c5x = c3x - h*(c2[1] -c1[1]) /d;
-    double c5y = c3y + h*( c2[0] - c1[0] )/d;
+    double c3x= x1 + a*( x2 - x1 )/d;
+    double c3y= y1 + a*( y2 - y1 )/d;
+    double c4x = c3x + h*(y2 -y1) /d;
+    double c4y = c3y - h*( x2 - x1 )/d;
+    double c5x = c3x - h*(y2 -y1) /d;
+    double c5y = c3y + h*( x2 - x1 )/d;
     double c4[2]={c4x, c4y};
     double c5[2]={c5x, c5y};
 
@@ -674,8 +681,6 @@ bool check_if_inside(Order Order1, Order Order2){
 // this one simply checks if an order is inside another order when there is no intersection.
     Coordinate C1= Order1.get_user().get_address();
     Coordinate C2= Order2.get_user().get_address();
-    double* c1= convert_to_meters(C1);
-    double* c2= convert_to_meters(C2);
     double r1=Order1.get_distance();
     double r2=Order2.get_distance();
     double d= C1.get_distance(C2);
@@ -711,11 +716,15 @@ boolPoint check_if_bucket (std::vector <Order> order_vector)
             int count2=0;
             for (int k = 0; k < int(order_vector.size()); k++)
             {
-                if (intersection1.get_distance(order_vector[k].get_user().get_address()) <= order_vector[k].get_distance())
+                if (k == i || k == j) {
                         count1++;
-                if (intersection2.get_distance(order_vector[k].get_user().get_address()) <= order_vector[k].get_distance())
-                        count2++;
-            }
+                        count2++;  }
+                else  {
+                        if (intersection1.get_distance(order_vector[k].get_user().get_address()) <= order_vector[k].get_distance())
+                            count1++;
+                        if (intersection2.get_distance(order_vector[k].get_user().get_address()) <= order_vector[k].get_distance())
+                            count2++;
+              }}
             if (int(order_vector.size())==count1)
             {
                 //struct boolPoint p1 = {intersection1, true};
