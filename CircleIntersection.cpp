@@ -33,8 +33,8 @@ std::vector<Coordinate> get_intersection(Order Order1, Order Order2)
     double r1=Order1.get_distance();
     double r2=Order2.get_distance();
     double d= C1.get_distance(C2);
-    if (d > r1+ r2)
-        return std::vector<Coordinate>();
+    if (d > r1+ r2){
+        return std::vector<Coordinate>()};
 
     double a=(r1*r1-r2*r2+d*d)/(2*d);
     double h=sqrt(r1*r1-a*a);
