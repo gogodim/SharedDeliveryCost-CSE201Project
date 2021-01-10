@@ -1,5 +1,3 @@
-
-
 # include "classes.h"
 # include <math.h>
 #include <iostream>
@@ -33,8 +31,8 @@ std::vector<Coordinate> get_intersection(Order Order1, Order Order2)
     double r1=Order1.get_distance();
     double r2=Order2.get_distance();
     double d= C1.get_distance(C2);
-    if (d > r1+ r2)
-        return std::vector<Coordinate>();
+    if (d > r1+ r2){
+        return std::vector<Coordinate>();}
 
     double a=(r1*r1-r2*r2+d*d)/(2*d);
     double h=sqrt(r1*r1-a*a);
@@ -64,13 +62,16 @@ bool check_if_inside(Order Order1, Order Order2){
     double r1=Order1.get_distance();
     double r2=Order2.get_distance();
     double d= C1.get_distance(C2);
-    if (d<=abs(r1-r2))
-        return true;
+    if (d<=abs(r1-r2)){
+        return true;}
     return false;
 }
 
 
 boolPoint check_if_bucket (std::vector <Order> order_vector)
+    \\ Here I determine whether a bucket is valid by using for loops. Every time I take two initial orders, and calculate their intersections. Then,for each intersection I check
+    \\ whether it is in every other circle. If it is, it means it is valid, and therefore I will return True and the adress, otherwise I continue, and finish by saying false and returning a 0 address.
+    \\ I check whether the intersection is in every circle by comparing the sizes of a vector which contains all of the orders to a number to which I add one every time an order commprises an intersection.    
 {
     struct boolPoint p3 = {Coordinate(), false};
     int count0=0;
@@ -79,10 +80,10 @@ boolPoint check_if_bucket (std::vector <Order> order_vector)
         for (int j = i+1; j < order_vector.size(); j++){
             Order order2 = order_vector[j];
             std::vector <Coordinate> intersection_vector=get_intersection(order1, order2);
-            if (intersection_vector.size()== 0 && !check_if_inside(order1, order2))
+            if (intersection_vector.size()== 0 && !check_if_inside(order1, order2)){
                 return p3;
-            if (intersection_vector.size()== 0 && check_if_inside(order1, order2))
-            {
+            }
+            if (intersection_vector.size()== 0 && check_if_inside(order1, order2)){
                 count0++;
                 continue;
             }
@@ -92,10 +93,10 @@ boolPoint check_if_bucket (std::vector <Order> order_vector)
             int count2=0;
             for (int k = 0; k < order_vector.size(); k++)
             {
-                if (intersection1.get_distance(order_vector[k].get_user().get_coordinates()) <= order_vector[k].get_distance())
-                        count1++;
-                if (intersection2.get_distance(order_vector[k].get_user().get_coordinates()) <= order_vector[k].get_distance())
-                        count2++;
+                if (intersection1.get_distance(order_vector[k].get_user().get_coordinates()) <= order_vector[k].get_distance()){
+                        count1++;}
+                if (intersection2.get_distance(order_vector[k].get_user().get_coordinates()) <= order_vector[k].get_distance()){
+                        count2++;}
             }
             if (order_vector.size()==count1)
             {
@@ -116,20 +117,3 @@ boolPoint check_if_bucket (std::vector <Order> order_vector)
     }
     return p3;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
