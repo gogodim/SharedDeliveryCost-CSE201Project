@@ -125,10 +125,10 @@ int main(int argc, char *argv[])
 
     Bucket b5=Bucket();
 
-    vector<double> vect1={0,10,1};
-    vector<double> vect2={10,30,1};
-    vector<double> vect3={30,70,0.5};
-    vector<double> vect4={70,200,0.5};
+    vector<double> vect1{0,10,1};
+    vector<double> vect2{10,30,1};
+    vector<double> vect3{30,70,0.5};
+    vector<double> vect4{70,200,0.5};
 
     vector<vector<double>> opts;
 
@@ -158,8 +158,8 @@ int main(int argc, char *argv[])
 
     Order ord1=Order(John,X,24,0.3,20);
     Order ord2=Order(Yuki,X,16,0.3,20);
-    Order ord3=Order(Haruhi,X,57,0.2,300);
-    Order ord4=Order(Noah,X,5,0.8,300);
+    Order ord3=Order(Haruhi,X,57,0.2,500);
+    Order ord4=Order(Noah,X,5,0.8,500);
 
     b1.add_order(ord1); // b1 has John + Yuki + Haruhi
     b1.add_order(ord2);
@@ -171,13 +171,17 @@ int main(int argc, char *argv[])
 
     list<Bucket> B_list={b2,b1,b3,b4};
 
+    vector<Order> vect{ord1,ord2};
+
     boolPoint bP=check_if_bucket(vector<Order> {ord1,ord2});
 
     cout<< " lat:"<< bP.p.get_latitude();
 
     cout<< " lon:"<< bP.p.get_longitude();
 
-    boolPoint bP2=check_if_bucket(vector<Order> {ord3,ord4});
+    vector<Order> ve2{ord3,ord4};
+
+    boolPoint bP2=check_if_bucket(ve2);
 
     cout<< " lat:"<< bP2.p.get_latitude();
 
@@ -253,11 +257,11 @@ list<Bucket>::iterator iter;
 
 //                cout<< " lon:"<< b.p.get_longitude();
 
-        cout<<"\n"<<"---------"<<"\n";
+       cout<<"\n"<<"---------"<<"\n";
 
 //        list<Bucket> dflt;
 
-//        tuple<bool,Bucket,list<Bucket>> tpl=processOrder(dflt,ord1); // Yuki's order
+//        tuple<bool,Bucket,list<Bucket>> tpl=processOrder(dflt,ord3); // Yuki's order
 
 //        cout<< "optimization: "<<get<0>(tpl)<<"\n";
 //        cout<< "optimization bucket:";
@@ -281,7 +285,7 @@ list<Bucket>::iterator iter;
 
 //        dflt=get<2>(tpl);
 
-//        tpl=processOrder(dflt,ord3); // adding Haruhi's order
+//        tpl=processOrder(dflt,ord4); // adding Haruhi's order
 
 //        cout<< "optimization: "<<get<0>(tpl)<<"\n";
 //        cout<< "optimization bucket:";
@@ -293,17 +297,31 @@ list<Bucket>::iterator iter;
 
 //        dflt=get<2>(tpl);
 
-//       cout<<"hello"<<"\n";
+////       cout<<"hello"<<"\n";
 
-//       print_bucket_list(dflt);
+////       print_bucket_list(dflt);
 
-//        tpl=processOrder(dflt,ord4); // adding Noah's order
+//        tpl=processOrder(dflt,ord1); // adding Noah's order
 
 //        cout<< "optimization: "<<get<0>(tpl)<<"\n";
 //        cout<< "optimization bucket:";
 //        get<1>(tpl).print();
 //        cout<< "remaining buckets:"<<"\n";
 //        print_bucket_list(get<2>(tpl));
+
+//        boolPoint c=check_if_bucket(vector<Order> {ord1,ord2});
+
+//        cout<< "lat:"<< c.p.get_latitude();
+
+//        cout<< " lon:"<< c.p.get_longitude();
+
+
+
+//         c=check_if_bucket(vector<Order> {ord3,ord4});
+
+//        cout<< "lat:"<< c.p.get_latitude();
+
+//        cout<< " lon:"<< c.p.get_longitude();
 
 
 
