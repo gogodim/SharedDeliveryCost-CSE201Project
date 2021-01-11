@@ -658,10 +658,8 @@ double* convert_to_meters(Coordinate C)
     return Coordinate (latitude, longitude);
 }
 
-std::vector<Coordinate> get_intersection(Order Order1, Order Order2)
+ std::vector<Coordinate> get_intersection(Order Order1, Order Order2){
 // this function is the mathematical way to get the intersection of the radius between two orders, this is necessary in order for the next one to be able to take in a vector of orders, and say wether or not they can all fit in one bucket.
-
-{
     Coordinate C1= Order1.get_user().get_address();
     Coordinate C2= Order2.get_user().get_address();
     //double* c1= convert_to_meters(C1);
@@ -675,10 +673,10 @@ std::vector<Coordinate> get_intersection(Order Order1, Order Order2)
     double r2=Order2.get_distance();
     double d= C1.get_distance(C2);
     if (d > r1+ r2){
-        return std::vector<Coordinate>();
+        return std::vector<Coordinate>();}
 
-    if (d<=abs(r1-r2))
-        return std::vector<Coordinate>();
+    if (d<=abs(r1-r2)){
+        return std::vector<Coordinate>();}
     double a=(r1*r1-r2*r2+d*d)/(2*d);
     double h=sqrt(r1*r1-a*a);
     double b=d-a;
@@ -699,8 +697,8 @@ std::vector<Coordinate> get_intersection(Order Order1, Order Order2)
     return vect;
 }
 
-bool check_if_inside(Order Order1, Order Order2){
-// this one simply checks if an order is inside another order when there is no intersection.
+bool check_if_inside(Order Order1, Order Order2){ // this one simply checks if an order is inside another order when there is no intersection.
+
     Coordinate C1= Order1.get_user().get_address();
     Coordinate C2= Order2.get_user().get_address();
     double r1=Order1.get_distance();
@@ -713,11 +711,10 @@ bool check_if_inside(Order Order1, Order Order2){
 }
 
 
-boolPoint check_if_bucket (std::vector <Order> order_vector)
+boolPoint check_if_bucket (std::vector<Order> order_vector){
 // This function takes in a vector of orders, so a potential bucket, and says whether or not they could all fit in a bucket, and returns the intersection where to deliver if it is true.
 //If it its false it will return an empty coordinate and false.
 //In order to check if an other order can be added to a bucket we could simply take the vector and pushback the new order. And say if check_if_bucket then its good.
-{
     //struct boolPoint p3 = {Coordinate(), false};
     boolPoint p3=boolPoint();
     int count0=0;

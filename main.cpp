@@ -156,10 +156,10 @@ int main(int argc, char *argv[])
 
     //Order(User user, Company company,double value,double delivery_cost,double distance,Coordinate address)
 
-    Order ord1=Order(John,X,24,0.3,20);
-    Order ord2=Order(Yuki,X,16,0.3,20);
-    Order ord3=Order(Haruhi,X,57,0.2,500);
-    Order ord4=Order(Noah,X,5,0.8,500);
+    Order ord1=Order(John,X,24,0.3,10);
+    Order ord2=Order(Yuki,X,16,0.3,10);
+    Order ord3=Order(Haruhi,X,57,0.2,200);
+    Order ord4=Order(Noah,X,5,0.8,200);
 
     b1.add_order(ord1); // b1 has John + Yuki + Haruhi
     b1.add_order(ord2);
@@ -171,21 +171,21 @@ int main(int argc, char *argv[])
 
     list<Bucket> B_list={b2,b1,b3,b4};
 
-    vector<Order> vect{ord1,ord2};
+//    vector<Order> vect{ord1,ord2};
 
-    boolPoint bP=check_if_bucket(vector<Order> {ord1,ord2});
+//    boolPoint bP=check_if_bucket(vector<Order> {ord1,ord2});
 
-    cout<< " lat:"<< bP.p.get_latitude();
+//    cout<< " lat:"<< bP.p.get_latitude();
 
-    cout<< " lon:"<< bP.p.get_longitude();
+//    cout<< " lon:"<< bP.p.get_longitude();
 
-    vector<Order> ve2{ord3,ord4};
+//    vector<Order> ve2{ord3,ord4};
 
-    boolPoint bP2=check_if_bucket(ve2);
+//    boolPoint bP2=check_if_bucket(ve2);
 
-    cout<< " lat:"<< bP2.p.get_latitude();
+//    cout<< " lat:"<< bP2.p.get_latitude();
 
-    cout<< " lon:"<< bP2.p.get_longitude();
+//    cout<< " lon:"<< bP2.p.get_longitude();
 
 
 //    tuple<bool,Coordinate> ans=b2.is_compatible(ord1);
@@ -259,69 +259,65 @@ list<Bucket>::iterator iter;
 
        cout<<"\n"<<"---------"<<"\n";
 
-//        list<Bucket> dflt;
+        list<Bucket> dflt;
 
-//        tuple<bool,Bucket,list<Bucket>> tpl=processOrder(dflt,ord3); // Yuki's order
+        tuple<bool,Bucket,list<Bucket>> tpl=processOrder(dflt,ord2); // Yuki's order
 
-//        cout<< "optimization: "<<get<0>(tpl)<<"\n";
-//        cout<< "optimization bucket:";
-//        get<1>(tpl).print();
-//        cout<< "remaining buckets:"<<"\n";
-//        print_bucket_list(get<2>(tpl));
+        cout<< "optimization: "<<get<0>(tpl)<<"\n";
+        cout<< "optimization bucket:";
+        get<1>(tpl).print();
+        cout<< "remaining buckets:"<<"\n";
+        print_bucket_list(get<2>(tpl));
 
-//        cout<<"\n"<<"---------"<<"\n";
+        cout<<"\n"<<"---------"<<"\n";
 
-//        dflt=get<2>(tpl);
+        dflt=get<2>(tpl);
 
-//        tpl=processOrder(dflt,ord2); // adding John's order
+        tpl=processOrder(dflt,ord4); // adding John's order
 
-//        cout<< "optimization: "<<get<0>(tpl)<<"\n";
-//        cout<< "optimization bucket:";
-//        get<1>(tpl).print();
-//        cout<< "remaining buckets:"<<"\n";
-//        print_bucket_list(get<2>(tpl));
+        cout<< "optimization: "<<get<0>(tpl)<<"\n";
+        cout<< "optimization bucket:";
+        get<1>(tpl).print();
+        cout<< "remaining buckets:"<<"\n";
+        print_bucket_list(get<2>(tpl));
 
-//        cout<<"\n"<<"---------"<<"\n";
+        cout<<"\n"<<"---------"<<"\n";
 
-//        dflt=get<2>(tpl);
+        dflt=get<2>(tpl);
 
-//        tpl=processOrder(dflt,ord4); // adding Haruhi's order
+        tpl=processOrder(dflt,ord1); // adding Haruhi's order
 
-//        cout<< "optimization: "<<get<0>(tpl)<<"\n";
-//        cout<< "optimization bucket:";
-//        get<1>(tpl).print();
-//        cout<< "remaining buckets:"<<"\n";
-//        print_bucket_list(get<2>(tpl));
+        cout<< "optimization: "<<get<0>(tpl)<<"\n";
+        cout<< "optimization bucket:";
+        get<1>(tpl).print();
+        cout<< "remaining buckets:"<<"\n";
+        print_bucket_list(get<2>(tpl));
 
-//        cout<<"\n"<<"---------"<<"\n";
+        cout<<"\n"<<"---------"<<"\n";
 
-//        dflt=get<2>(tpl);
+        dflt=get<2>(tpl);
 
-////       cout<<"hello"<<"\n";
+        tpl=processOrder(dflt,ord3); // adding Noah's order
 
-////       print_bucket_list(dflt);
+        cout<< "optimization: "<<get<0>(tpl)<<"\n";
+        cout<< "optimization bucket:";
+        get<1>(tpl).print();
+        cout<< "remaining buckets:"<<"\n";
+        print_bucket_list(get<2>(tpl));
 
-//        tpl=processOrder(dflt,ord1); // adding Noah's order
+        boolPoint c=check_if_bucket(vector<Order> {ord1,ord2});
 
-//        cout<< "optimization: "<<get<0>(tpl)<<"\n";
-//        cout<< "optimization bucket:";
-//        get<1>(tpl).print();
-//        cout<< "remaining buckets:"<<"\n";
-//        print_bucket_list(get<2>(tpl));
+        cout<< "lat:"<< c.p.get_latitude();
 
-//        boolPoint c=check_if_bucket(vector<Order> {ord1,ord2});
-
-//        cout<< "lat:"<< c.p.get_latitude();
-
-//        cout<< " lon:"<< c.p.get_longitude();
+        cout<< " lon:"<< c.p.get_longitude();
 
 
 
-//         c=check_if_bucket(vector<Order> {ord3,ord4});
+         c=check_if_bucket(vector<Order> {ord3,ord4});
 
-//        cout<< "lat:"<< c.p.get_latitude();
+        cout<< "lat:"<< c.p.get_latitude();
 
-//        cout<< " lon:"<< c.p.get_longitude();
+        cout<< " lon:"<< c.p.get_longitude();
 
 
 
