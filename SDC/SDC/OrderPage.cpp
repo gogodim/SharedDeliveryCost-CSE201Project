@@ -14,7 +14,9 @@
 
 using namespace Wt;
 
-OrderPage::OrderPage(): WContainerWidget(){
+OrderPage::OrderPage(int argc, char** argv): WContainerWidget(){
+    this->argc = argc;
+    this->argv = argv;
 
     this->setStyleClass("login-page");
 
@@ -131,5 +133,5 @@ void OrderPage::Go_Register(){
     std::move(database);
 
     this->removeFromParent();
-    WApplication::instance()->root()->addWidget(cpp14::make_unique<RegisterPage>());
+    WApplication::instance()->root()->addWidget(cpp14::make_unique<RegisterPage>(this->argc, this->argv));
 }

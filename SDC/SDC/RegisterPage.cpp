@@ -15,13 +15,16 @@
 #include "RegisterPage.h"
 #include "OrderPage.h"
 
-RegisterPage::RegisterPage(): WContainerWidget()
+RegisterPage::RegisterPage(int argc, char** argv): WContainerWidget()
 {
+    this->argc = argc;
+    this->argv = argv;
+
     this->setStyleClass("login-page");
 
-    /*Login layout*/
+    /*Register layout*/
     auto Login = Wt::cpp14::make_unique<Wt::WContainerWidget>();
-    Login->setHeight(300);
+    Login->setHeight(400);
     Login->setWidth(200);
     Login->setStyleClass("login-box");
 
@@ -75,14 +78,32 @@ RegisterPage::RegisterPage(): WContainerWidget()
     passwordEdit_->setFocus();
 
 
-    /*address input*/
+    /*postalcode input*/
     hbox = vbox->addLayout(Wt::cpp14::make_unique<Wt::WHBoxLayout>());
-    text = Wt::cpp14::make_unique<Wt::WText>("Address");
+    text = Wt::cpp14::make_unique<Wt::WText>("PostalCode");
     text->setStyleClass("login-element");
     hbox->addWidget(std::move(text));
-    locationEdit_ = hbox->addWidget(Wt::cpp14::make_unique<Wt::WLineEdit>());
-    locationEdit_->setStyleClass("login-edit");
-    locationEdit_->setFocus();
+    PostCodeEdit_ = hbox->addWidget(Wt::cpp14::make_unique<Wt::WLineEdit>());
+    PostCodeEdit_->setStyleClass("login-edit");
+    PostCodeEdit_->setFocus();
+
+    /*city input*/
+    hbox = vbox->addLayout(Wt::cpp14::make_unique<Wt::WHBoxLayout>());
+    text = Wt::cpp14::make_unique<Wt::WText>("City");
+    text->setStyleClass("login-element");
+    hbox->addWidget(std::move(text));
+    CityEdit_ = hbox->addWidget(Wt::cpp14::make_unique<Wt::WLineEdit>());
+    CityEdit_->setStyleClass("login-edit");
+    CityEdit_->setFocus();
+
+    /*street input*/
+    hbox = vbox->addLayout(Wt::cpp14::make_unique<Wt::WHBoxLayout>());
+    text = Wt::cpp14::make_unique<Wt::WText>("Street Name and Number");
+    text->setStyleClass("login-element");
+    hbox->addWidget(std::move(text));
+    StreetNoEdit_ = hbox->addWidget(Wt::cpp14::make_unique<Wt::WLineEdit>());
+    StreetNoEdit_->setStyleClass("login-edit");
+    StreetNoEdit_->setFocus();
 
 
     hbox = vbox->addLayout(Wt::cpp14::make_unique<Wt::WHBoxLayout>());
@@ -113,7 +134,7 @@ RegisterPage::RegisterPage(): WContainerWidget()
 
     //addWidget(Wt::cpp14::make_unique<WText>("Enter your name, SVP? "));
 
-    locationEdit_->enterPressed().connect(std::bind(&RegisterPage::Register, this));
+    StreetNoEdit_->enterPressed().connect(std::bind(&RegisterPage::Register, this));
 
     database = Wt::cpp14::make_unique<Database>();
 
@@ -121,28 +142,38 @@ RegisterPage::RegisterPage(): WContainerWidget()
 
 void RegisterPage::Register(){
     User* user{new User()};
+    Address useraddress((PostCodeEdit_->text()).toUTF8(), (CityEdit_->text()).toUTF8(), (StreetNoEdit_->text()).toUTF8());
     user->set_password((passwordEdit_->text()).toUTF8());
     user->set_email((emailEdit_->text()).toUTF8());
-    user->set_address((locationEdit_->text()).toUTF8());
-    user->set_username((usernameEdit_->text()).toUTF8());
+    user->set_address(useraddress.get_address());
+    user->set_address(useraddress.get_address());
+    user->set_useraddress(useraddress);
     user->set_name((nameEdit_->text()).toUTF8());
     user->set_surname((surnameEdit_->text()).toUTF8());
 
     bool find_flag = database->find_user(user);
-    bool email_flag = this->Check_Valid_Email(user->get_email());
+
     if(!find_flag){
+        bool email_flag = this->Check_Valid_Email(user->get_email());
         if(!email_flag){
             confirm_->setText("Wrong Email");
         }
         else{
+            bool address_flag = this->Check_Valid_Address(user->get_useraddress());
+            if(!address_flag){
+                confirm_->setText("Wrong Address");
+                return;
+            }
             confirm_->setText("Register Successful");
             database->add_user(user);
+            return;
         }
 
     }
     else{
-        confirm_->setText("There is already a username: " + nameEdit_->text() +
+        confirm_->setText("There is already a username: " + usernameEdit_->text() +
                           ". Please check again.");
+        return;
     }
 }
 
@@ -150,7 +181,7 @@ void RegisterPage::Go_Login(){
     /*Change Container too RegisterPage*/
     std::move(database);
     this->removeFromParent();
-    WApplication::instance()->root()->addWidget(cpp14::make_unique<OrderPage>());
+    WApplication::instance()->root()->addWidget(cpp14::make_unique<OrderPage>(this->argc, this->argv));
 }
 
 //functions necessary for user
@@ -158,6 +189,8 @@ bool RegisterPage::Check_Valid_Email(std::string email){
     return regex_match(email, std::regex("(\\w+)(\\.|_)?(\\w*)@(\\w+)(\\.(\\w+))+"));
 }
 
-bool RegisterPage::Check_Valid_Address(std::string address){
+bool RegisterPage::Check_Valid_Address(Address address){
+    Coordinate cor = address_to_coordinates(argc, argv, address);
+    std::cout<<"latitude: "<<cor.get_latitude()<<", longtitude: "<<cor.get_longitude()<<std::endl;
     return true;
 }
