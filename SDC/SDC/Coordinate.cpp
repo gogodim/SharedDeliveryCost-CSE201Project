@@ -112,7 +112,6 @@ Coordinate address_to_coordinates(int argc, char** argv, Address address){
       qApp.exec();
     //}
     return cor;
-    return Coordinate();
 }
 std::string coordinate_to_address(Coordinate coordinate){
     return "";
