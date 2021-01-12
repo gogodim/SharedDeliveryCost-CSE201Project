@@ -96,6 +96,10 @@ Coordinate address_to_coordinates(int argc, char** argv, Address address){
           // eval. result
           QList<QGeoLocation> qGeoLocs = pQGeoCode->locations();
           std::cout << qGeoLocs.size() << " location(s) returned." << std::endl;
+          if(qGeoLocs.size() == 0){
+              cor.set_coordinate(-1, -1);
+          }
+          else{
             QGeoLocation &qGeoLoc = qGeoLocs[0];
             qGeoLoc.setAddress(qGeoAddr);
             QGeoCoordinate qGeoCoord = qGeoLoc.coordinate();
@@ -104,13 +108,11 @@ Coordinate address_to_coordinates(int argc, char** argv, Address address){
               << "Long.: " << qGeoCoord.longitude() << std::endl
               << "Alt.:  " << qGeoCoord.altitude() << std::endl;
             cor.set_coordinate(qGeoCoord.latitude(), qGeoCoord.longitude());
+          }
             qApp.exit(0);
-            return "HiHi";
-
+            return "Successful";
         });
-
       qApp.exec();
-    //}
     return cor;
 }
 std::string coordinate_to_address(Coordinate coordinate){

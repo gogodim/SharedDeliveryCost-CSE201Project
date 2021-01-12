@@ -21,6 +21,8 @@ RegisterPage::RegisterPage(int argc, char** argv): WContainerWidget()
     this->argv = argv;
 
     this->setStyleClass("login-page");
+    addWidget(Wt::cpp14::make_unique<WText>("Register your account, SVP? "));
+
 
     /*Register layout*/
     auto Login = Wt::cpp14::make_unique<Wt::WContainerWidget>();
@@ -130,10 +132,6 @@ RegisterPage::RegisterPage(int argc, char** argv): WContainerWidget()
 
     /*Confirm Message*/
 
-
-
-    //addWidget(Wt::cpp14::make_unique<WText>("Enter your name, SVP? "));
-
     StreetNoEdit_->enterPressed().connect(std::bind(&RegisterPage::Register, this));
 
     database = Wt::cpp14::make_unique<Database>();
@@ -141,11 +139,12 @@ RegisterPage::RegisterPage(int argc, char** argv): WContainerWidget()
 }
 
 void RegisterPage::Register(){
+    confirm_->setText("Loading......");
     User* user{new User()};
     Address useraddress((PostCodeEdit_->text()).toUTF8(), (CityEdit_->text()).toUTF8(), (StreetNoEdit_->text()).toUTF8());
+    user->set_username(usernameEdit_->text().toUTF8());
     user->set_password((passwordEdit_->text()).toUTF8());
     user->set_email((emailEdit_->text()).toUTF8());
-    user->set_address(useraddress.get_address());
     user->set_address(useraddress.get_address());
     user->set_useraddress(useraddress);
     user->set_name((nameEdit_->text()).toUTF8());
@@ -159,7 +158,7 @@ void RegisterPage::Register(){
             confirm_->setText("Wrong Email");
         }
         else{
-            bool address_flag = this->Check_Valid_Address(user->get_useraddress());
+            bool address_flag = this->Check_Valid_Address(user->get_useraddress(), user);
             if(!address_flag){
                 confirm_->setText("Wrong Address");
                 return;
@@ -189,8 +188,12 @@ bool RegisterPage::Check_Valid_Email(std::string email){
     return regex_match(email, std::regex("(\\w+)(\\.|_)?(\\w*)@(\\w+)(\\.(\\w+))+"));
 }
 
-bool RegisterPage::Check_Valid_Address(Address address){
+bool RegisterPage::Check_Valid_Address(Address address, User* userptr){
     Coordinate cor = address_to_coordinates(argc, argv, address);
     std::cout<<"latitude: "<<cor.get_latitude()<<", longtitude: "<<cor.get_longitude()<<std::endl;
+    if(cor.get_latitude() == -1 && cor.get_longitude() == -1){
+        return false;
+    }
+    userptr->set_coordinates(cor);
     return true;
 }
