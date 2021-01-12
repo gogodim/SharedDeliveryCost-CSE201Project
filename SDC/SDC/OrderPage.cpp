@@ -11,7 +11,6 @@
 #include "OrderPage.h"
 #include "RegisterPage.h"
 #include "Database.h"
-
 using namespace Wt;
 
 OrderPage::OrderPage(): WContainerWidget(){
@@ -86,8 +85,6 @@ OrderPage::OrderPage(): WContainerWidget(){
     logo->setStyleClass("login-image");
     hbox->addWidget(std::move(logo));
     hbox->addWidget(std::move(Login));
-
-    /*Confirm Message*/
 
 
 

@@ -3,12 +3,14 @@ CONFIG += console c++14
 CONFIG -= app_bundle
 CONFIG -= qt
 #QT += gui widgets xml
+QT += widgets
 
 SOURCES += \
         Bucket.cpp \
         Company.cpp \
         Coordinate.cpp \
         Database.cpp \
+        GeocodingAPI.cpp \
         Order.cpp \
         OrderPage.cpp \
         RegisterPage.cpp \
@@ -46,6 +48,7 @@ HEADERS += \
     Company.h \
     Coordinate.h \
     Database.h \
+    GeocodingAPI.h \
     Order.h \
     OrderPage.h \
     User.h \
