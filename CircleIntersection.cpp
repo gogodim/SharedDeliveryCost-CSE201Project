@@ -36,7 +36,6 @@ std::vector<Coordinate> get_intersection(Order Order1, Order Order2)
 
     double a=(r1*r1-r2*r2+d*d)/(2*d);
     double h=sqrt(r1*r1-a*a);
-    double b=d-a;
     double c3x= c1[0] + a*( c2[0] - c1[0] )/d;
     double c3y= c1[1] + a*( c2[1] - c1[1] )/d;
     double c4x = c3x + h*(c2[1] -c1[1]) /d;
