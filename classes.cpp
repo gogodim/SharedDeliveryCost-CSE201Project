@@ -797,16 +797,20 @@ boolPoint check_if_bucket (std::vector<Order> order_vector){
             int count2=0;
             for (int k = 0; k < int(order_vector.size()); k++)
             {
-
                 if (k == i || k == j) {
                         count1++;
                         count2++;  }
-                else  {
-                        if (intersection1.get_distance(order_vector[k].get_user().get_address()) <= order_vector[k].get_distance())
+
+
+                else  { if (order_vector[k].get_user().get_address()==order1.get_user().get_address() and order_vector[k].get_distance()==order1.get_distance() || order_vector[k].get_user().get_address()==order2.get_user().get_address() and order_vector[k].get_distance()==order2.get_distance()) {
                             count1++;
-                        if (intersection2.get_distance(order_vector[k].get_user().get_address()) <= order_vector[k].get_distance())
+                            count2++;  }
+
+                        else {   if (intersection1.get_distance(order_vector[k].get_user().get_address()) <= order_vector[k].get_distance())
+                            count1++;
+                            if (intersection2.get_distance(order_vector[k].get_user().get_address()) <= order_vector[k].get_distance())
                             count2++;
-              }}
+              }}}
             if (int(order_vector.size())==count1)
             {
                 //struct boolPoint p1 = {intersection1, true};
