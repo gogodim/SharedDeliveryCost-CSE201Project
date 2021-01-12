@@ -24,10 +24,13 @@ User::User(std::string username,
     this->email = email;
     this->address = address;
     this->password = password;
-    set_coordinates(coordinate_from_address(address));
+    //set_coordinates(coordinate_from_address(address));
 };
 
 // User, Gettters
+Address User::get_useraddress(){
+    return this->useraddress;
+}
 std::string User::get_username(){
     return this->username;
 }
@@ -54,6 +57,9 @@ std::string User::get_password() const{
     return this->password;
 }
 
+std::string User::get_username() const{
+    return this->username;
+}
 
 //User, Setters
 void User::set_username(std::string username){
@@ -63,22 +69,27 @@ std::hash <std::string> hash;
 
 void User::set_password(std::string password){
     this->password = std::to_string(hash(password));
-};
+}
 void User::set_name(std::string name){
     this->name = name;
-};
+}
 void User::set_surname(std::string surname){
     this->surname = surname;
-};
+}
 void User::set_address(std::string address){
     this->address = address;
-};
+}
 void User::set_email(std::string email){
     this->email = email;
-};
+}
+void User::set_useraddress(Address add){
+    this->useraddress.set_postalcode(add.get_postalcode());
+    this->useraddress.set_city(add.get_city());
+    this->useraddress.set_street(add.get_street());
+}
 void User::set_coordinates(Coordinate coordinates){
     this->coordinates = coordinates;
-};
+}
 
 /*double array_of_one_delivery(){ // This function creates the array of all the orders concerned by the delivery, idk how to do it because linked to the database?
     double arr = 0;

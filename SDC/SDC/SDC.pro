@@ -1,7 +1,7 @@
 TEMPLATE = app
 CONFIG += console c++14
-CONFIG -= app_bundle
-CONFIG -= qt
+#CONFIG -= app_bundle
+#CONFIG -= qt
 #QT += gui widgets xml
 QT += widgets
 
@@ -68,3 +68,7 @@ DISTFILES += \
     resources/webkit-transitions.css \
     shared.css \
     CSS/style.css
+
+QT += widgets
+QT += positioning
+QT += location

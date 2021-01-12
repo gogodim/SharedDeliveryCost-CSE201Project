@@ -15,13 +15,15 @@ using namespace Wt;
 class OrderPage: public WContainerWidget{
 
 public:
-    OrderPage();
+    OrderPage(int, char**);
+    int                    argc;
+    char**                 argv;
 
 private:
-    Wt::WLineEdit                  *nameEdit_;
-    Wt::WLineEdit                  *passwordEdit_;
-    Wt::WText                      *confirm_;
-    Database      database;
+    Wt::WLineEdit          *nameEdit_;
+    Wt::WLineEdit          *passwordEdit_;
+    Wt::WText              *confirm_;
+    Database                database;
 
     void Login();
     void Go_Register();
