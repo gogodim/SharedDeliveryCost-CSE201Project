@@ -252,6 +252,41 @@ Bucket::Bucket(Company company, std::list<Order> content,double cur_amount,doubl
     this->intersection_point=inter;
 }
 
+bool Bucket::operator==(Bucket other){ // 2 buckets are equal when their contents are equal, we know that their contents are sorted based on willingness of delivery
+    list<Order>::iterator i;
+
+    if (other.content.size()!=content.size()){
+        return false;
+    }
+
+    // build vectors from content and other.content
+
+    vector<Order> v1;
+    vector<Order> v2;
+
+    for (i=content.begin();i!=content.end();i++){
+        v1.push_back(*i);
+    }
+
+    for (i=other.content.begin();i!=other.content.end();i++){
+        v2.push_back(*i);
+    }
+
+    // compare entries one by one (knowing that the contents are sorted)
+
+    int max=v1.size();
+    bool found=true;
+
+    int j;
+    for (j=0;j<max;j++){
+
+        if ((v1[j]==v2[j])==false){ // we found an entry that doesn't match, the buckets cannot be equal
+            found=false;
+        }
+    }
+    return found;
+}
+
 void Bucket::print(){
 
     if(content.size()>0){
@@ -321,6 +356,7 @@ void Bucket::update_parameters(Order order){ //updates bucket parameters after d
     cur_amount=new_amnt;
     cur_cost=new_cost;
     max_cost=new_max;
+    intersection_point=Coordinate();
 
 }
 
@@ -343,6 +379,17 @@ void Bucket::find_and_remove_order_list(list<Order> orders){
 
 }
 
+
+bool compare_willingness(Order order1, Order order2){
+
+    if (order1.get_delivery_cost()==order2.get_delivery_cost()){ // if both have the same willingness
+
+        return order1.get_user().get_name()<order1.get_user().get_name(); // sort by alphabetical order of first name
+    }
+
+    return order1.get_delivery_cost()<order2.get_delivery_cost();
+}
+
 void Bucket::match_delivery_cost(){
 
     double difference=cur_cost-max_cost;
@@ -353,8 +400,11 @@ void Bucket::match_delivery_cost(){
         cur_cost-=difference;
 
         double idv=difference/content.size(); // the difference will be removed in equal parts (idv) among the users
+        double extra=0;
 
         list<Order>::iterator i;
+
+        //content.sort(compare_willingness);
 
         for(i = content.begin(); i != content.end(); ++i) { // we iterate through the orders of the bucket
 
@@ -366,15 +416,26 @@ void Bucket::match_delivery_cost(){
 
             if (q>=0){
 
-                i->to_pay=q;
-                //ord.set_to_pay(q);
+                double new_q=q+extra;
+
+                if (new_q>=0){
+                    i->to_pay=new_q;
+                    extra=0;
+                }
+                else{
+                    i->to_pay=q;
+                }
+
             }
             else{
+
+                extra+=q;
                 i->to_pay=0;
-                //ord.set_to_pay(0);
+
             }
 
         }
+
       }
 }
 
@@ -386,6 +447,7 @@ void Bucket::add_order(Order order,Coordinate inter){
              cur_cost+= order.get_delivery_cost();
              cur_amount+= order.get_value();
              max_cost= delivery_cost(company,cur_amount);
+             content.sort(compare_willingness);
              match_delivery_cost();
 }
 
@@ -552,15 +614,19 @@ bool compare(Bucket b1,Bucket b2){ // comparing buckets for sorting in the bucke
     }
 }
 
-tuple<bool,Bucket,list<Bucket>> processOrder(list<Bucket> bucket_list, Order new_order){
+tuple<bool,Bucket,list<Bucket>,string> processOrder(list<Bucket> bucket_list, Order new_order){
 
 
     std::list<Bucket> buckets_to_inspect=generate_buckets(new_order, bucket_list); // generate list of buckets that can satisfy the optimization problem
-                                                                                    // these new buckets are the only interesting ones to look at, the other ones can't be complete
+                                                                                        // these new buckets are the only interesting ones to look at, the other ones can't be complete
+
+    string final_link="No link available"; // final link will send us to a google maps page where the users can see the intersection
 
     buckets_to_inspect.sort(compare);//sort bucket_list in decreasing order of length
 
     std::list<Bucket>::iterator i;
+
+    std::list<Bucket>::iterator it;
 
     Bucket optimal_buc;// will store the optimal bucket, if found
 
@@ -577,7 +643,7 @@ tuple<bool,Bucket,list<Bucket>> processOrder(list<Bucket> bucket_list, Order new
 
     //removing orders in optimal_buc in all buckets in bucket list
 
-    tuple<bool,Bucket,list<Bucket>> tpl; //tpl is a tuple that will contain the final output
+    tuple<bool,Bucket,list<Bucket>,string> tpl; //tpl is a tuple that will contain the final output
 
     list<Order> orders_to_remove=optimal_buc.get_content();
 
@@ -589,17 +655,31 @@ tuple<bool,Bucket,list<Bucket>> processOrder(list<Bucket> bucket_list, Order new
         Bucket buc=*i;
         buc.find_and_remove_order_list(orders_to_remove);
         if (buc.get_content().size()>0){
+
+            bool push=true; // we now check for duplicates
+            for (it=new_bucket_list.begin();it!=new_bucket_list.end();it++){ // seeing if the obtained bucket is already in the bucket list
+                Bucket buc2=*it;
+                if (buc2==buc){
+                    push=false;
+                    break;
+                }
+            }
+            if (push){ // if buc is not already in the new list, we can add it
             new_bucket_list.push_back(buc);
+            }
         }
+    }
 
-     }
+    string lat=to_string(optimal_buc.get_intersection_point().get_latitude());
+    string lon=to_string(optimal_buc.get_intersection_point().get_longitude());
 
-    tpl=make_tuple(true,optimal_buc,new_bucket_list);
+    final_link="http://www.google.com/maps/place/"+lat+","+lon;
+    tpl=make_tuple(true,optimal_buc,new_bucket_list, final_link);
   }
 
    else{
 
-     tpl=make_tuple(false,optimal_buc,bucket_list); // in this case, optimal buc is empty
+     tpl=make_tuple(false,optimal_buc,bucket_list,final_link); // in this case, optimal buc is empty
 
     }
 
@@ -627,6 +707,7 @@ double* convert_to_meters(Coordinate C)
     double y=C.get_latitude()*111000;
     double x=C.get_longitude()*111000*cos(C.get_latitude()*M_PI/180);
     static double array [2] = { x, y };
+
     return array;
 }
 
@@ -637,10 +718,8 @@ double* convert_to_meters(Coordinate C)
     return Coordinate (latitude, longitude);
 }
 
-std::vector<Coordinate> get_intersection(Order Order1, Order Order2)
+ std::vector<Coordinate> get_intersection(Order Order1, Order Order2){
 // this function is the mathematical way to get the intersection of the radius between two orders, this is necessary in order for the next one to be able to take in a vector of orders, and say wether or not they can all fit in one bucket.
-
-{
     Coordinate C1= Order1.get_user().get_address();
     Coordinate C2= Order2.get_user().get_address();
     //double* c1= convert_to_meters(C1);
@@ -653,10 +732,11 @@ std::vector<Coordinate> get_intersection(Order Order1, Order Order2)
     double r1=Order1.get_distance();
     double r2=Order2.get_distance();
     double d= C1.get_distance(C2);
-    if (d > r1+ r2)
-        return std::vector<Coordinate>();
-    if (d<=abs(r1-r2))
-        return std::vector<Coordinate>();
+    if (d > r1+ r2){
+        return std::vector<Coordinate>();}
+
+    if (d<=abs(r1-r2)){
+        return std::vector<Coordinate>();}
     double a=(r1*r1-r2*r2+d*d)/(2*d);
     double h=sqrt(r1*r1-a*a);
     double b=d-a;
@@ -672,29 +752,29 @@ std::vector<Coordinate> get_intersection(Order Order1, Order Order2)
     Coordinate Intersection1= convert_to_coordinates(c4);
     Coordinate Intersection2= convert_to_coordinates(c5);
     std::vector<Coordinate> vect;
-              vect.push_back(Intersection1);
-              vect.push_back(Intersection2);
-              return vect;
+    vect.push_back(Intersection1);
+    vect.push_back(Intersection2);
+    return vect;
 }
 
-bool check_if_inside(Order Order1, Order Order2){
-// this one simply checks if an order is inside another order when there is no intersection.
+bool check_if_inside(Order Order1, Order Order2){ // this one simply checks if an order is inside another order when there is no intersection.
+
     Coordinate C1= Order1.get_user().get_address();
     Coordinate C2= Order2.get_user().get_address();
     double r1=Order1.get_distance();
     double r2=Order2.get_distance();
     double d= C1.get_distance(C2);
-    if (d<=abs(r1-r2))
+    if (d<=abs(r1-r2)){
         return true;
+    }
     return false;
 }
 
 
-boolPoint check_if_bucket (std::vector <Order> order_vector)
+boolPoint check_if_bucket (std::vector<Order> order_vector){
 // This function takes in a vector of orders, so a potential bucket, and says whether or not they could all fit in a bucket, and returns the intersection where to deliver if it is true.
 //If it its false it will return an empty coordinate and false.
 //In order to check if an other order can be added to a bucket we could simply take the vector and pushback the new order. And say if check_if_bucket then its good.
-{
     //struct boolPoint p3 = {Coordinate(), false};
     boolPoint p3=boolPoint();
     int count0=0;
@@ -704,7 +784,8 @@ boolPoint check_if_bucket (std::vector <Order> order_vector)
             Order order2 = order_vector[j];
             std::vector <Coordinate> intersection_vector=get_intersection(order1, order2);
             if (intersection_vector.size()== 0 && !check_if_inside(order1, order2))
-                return p3;
+            {
+                return p3;}
             if (intersection_vector.size()== 0 && check_if_inside(order1, order2))
             {
                 count0++;
@@ -716,6 +797,7 @@ boolPoint check_if_bucket (std::vector <Order> order_vector)
             int count2=0;
             for (int k = 0; k < int(order_vector.size()); k++)
             {
+
                 if (k == i || k == j) {
                         count1++;
                         count2++;  }
