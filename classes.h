@@ -133,6 +133,7 @@ public:
     void find_and_remove_order_list(list<Order> orders); // remove elements in bucket content that belong to the input list "orders"
     void update_parameters(Order order); // update bucket params after removal of input order "order" (the removal is done prior to the function call)
     void print();
+    bool operator==(Bucket other);
     //setters
 
     void set_company(Company comp){
@@ -207,7 +208,7 @@ bool radius_overlap(Order order1, Order order2); // True if there exists a commo
 
 double delivery_cost(Company company,double amount); // returns the delivery cost associated to an order amount, given a company
 
-tuple<bool,Bucket,list<Bucket>> processOrder(list<Bucket> bucketList, Order newOrder);
+tuple<bool,Bucket,list<Bucket>,string> processOrder(list<Bucket> bucketList, Order newOrder);
 // final optimization function, returns a triple of the form (found, optimal_buc,updated_bucket_list)
 // found==true if an optimization bundle exists,
 // optimal_buc is the bucket grouping orders satifying this optimization (it could be empty)

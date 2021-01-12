@@ -252,6 +252,41 @@ Bucket::Bucket(Company company, std::list<Order> content,double cur_amount,doubl
     this->intersection_point=inter;
 }
 
+bool Bucket::operator==(Bucket other){ // 2 buckets are equal when their contents are equal, we know that their contents are sorted based on willingness of delivery
+    list<Order>::iterator i;
+
+    if (other.content.size()!=content.size()){
+        return false;
+    }
+
+    // build vectors from content and other.content
+
+    vector<Order> v1;
+    vector<Order> v2;
+
+    for (i=content.begin();i!=content.end();i++){
+        v1.push_back(*i);
+    }
+
+    for (i=other.content.begin();i!=other.content.end();i++){
+        v2.push_back(*i);
+    }
+
+    // compare entries one by one (knowing that the contents are sorted)
+
+    int max=v1.size();
+    bool found=true;
+
+    int j;
+    for (j=0;j<max;j++){
+
+        if ((v1[j]==v2[j])==false){ // we found an entry that doesn't match, the buckets cannot be equal
+            found=false;
+        }
+    }
+    return found;
+}
+
 void Bucket::print(){
 
     if(content.size()>0){
@@ -321,6 +356,7 @@ void Bucket::update_parameters(Order order){ //updates bucket parameters after d
     cur_amount=new_amnt;
     cur_cost=new_cost;
     max_cost=new_max;
+    intersection_point=Coordinate();
 
 }
 
@@ -346,6 +382,11 @@ void Bucket::find_and_remove_order_list(list<Order> orders){
 
 bool compare_willingness(Order order1, Order order2){
 
+    if (order1.get_delivery_cost()==order2.get_delivery_cost()){ // if both have the same willingness
+
+        return order1.get_user().get_name()<order1.get_user().get_name(); // sort by alphabetical order of first name
+    }
+
     return order1.get_delivery_cost()<order2.get_delivery_cost();
 }
 
@@ -363,7 +404,7 @@ void Bucket::match_delivery_cost(){
 
         list<Order>::iterator i;
 
-        content.sort(compare_willingness);
+        //content.sort(compare_willingness);
 
         for(i = content.begin(); i != content.end(); ++i) { // we iterate through the orders of the bucket
 
@@ -406,6 +447,7 @@ void Bucket::add_order(Order order,Coordinate inter){
              cur_cost+= order.get_delivery_cost();
              cur_amount+= order.get_value();
              max_cost= delivery_cost(company,cur_amount);
+             content.sort(compare_willingness);
              match_delivery_cost();
 }
 
@@ -572,15 +614,19 @@ bool compare(Bucket b1,Bucket b2){ // comparing buckets for sorting in the bucke
     }
 }
 
-tuple<bool,Bucket,list<Bucket>> processOrder(list<Bucket> bucket_list, Order new_order){
+tuple<bool,Bucket,list<Bucket>,string> processOrder(list<Bucket> bucket_list, Order new_order){
 
 
     std::list<Bucket> buckets_to_inspect=generate_buckets(new_order, bucket_list); // generate list of buckets that can satisfy the optimization problem
-                                                                                    // these new buckets are the only interesting ones to look at, the other ones can't be complete
+                                                                                        // these new buckets are the only interesting ones to look at, the other ones can't be complete
+
+    string final_link="No link available"; // final link will send us to a google maps page where the users can see the intersection
 
     buckets_to_inspect.sort(compare);//sort bucket_list in decreasing order of length
 
     std::list<Bucket>::iterator i;
+
+    std::list<Bucket>::iterator it;
 
     Bucket optimal_buc;// will store the optimal bucket, if found
 
@@ -597,7 +643,7 @@ tuple<bool,Bucket,list<Bucket>> processOrder(list<Bucket> bucket_list, Order new
 
     //removing orders in optimal_buc in all buckets in bucket list
 
-    tuple<bool,Bucket,list<Bucket>> tpl; //tpl is a tuple that will contain the final output
+    tuple<bool,Bucket,list<Bucket>,string> tpl; //tpl is a tuple that will contain the final output
 
     list<Order> orders_to_remove=optimal_buc.get_content();
 
@@ -609,17 +655,31 @@ tuple<bool,Bucket,list<Bucket>> processOrder(list<Bucket> bucket_list, Order new
         Bucket buc=*i;
         buc.find_and_remove_order_list(orders_to_remove);
         if (buc.get_content().size()>0){
+
+            bool push=true; // we now check for duplicates
+            for (it=new_bucket_list.begin();it!=new_bucket_list.end();it++){ // seeing if the obtained bucket is already in the bucket list
+                Bucket buc2=*it;
+                if (buc2==buc){
+                    push=false;
+                    break;
+                }
+            }
+            if (push){ // if buc is not already in the new list, we can add it
             new_bucket_list.push_back(buc);
+            }
         }
+    }
 
-     }
+    string lat=to_string(optimal_buc.get_intersection_point().get_latitude());
+    string lon=to_string(optimal_buc.get_intersection_point().get_longitude());
 
-    tpl=make_tuple(true,optimal_buc,new_bucket_list);
+    final_link="http://www.google.com/maps/place/"+lat+","+lon;
+    tpl=make_tuple(true,optimal_buc,new_bucket_list, final_link);
   }
 
    else{
 
-     tpl=make_tuple(false,optimal_buc,bucket_list); // in this case, optimal buc is empty
+     tpl=make_tuple(false,optimal_buc,bucket_list,final_link); // in this case, optimal buc is empty
 
     }
 
