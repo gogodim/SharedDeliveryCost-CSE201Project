@@ -56,7 +56,7 @@ NotificationWidget::NotificationWidget(const std::string &username,Database *ses
 
     // This adds a widget to create a new order
     CreateOrderButton_->addStyleClass("buttonCreateOrder");
-    CreateOrderWidget_ = addWidget(std::make_unique<NewOrderWidget>());
+    CreateOrderWidget_ = addWidget(std::make_unique<NewOrderWidget>(username,&*session));
     CreateOrderWidget_->addStyleClass("buttonCreateOrder");
     CreateOrderButton_->clicked().connect(CreateOrderWidget_, &NewOrderWidget::display);
 

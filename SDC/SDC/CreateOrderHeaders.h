@@ -15,15 +15,21 @@
 #include <Wt/WBreak.h>
 #include <Wt/WSelectionBox.h>
 #include <Wt/WSlider.h>
+#include <stdlib.h>
+
+#include "Order.h"
+#include "Database.h"
+#include "User.h"
 
 class NewOrderWidget : public Wt::WContainerWidget
 {
 public:
-    NewOrderWidget();
+    NewOrderWidget(const std::string &username, Database *session);
     void confirm();
     void display();
 
 private:
+    Database            *session_;
     Wt::WText           *title_;
 
     Wt::WSelectionBox   *company_;
@@ -40,17 +46,13 @@ private:
 
     Wt::WLineEdit       *radius_;
 //    Wt::WSlider         *radius_
-    Wt::WText           *radius_description;;
+    Wt::WText           *radius_description;
     Wt::WPushButton     *confirm_;
+
+    std::string         user_;
+    Order               *new_order;
 };
 
-class CreateOrderApplication : public Wt::WApplication
-{
-public:
-    CreateOrderApplication(const Wt::WEnvironment& env);
 
-private:
-//    find out later
-};
 
 #endif // CREATEORDERHEADERS_H

@@ -10,6 +10,7 @@ SOURCES += \
         Coordinate.cpp \
         Database.cpp \
         Order.cpp \
+        OrderDB.cpp \
         OrderPage.cpp \
         RegisterPage.cpp \
         User.cpp \
@@ -48,6 +49,7 @@ HEADERS += \
     Coordinate.h \
     Database.h \
     Order.h \
+    OrderDB.h \
     OrderPage.h \
     User.h \
     NotificationWidget.h \
