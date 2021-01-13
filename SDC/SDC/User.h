@@ -95,3 +95,39 @@ Coordinate distance_optimization(double array);
 Coordinate convert_to_coordinates(std::string address);*/
 
 #endif // USER_H
+/*
+class User{
+public:
+    //we assume all login details are valid, the check is done before.
+    User();
+    User(std::string username,
+         std::string password,
+         std::string name,
+         std::string surname,
+         #PROBLEM# Coordinate adresss,
+         std::string email);
+
+    std::string get_username();
+    std::string get_password();
+    std::string get_name();
+    std::string get_surname();
+    #PROBLEM# Coordinate get_address();
+    std::string get_email();
+
+    void set_username(std::string n);
+    void set_password(std::string n);
+    void set_name(std::string n);
+    void set_surname(std::string n);
+    #PROBLEM# void set_address(Coordinate n);
+    void set_email(std::string n);
+
+private:
+    std::string username;
+    std::string password;
+    std::string name;
+    std::string surname;
+    #PROBLEM# Coordinate address;
+    std::string email;
+
+};
+*/

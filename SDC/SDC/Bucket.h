@@ -1,4 +1,4 @@
-#ifndef BUCKET_H
+/*#ifndef BUCKET_H
 #define BUCKET_H
 
 #include "Company.h"
@@ -76,7 +76,7 @@ private:
 
 };
 
-/*Bucket copy(Bucket other);
+Bucket copy(Bucket other);
 
 std::list<Bucket> generate_buckets(Order new_order,std::list<Bucket> buckets); // generates all valid bucket combinations of existing buckets with new_order
 
@@ -84,6 +84,7 @@ bool radius_overlap(Order order1, Order order2); // True if there exists a commo
 
 double delivery_cost(Company company,double amount); // returns the delivery cost associated to an order amount, given a company
 
-std::tuple<bool,std::list<Bucket>> processOrder(std::vector<Company> companyList, std::vector<Bucket> bucketList, Order newOrder);*/
+std::tuple<bool,std::list<Bucket>> processOrder(std::vector<Company> companyList, std::vector<Bucket> bucketList, Order newOrder);
 
 #endif // BUCKET_H
+*/

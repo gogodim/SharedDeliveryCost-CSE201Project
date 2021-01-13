@@ -3,22 +3,25 @@ CONFIG += console c++14
 #CONFIG -= app_bundle
 #CONFIG -= qt
 #QT += gui widgets xml
-QT += widgets
+QT += positioning
+
+CONFIG -= app_bundle
 
 SOURCES += \
         Bucket.cpp \
         Company.cpp \
         Coordinate.cpp \
         Database.cpp \
-        GeocodingAPI.cpp \
         Order.cpp \
+        OrderPage.cpp \
         OrderDB.cpp \
         OrderPage.cpp \
         RegisterPage.cpp \
         User.cpp \
         main.cpp \
         NotificationWidget.cpp \
-        notification.cpp \
+        notification.cpp\
+        #classes.cpp\
         CreateOrder.cpp
 
 
@@ -50,7 +53,6 @@ HEADERS += \
     Company.h \
     Coordinate.h \
     Database.h \
-    GeocodingAPI.h \
     Order.h \
     OrderDB.h \
     OrderPage.h \
@@ -58,8 +60,9 @@ HEADERS += \
     NotificationWidget.h \
     notification.h \
     RegisterPage.h \
-    notification.h \
+    notification.h\
     CreateOrderHeaders.h
+    #classes.h
 
 DISTFILES += \
     css/shared.css \
