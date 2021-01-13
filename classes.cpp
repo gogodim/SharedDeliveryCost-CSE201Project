@@ -802,7 +802,7 @@ boolPoint check_if_bucket (std::vector<Order> order_vector){
                         count2++;  }
 
 
-                else  { if (order_vector[k].get_user().get_address()==order1.get_user().get_address() and order_vector[k].get_distance()==order1.get_distance() || order_vector[k].get_user().get_address()==order2.get_user().get_address() and order_vector[k].get_distance()==order2.get_distance()) {
+                else  { if ((order_vector[k].get_user().get_address()==order1.get_user().get_address() and order_vector[k].get_distance()==order1.get_distance()) || (order_vector[k].get_user().get_address()==order2.get_user().get_address() and order_vector[k].get_distance()==order2.get_distance())) {
                             count1++;
                             count2++;  }
 
