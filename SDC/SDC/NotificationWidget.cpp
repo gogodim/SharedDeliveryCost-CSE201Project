@@ -7,6 +7,8 @@
 #include <Wt/WText.h>
 #include <Wt/WAny.h>
 
+
+#include "CreateOrderHeaders.h"
 #include "Database.h"
 
 using namespace Wt;
@@ -43,11 +45,20 @@ NotificationWidget::NotificationWidget(const std::string &username,Database *ses
 {
     //Wt::WPushButton *button = addWidget(std::make_unique<Wt::WPushButton>("Greet me."));
     button_ = addWidget(std::make_unique<Wt::WPushButton>("Notifications"));
+    CreateOrderButton_ = addWidget(std::make_unique<Wt::WPushButton>("Create Order"));
+
     button_->addStyleClass("buttonNotifications");
+
     Ntable_ = addWidget(std::make_unique<NotificationTable>(username,&*session));
     Ntable_->hide();
     showed = false;
     button_->clicked().connect(this,&NotificationWidget::showHide);
+
+    // This adds a widget to create a new order
+    CreateOrderButton_->addStyleClass("buttonCreateOrder");
+    CreateOrderWidget_ = addWidget(std::make_unique<NewOrderWidget>(username,&*session));
+    CreateOrderWidget_->addStyleClass("buttonCreateOrder");
+    CreateOrderButton_->clicked().connect(CreateOrderWidget_, &NewOrderWidget::display);
 
 }
 

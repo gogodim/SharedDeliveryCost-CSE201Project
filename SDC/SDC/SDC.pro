@@ -12,12 +12,14 @@ SOURCES += \
         Database.cpp \
         GeocodingAPI.cpp \
         Order.cpp \
+        OrderDB.cpp \
         OrderPage.cpp \
         RegisterPage.cpp \
         User.cpp \
         main.cpp \
         NotificationWidget.cpp \
-        notification.cpp
+        notification.cpp \
+        CreateOrder.cpp
 
 
 INCLUDEPATH += C:/Boost/include/boost-1_67 \
@@ -50,12 +52,14 @@ HEADERS += \
     Database.h \
     GeocodingAPI.h \
     Order.h \
+    OrderDB.h \
     OrderPage.h \
     User.h \
     NotificationWidget.h \
     notification.h \
     RegisterPage.h \
-    notification.h
+    notification.h \
+    CreateOrderHeaders.h
 
 DISTFILES += \
     css/shared.css \

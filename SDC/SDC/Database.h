@@ -7,6 +7,9 @@
 #include "Coordinate.h"
 #include "User.h"
 #include "notification.h"
+#include "Order.h"
+#include "OrderDB.h"
+#include "Company.h"
 
 namespace dbo = Wt::Dbo;
 
@@ -18,12 +21,16 @@ public:
     bool find_user(const User*);
     bool valid_user(const User*);
     std::vector<Notification> readAllNotifications();
-    void addNotification(std::string username,int orderID,double costShare,std::string deliveryLocation,std::string otherOrders);
+    void addNotification(std::string username,int orderID,double costShare,
+                         std::string deliveryLocation,std::string otherOrders);
     dbo::Session session;
+    bool addOrder(std::string username, double maxDeliveryCost, std::string deliveryLocation,
+                  double orderCost, double radius, std::string store, std::string address);
 
 private:
     mutable Dbo::Session session_;
     dbo::ptr<Notification> notification() const;
+    dbo::ptr<OrderDB> orderDB() const;
 
 };
 
