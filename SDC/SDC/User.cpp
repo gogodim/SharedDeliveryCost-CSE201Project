@@ -54,6 +54,10 @@ std::string User::get_password() const{
     return this->password;
 }
 
+std::string User::get_address_second() const{
+    return this->address;
+}
+
 
 //User, Setters
 void User::set_username(std::string username){
