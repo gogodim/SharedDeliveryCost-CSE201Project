@@ -58,7 +58,7 @@ HEADERS += \
     notification.h \
     RegisterPage.h \
     notification.h \
-    CreateOrder.h \
+    CreateOrderHeaders.h \
     OrderDB.h
 
 DISTFILES += \
