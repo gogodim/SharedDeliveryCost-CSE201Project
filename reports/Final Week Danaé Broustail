@@ -1,0 +1,3 @@
+I fixed match_delivery_cost along with several other functions and found a way to remove duplicates in buckets. 
+I also tested the process_order function for a variety of inputs. Process_order now returns a google maps link to the meeting point of a completed bucket. 
+This week, I will work on the merging of the wt and non-wt branches with the team.
