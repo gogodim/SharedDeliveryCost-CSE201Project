@@ -4,7 +4,7 @@
 #include <Wt/WContainerWidget.h>
 #include <Wt/WTable.h>
 #include <Wt/WPushButton.h>
-
+#include "CreateOrderHeaders.h"
 
 class Database;
 class Notification;
@@ -39,6 +39,8 @@ private:
   Wt::WContainerWidget              *container_;
   Wt::WPushButton                   *button_;
   NotificationTable                 *Ntable_;
+  Wt::WPushButton                   *CreateOrderButton_;
+  NewOrderWidget                    *CreateOrderWidget_;
   bool                               showed;
   void showHide();
   Wt::WTable createTableOrder(std::string otherOrders);

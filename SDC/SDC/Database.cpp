@@ -27,6 +27,8 @@ Database::Database()
 
     session.mapClass<Notification>("Notification");
 
+    session.mapClass<OrderDB>("Order");
+
     /* if there isn't a .db, create and add a default user to the database*/
     dbo::Transaction transaction(session);
     try {

@@ -49,6 +49,13 @@ NotificationWidget::NotificationWidget(const std::string &username,Database *ses
     showed = false;
     button_->clicked().connect(this,&NotificationWidget::showHide);
 
+    CreateOrderButton_ = addWidget(std::make_unique<Wt::WPushButton>("Create Order"));
+    CreateOrderButton_->addStyleClass("CreateOrder");
+    CreateOrderWidget_ = addWidget(std::make_unique<NewOrderWidget>(username,&*session));
+    CreateOrderWidget_->addStyleClass("CreateOrder");
+    CreateOrderWidget_->hide();
+    CreateOrderButton_->clicked().connect(CreateOrderWidget_, &NewOrderWidget::display);
+
 }
 
 /*

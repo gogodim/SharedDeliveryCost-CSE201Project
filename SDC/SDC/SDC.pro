@@ -17,7 +17,9 @@ SOURCES += \
         User.cpp \
         main.cpp \
         NotificationWidget.cpp \
-        notification.cpp
+        notification.cpp \
+        CreateOrder.cpp \
+        OrderDB.cpp
 
 
 INCLUDEPATH += C:/Boost/include/boost-1_67 \
@@ -55,7 +57,9 @@ HEADERS += \
     NotificationWidget.h \
     notification.h \
     RegisterPage.h \
-    notification.h
+    notification.h \
+    CreateOrder.h \
+    OrderDB.h
 
 DISTFILES += \
     css/shared.css \
