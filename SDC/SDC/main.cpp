@@ -9,9 +9,6 @@
 
 using namespace Wt;
 
-int myargc;
-char** myargv;
-
 // Create a New Application/Page of Web
 std::unique_ptr<WApplication> createApplication(const WEnvironment& env){
     auto app = cpp14::make_unique<WApplication>(env);
@@ -22,14 +19,12 @@ std::unique_ptr<WApplication> createApplication(const WEnvironment& env){
 
     //Load css
     app->useStyleSheet("css/shared.css");
-    app->root()->addWidget(cpp14::make_unique<OrderPage>(myargc, myargv));
+    app->root()->addWidget(cpp14::make_unique<OrderPage>());
 
     return app;
 }
 
 int main(int argc, char** argv){
-    myargc = argc;
-    myargv = argv;
     try{
         WServer server(argc, argv, WTHTTP_CONFIGURATION);
 

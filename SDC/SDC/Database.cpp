@@ -63,7 +63,7 @@ bool Database::find_user(const User* user){
        std::cout<<"False"<<std::endl;
        return false;
     }
-    std::cout<<"True"<<u->get_username()<<std::endl;
+    std::cout<<"True"<<std::endl;
     return true;
 }
 

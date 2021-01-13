@@ -37,23 +37,21 @@ public:
     std::string get_password();
     std::string get_name();
     std::string get_surname();
-    Address get_useraddress();
     std::string get_address();
     std::string get_email();
     Coordinate get_coordinates();
+
     std::string get_password()const;
-    std::string get_username()const;
 
     void set_username(std::string n);
     void set_password(std::string n);
     void set_name(std::string n);
     void set_surname(std::string n);
     void set_address(std::string n);
-    void set_useraddress(Address add);
     void set_email(std::string n);
     void set_coordinates(Coordinate coord);
-    void Address2Coordinate();
-    //void Coordinate2Address(Coordinate coord);
+    void Address2Coordinate(std::string address);
+    void Coordinate2Address(Coordinate coord);
 
 
     template<class Action>
@@ -79,7 +77,6 @@ private:
     std::string  surname;
     std::string  email;
     std::string  address;
-    Address      useraddress;
     Coordinate   coordinates;
 
 };

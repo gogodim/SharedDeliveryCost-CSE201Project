@@ -15,13 +15,11 @@ using namespace Wt;
 class RegisterPage: public WContainerWidget{
 
 public:
-    RegisterPage(int, char**);
-    int                    argc;
-    char**                 argv;
+    RegisterPage();
     void Register();
     void Go_Login();
     bool Check_Valid_Email(std::string email);
-    bool Check_Valid_Address(Address address, User *userptr);
+    bool Check_Valid_Address(std::string address);
 
 private:
     Wt::WLineEdit                  *usernameEdit_;
@@ -33,7 +31,7 @@ private:
     Wt::WLineEdit                  *PostCodeEdit_;
     Wt::WLineEdit                  *CityEdit_;
     Wt::WLineEdit                  *StreetNoEdit_;
-    //Wt::WLineEdit                  *locationEdit_;
+    Wt::WLineEdit                  *locationEdit_;
     Wt::WText                      *confirm_;
     std::unique_ptr<Database>      database;   
 };
