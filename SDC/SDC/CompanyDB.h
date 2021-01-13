@@ -4,14 +4,14 @@
 #include <string>
 #include <vector>
 
-class Company{
+class CompanyDB{
 public:
 
     // list of vectors of doubles, each vector of the form:
     // ( minimum amount to pay, maximum amount, delivery fee for amounts in the interval [min_amount, max_mount])
 
-    Company(std::string name, std::vector<std::vector<double> > opts);
-    Company();
+    CompanyDB(std::string name, std::vector<std::vector<double> > opts);
+    CompanyDB();
     void set_options(std::vector<std::vector<double> > options);
     void set_name(std::string name);
 //private:

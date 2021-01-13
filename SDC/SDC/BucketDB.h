@@ -1,31 +1,31 @@
 #ifndef BUCKET_H
 #define BUCKET_H
 
-#include "Company.h"
-#include "Order.h"
+#include "CompanyDB.h"
+#include "OrderDBfirst.h"
 #include <list>
 
-class Bucket{
+class BucketDB{
 public:
-    Bucket();
-    Bucket(Company company, std::list<Order> content,double bucket_cur_amount,double bucket_cur_cost,double bucket_max_cost,bool bucket_completion);
-    bool is_compatible(Order order);
-    void add_order(Order order); // adds valid order in bucket_content and updates all data members accordingly
+    BucketDB();
+    BucketDB(CompanyDB company, std::list<OrderDBfirst> content,double bucket_cur_amount,double bucket_cur_cost,double bucket_max_cost,bool bucket_completion);
+    bool is_compatible(OrderDBfirst order);
+    void add_order(OrderDBfirst order); // adds valid order in bucket_content and updates all data members accordingly
     void match_delivery_cost();//Checks if the contribution of delivery cost of the new order doesn't overflow the max_cost, and distribute the cost
                                // Function is applied after the order has been added to the bucket, to redistribute the cost in the case of an overflow
                               //and update the bucket completion
 
     // functions to modify bucket content
-    void append_to_content(Order order){
+    void append_to_content(OrderDBfirst order){
         content.push_back(order);
     }
-    void find_and_remove(Order order); //find an order equal to the input order and removes it from the bucket
-    void find_and_remove_order_list(std::list<Order> orders); // remove elements in bucket content that belong to the input list "orders"
-    void update_parameters(Order order); // update bucket params after removal of input order "order" (the removal is done prior to the function call)
+    void find_and_remove(OrderDBfirst order); //find an order equal to the input order and removes it from the bucket
+    void find_and_remove_order_list(std::list<OrderDBfirst> orders); // remove elements in bucket content that belong to the input list "orders"
+    void update_parameters(OrderDBfirst order); // update bucket params after removal of input order "order" (the removal is done prior to the function call)
 
     //setters
 
-    void set_company(Company comp){
+    void set_company(CompanyDB comp){
         company=comp;
     }
     void set_completion(bool b){
@@ -43,10 +43,10 @@ public:
 
     //getters
 
-    std::list<Order> get_content(){
+    std::list<OrderDBfirst> get_content(){
         return content;
     }
-    Company get_company(){
+    CompanyDB get_company(){
         return company;
     }
     bool get_completion(){
@@ -67,8 +67,8 @@ public:
 
 private:
 
-    Company company; // company of the bucket (in one bucket, there can only be one company)
-    std::list<Order> content; // list of orders in the bucket
+    CompanyDB company; // company of the bucket (in one bucket, there can only be one company)
+    std::list<OrderDBfirst> content; // list of orders in the bucket
     double cur_amount; // total amount paid for all orders in the bucket
     double cur_cost; // current sum of delivery cost contributions of each user
     double max_cost; // total amount of delivery cost to pay (based on the company, and the current amount to pay for the orders)

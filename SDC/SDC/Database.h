@@ -4,7 +4,7 @@
 #include <Wt/Dbo/Dbo.h>
 #include <Wt/Dbo/backend/Sqlite3.h>
 #include <string>
-#include "CoordinateDB.h"
+#include "Coordinate.h"
 #include "UserDB.h"
 #include "notification.h"
 #include "CompanyDB.h"

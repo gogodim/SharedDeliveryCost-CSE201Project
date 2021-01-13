@@ -20,7 +20,7 @@
 #include "OrderDBfirst.h"
 #include "Database.h"
 #include "UserDB.h"
-#include "CoordinateDB.h"
+#include "Coordinate.h"
 
 class NewOrderWidget : public Wt::WContainerWidget
 {
@@ -38,7 +38,7 @@ private:
 
     Wt::WLineEdit       *diff_loc_;
     Wt::WText           *diff_loc_description;
-    CoordinateDB          *address;
+    Coordinate          *address;
 
     Wt::WLineEdit       *order_val_;
     Wt::WText           *order_val_description;

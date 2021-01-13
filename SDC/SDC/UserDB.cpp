@@ -46,7 +46,7 @@ std::string UserDB::get_address(){
 std::string UserDB::get_email(){
     return this->email;
 };
-CoordinateDB UserDB::get_coordinates(){
+Coordinate UserDB::get_coordinates(){
     return this->coordinates;
 };
 
@@ -80,7 +80,7 @@ void UserDB::set_address(std::string address){
 void UserDB::set_email(std::string email){
     this->email = email;
 };
-void UserDB::set_coordinates(CoordinateDB coordinates){
+void UserDB::set_coordinates(Coordinate coordinates){
     this->coordinates = coordinates;
 };
 

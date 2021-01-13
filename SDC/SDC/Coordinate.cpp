@@ -1,46 +1,50 @@
-#include "CoordinateDB.h"
+#include "Coordinate.h"
 #include <cmath>
-CoordinateDB::CoordinateDB(double latitude,
+Coordinate::Coordinate(double latitude,
                        double longitude){
     this->latitude = latitude;
     this->longitude = longitude;
     }
-CoordinateDB::CoordinateDB(){
+Coordinate::Coordinate(){
     latitude = 0;
     longitude = 0;
     }
 //Coordinate, Getters
-    double CoordinateDB::get_latitude(){
+    double Coordinate::get_latitude(){
         return latitude;
     }
-    double CoordinateDB::get_longitude(){
+    double Coordinate::get_longitude(){
         return longitude;
     }
 //Coordinate, Setters
-    void CoordinateDB::set_latitude(double latitude){
+    void Coordinate::set_latitude(double latitude){
         this->latitude = latitude;
     }
-    void CoordinateDB::set_longitude(double longitude){
+    void Coordinate::set_longitude(double longitude){
         this->longitude = longitude;
     }
-    void CoordinateDB::set_coordinate(double latitude,
+    void Coordinate::set_coordinate(double latitude,
                                     double longitude){
         this->latitude = latitude;
         this->longitude = longitude;
     }
 
-CoordinateDB coordinate_from_address(std::string address){
-    return CoordinateDB(0, 0);
+bool Coordinate::operator==(Coordinate other){ // two coords are equal when lat = long
+        return ((get_latitude() == other.get_latitude()) && (get_longitude() == other.get_longitude()));
+    }
+Coordinate coordinate_from_address(std::string address){
+    return Coordinate(0, 0);
 }
 
-CoordinateDB address_to_coordinates(std::string address){
-    return CoordinateDB();
+Coordinate address_to_coordinates(std::string address){
+    return Coordinate();
 }
-std::string coordinate_to_address(CoordinateDB coordinate){
+std::string coordinate_to_address(Coordinate coordinate){
     return "";
 }
 
-double CoordinateDB::get_distance(CoordinateDB other){
+
+double Coordinate::get_distance(Coordinate other){
 
     const int R=6371; //radius of the earth in km
     const double PI=3.14159265358;
@@ -55,8 +59,10 @@ double CoordinateDB::get_distance(CoordinateDB other){
 
     double a = sin(latDist/2) * sin(latDist/2) + cos(lat1) * cos(lat2)* sin(lonDist / 2) * sin(lonDist / 2);
     double c = 2 * atan2(sqrt(a), sqrt(1 - a));
-    double distance = R * c;
+    double distance = R * c; // in km
 
-    return distance; // in km
+    distance=distance*1000; // distance is now in meters
+
+    return distance; // in meters
 
 }

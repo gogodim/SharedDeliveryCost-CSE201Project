@@ -3,29 +3,11 @@
 #include <string>
 #include <list>
 #include <vector>
-
+#include <Coordinate.h>
 #endif // CLASSES_H
 using namespace std;
 
 
-class Coordinate{
-public:
-    Coordinate();
-    Coordinate(double lat,double lo);
-    double get_distance(Coordinate other); // in m
-    double get_latitude();
-    double get_longitude();
-    void set_latitude(double latitude);
-    void set_longitude(double longitude);
-    void set_coordinate(double latitude,
-                            double longitude);
-    bool operator==(Coordinate other);
-private:
-    double latitude; //given in degrees (western latitudes are negative angles)
-    double longitude; // given in degrees (southern longtidues are negative angles)
-};
-
-Coordinate coordinate_from_address(std::string address);
 
 class User{
 public:

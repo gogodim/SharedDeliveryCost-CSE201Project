@@ -4,9 +4,9 @@
 #include "UserDB.h"
 #include "CompanyDB.h"
 
-class Order{
+class OrderDBfirst{
 public:
-    Order(UserDB user,
+    OrderDBfirst(UserDB user,
           CompanyDB company,
           double value,
           double delivery_cost,
@@ -16,7 +16,7 @@ public:
     double get_value();
     double get_delivery_cost();
     double get_distance();
-    bool operator==(Order other);
+    bool operator==(OrderDBfirst other);
 
 
 //private:

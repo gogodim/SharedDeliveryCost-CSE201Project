@@ -65,11 +65,11 @@ bool Database::addOrder(std::string username, double maxDeliveryCost, std::strin
     double lat = 0;
     double lon = 0;
     if (deliveryLocation != ""){
-        CoordinateDB coord = coordinate_from_address(deliveryLocation);
+        Coordinate coord = coordinate_from_address(deliveryLocation);
         lat = coord.get_latitude();
         lon = coord.get_longitude();
     } else{
-        CoordinateDB coord = coordinate_from_address(u->get_address_second());
+        Coordinate coord = coordinate_from_address(u->get_address_second());
         deliveryLocation = u->get_address_second();
         lat = coord.get_latitude();
         lon = coord.get_longitude();

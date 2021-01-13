@@ -10,11 +10,11 @@
 
 namespace dbo = Wt::Dbo;
 
-class User {
+class UserDB {
 public:
     /*Constructors*/
-    User();
-    User(const User &u){
+    UserDB();
+    UserDB(const UserDB &u){
         this->username    = u.username;
         this->password    = u.password;
         this->name        = u.name;
@@ -25,7 +25,7 @@ public:
 
         this->coordinates = u.coordinates;
     };
-    User(std::string username,
+    UserDB(std::string username,
              std::string password,
              std::string name,
              std::string surname,
@@ -66,7 +66,7 @@ public:
         dbo::field(a, address,  "address");
     }
 
-    friend std::ostream& operator<<(std::ostream& os, const User& user){
+    friend std::ostream& operator<<(std::ostream& os, const UserDB& user){
         os << user.name << " is user's name";
         return os;
     }

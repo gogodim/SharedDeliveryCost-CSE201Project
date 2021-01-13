@@ -4,13 +4,15 @@ CONFIG -= app_bundle
 CONFIG -= qt
 #QT += gui widgets xml
 QT += widgets
+QT -= core
+QT -= gui
+QT += positioning
 
 SOURCES += \
         BucketDB.cpp \
         CompanyDB.cpp \
-        CoordinateDB.cpp \
+        Coordinate.cpp \
         Database.cpp \
-        GeocodingAPI.cpp \
         OrderDBfirst.cpp \
         OrderPage.cpp \
         RegisterPage.cpp \
@@ -19,7 +21,8 @@ SOURCES += \
         NotificationWidget.cpp \
         notification.cpp \
         CreateOrder.cpp \
-        OrderDB.cpp
+        OrderDB.cpp\
+        classes.cpp
 
 
 INCLUDEPATH += C:/Boost/include/boost-1_67 \
@@ -48,9 +51,8 @@ LIBS  +=  -LC:/Qt/Tools/mingw730_64/i686-w64-mingw32/lib  \
 HEADERS += \
     BucketDB.h \
     CompanyDB.h \
-    CoordinateDB.h \
+    Coordinate.h \
     Database.h \
-    GeocodingAPI.h \
     OrderDBfirst.h \
     OrderPage.h \
     NotificationWidget.h \
@@ -59,7 +61,9 @@ HEADERS += \
     RegisterPage.h \
     notification.h \
     CreateOrderHeaders.h \
-    OrderDB.h
+    OrderDB.h\
+    classes.h\
+    testing.h
 
 DISTFILES += \
     css/shared.css \

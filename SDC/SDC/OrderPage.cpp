@@ -11,6 +11,7 @@
 #include "OrderPage.h"
 #include "RegisterPage.h"
 #include "Database.h"
+#include "testing.h"
 using namespace Wt;
 
 OrderPage::OrderPage(): WContainerWidget(){
@@ -86,9 +87,12 @@ OrderPage::OrderPage(): WContainerWidget(){
     hbox->addWidget(std::move(logo));
     hbox->addWidget(std::move(Login));
 
+    /*Testing*/
+    auto a = testing();
+    if (a==0){
+        std::cout<<"TESTS PASSED"<<std::endl;
+    }
 
-
-    //addWidget(Wt::cpp14::make_unique<WText>("Enter your name, SVP? "));
 
     passwordEdit_->enterPressed().connect(std::bind(&OrderPage::Login, this));
 
