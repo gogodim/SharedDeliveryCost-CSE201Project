@@ -13,7 +13,7 @@ public:
     void set_latitude(double latitude);
     void set_longitude(double longitude);
     void set_coordinate(double latitude, double longitude);
-    bool operator==(Coordinate other);
+
 private:
     double latitude; //given in degrees (western latitudes are negative angles)
     double longitude; // given in degrees (southern longtidues are negative angles)

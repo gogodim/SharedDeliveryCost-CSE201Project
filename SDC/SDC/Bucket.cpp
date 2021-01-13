@@ -1,4 +1,3 @@
-/*
 #include "Bucket.h"
 
 double delivery_cost(Company company,double amount){
@@ -233,4 +232,3 @@ std::tuple<bool,Bucket, std::list<Bucket>> processOrder(std::list<Bucket> bucket
 
     return tpl;
 }
-*/

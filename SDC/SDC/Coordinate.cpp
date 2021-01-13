@@ -139,7 +139,3 @@ double Coordinate::get_distance(Coordinate other){
     return distance; // in km
 
 }
-
-bool Coordinate::operator==(Coordinate other){ // two coords are equal when lat = long
-        return ((get_latitude() == other.get_latitude()) && (get_longitude() == other.get_longitude()));
-    }
