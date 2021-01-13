@@ -806,10 +806,10 @@ boolPoint check_if_bucket (std::vector<Order> order_vector){
                             count1++;
                             count2++;  }
 
-                        else {   if (intersection1.get_distance(order_vector[k].get_user().get_address()) <= order_vector[k].get_distance())
-                            count1++;
-                            if (intersection2.get_distance(order_vector[k].get_user().get_address()) <= order_vector[k].get_distance())
-                            count2++;
+                        else {   if (intersection1.get_distance(order_vector[k].get_user().get_address()) <= order_vector[k].get_distance()){
+                            count1++;}
+                            if (intersection2.get_distance(order_vector[k].get_user().get_address()) <= order_vector[k].get_distance()){
+                            count2++;}
               }}}
             if (int(order_vector.size())==count1)
             {
