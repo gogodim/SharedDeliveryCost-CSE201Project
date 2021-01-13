@@ -3,21 +3,21 @@ CONFIG += console c++14
 CONFIG -= app_bundle
 CONFIG -= qt
 #QT += gui widgets xml
+QT += widgets
 
 SOURCES += \
         Bucket.cpp \
         Company.cpp \
         Coordinate.cpp \
         Database.cpp \
+        GeocodingAPI.cpp \
         Order.cpp \
-        OrderDB.cpp \
         OrderPage.cpp \
         RegisterPage.cpp \
         User.cpp \
         main.cpp \
         NotificationWidget.cpp \
-        notification.cpp \
-        CreateOrder.cpp
+        notification.cpp
 
 
 INCLUDEPATH += C:/Boost/include/boost-1_67 \
@@ -48,15 +48,14 @@ HEADERS += \
     Company.h \
     Coordinate.h \
     Database.h \
+    GeocodingAPI.h \
     Order.h \
-    OrderDB.h \
     OrderPage.h \
     User.h \
     NotificationWidget.h \
     notification.h \
     RegisterPage.h \
-    notification.h \
-    CreateOrderHeaders.h
+    notification.h
 
 DISTFILES += \
     css/shared.css \
