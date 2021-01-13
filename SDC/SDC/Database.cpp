@@ -27,8 +27,6 @@ Database::Database()
 
     session.mapClass<Notification>("Notification");
 
-    session.mapClass<OrderDB>("OrderDB");
-
     /* if there isn't a .db, create and add a default user to the database*/
     dbo::Transaction transaction(session);
     try {
@@ -54,16 +52,6 @@ bool Database::add_user(const User* user){
         return true;
     }
     return false;
-}
-
-bool Database::addOrder(std::string username, double maxDeliveryCost, std::string deliveryLocation, double orderCost,
-                        double radius, std::string store, std::string address){
-    dbo::Transaction transaction(session);
-    dbo::ptr<User> u = session.find<User>().where("username = ?").bind(username);
-    Company comp = Company();
-    std::unique_ptr<OrderDB> ordptr = std::make_unique<OrderDB>(username,store, orderCost, maxDeliveryCost, radius, address);
-    dbo::ptr<OrderDB> ordrPtr = session.add(std::move(ordptr));
-    return true;
 }
 
 bool Database::find_user(const User* user){
@@ -99,11 +87,6 @@ bool Database::valid_user(const User* user){
 dbo::ptr<Notification> Database::notification() const
 {
     return dbo::ptr<Notification>();
-}
-
-dbo::ptr<OrderDB> Database::orderDB() const
-{
-    return dbo::ptr<OrderDB>();
 }
 
 std::vector<Notification> Database::readAllNotifications()
