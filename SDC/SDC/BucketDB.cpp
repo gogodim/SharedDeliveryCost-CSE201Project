@@ -1,6 +1,6 @@
-#include "Bucket.h"
+#include "BucketDB.h"
 
-double delivery_cost(Company company,double amount){
+double delivery_cost(CompanyDB company,double amount){
 
     int v=company.options.size();
 
@@ -13,9 +13,9 @@ double delivery_cost(Company company,double amount){
     return 0;
 }
 
-Bucket::Bucket(){
-    company=Company();
-    std::list<Order> default_buckets; //empty list
+BucketDB::BucketDB(){
+    company=CompanyDB();
+    std::list<OrderDBfirst> default_buckets; //empty list
     content=default_buckets;
     completion=false;
     max_cost=0;
@@ -24,7 +24,7 @@ Bucket::Bucket(){
 
 }
 
-Bucket::Bucket(Company company, std::list<Order> content,double cur_amount,double cur_cost,
+BucketDB::BucketDB(CompanyDB company, std::list<OrderDBfirst> content,double cur_amount,double cur_cost,
                double max_cost,bool completion){
 
 
@@ -36,10 +36,10 @@ Bucket::Bucket(Company company, std::list<Order> content,double cur_amount,doubl
     this->cur_cost=cur_cost;
 }
 
-void Bucket::find_and_remove(Order order){ //find an order equal to the input order and removes it from the bucket
+void BucketDB::find_and_remove(OrderDBfirst order){ //find an order equal to the input order and removes it from the bucket
 
-    std::list<Order>::iterator i;
-    std::list<Order>::iterator final;
+    std::list<OrderDBfirst>::iterator i;
+    std::list<OrderDBfirst>::iterator final;
 
     bool found=false;
 
@@ -66,7 +66,7 @@ void Bucket::find_and_remove(Order order){ //find an order equal to the input or
     }
 }
 
-void Bucket::update_parameters(Order order){ //updates bucket parameters after deletion of the input order "order", the deletion is already done (bucket content updated)
+void BucketDB::update_parameters(OrderDBfirst order){ //updates bucket parameters after deletion of the input order "order", the deletion is already done (bucket content updated)
 
     double new_amnt=cur_amount-order.get_value();
     double new_cost=cur_cost-order.get_delivery_cost();
@@ -78,13 +78,13 @@ void Bucket::update_parameters(Order order){ //updates bucket parameters after d
 
 }
 
-void Bucket::find_and_remove_order_list(std::list<Order> orders){
+void BucketDB::find_and_remove_order_list(std::list<OrderDBfirst> orders){
 
-    std::list<Order>::iterator i;
-    std::list<Order>::iterator s;
+    std::list<OrderDBfirst>::iterator i;
+    std::list<OrderDBfirst>::iterator s;
 
     for (i=orders.begin();i!=orders.end();i++){
-        Order ord=*i;
+        OrderDBfirst ord=*i;
         s=std::find(content.begin(), content.end(), ord); // return iterator at position of ord in content of bucket
 
     if (s != content.end()){ //true if ord has been found in bucket content
@@ -97,7 +97,7 @@ void Bucket::find_and_remove_order_list(std::list<Order> orders){
 
 }
 
-void Bucket::add_order(Order order){
+void BucketDB::add_order(OrderDBfirst order){
 
     if(order.get_company().name == company.name){
         //bol = True;
@@ -113,24 +113,24 @@ void Bucket::add_order(Order order){
              }
          }
 
-bool  Bucket::is_compatible(Order order){
+bool  BucketDB::is_compatible(OrderDBfirst order){
     return true;
 }
 
-Bucket copy(Bucket other){ // crates a clone of the input Bucket
+BucketDB copy(BucketDB other){ // crates a clone of the input Bucket
 
-    return Bucket( other.get_company(), other.get_content(),other.get_cur_amount(),other.get_cur_cost(),other.get_max_cost(), other.get_completion());
+    return BucketDB( other.get_company(), other.get_content(),other.get_cur_amount(),other.get_cur_cost(),other.get_max_cost(), other.get_completion());
 }
 
-std::list<Bucket> generate_buckets(Order new_order,std::list<Bucket>& buckets){ // generates all valid bucket combinations of existing buckets with new_order
+std::list<BucketDB> generate_buckets(OrderDBfirst new_order,std::list<BucketDB>& buckets){ // generates all valid bucket combinations of existing buckets with new_order
 
-    std::list<Bucket> res; // res will contain new combinations of buckets with new_order
-    std::list<Bucket>::iterator it;
+    std::list<BucketDB> res; // res will contain new combinations of buckets with new_order
+    std::list<BucketDB>::iterator it;
     for (it = buckets.begin(); it != buckets.end(); it ++){
-        Bucket CurrentBucket = *it;
+        BucketDB CurrentBucket = *it;
         if (CurrentBucket.is_compatible(new_order)){
 
-            Bucket NewBucket=copy(CurrentBucket);// copy the current bucket and add the new_order to the copy
+            BucketDB NewBucket=copy(CurrentBucket);// copy the current bucket and add the new_order to the copy
             NewBucket.add_order(new_order);
 
             buckets.push_back(NewBucket); // update bucket list with the new combination
@@ -142,7 +142,7 @@ std::list<Bucket> generate_buckets(Order new_order,std::list<Bucket>& buckets){ 
 
 
 
-void Bucket::match_delivery_cost(){
+void BucketDB::match_delivery_cost(){
 
     double difference=cur_cost-max_cost;
 
@@ -153,7 +153,7 @@ void Bucket::match_delivery_cost(){
 
         double idv=difference/content.size();
 
-        std::list<Order>::iterator i;
+        std::list<OrderDBfirst>::iterator i;
 
         for(i=content.begin();i!=content.end(); ++i) {
             i->delivery_cost-=idv;
@@ -161,10 +161,10 @@ void Bucket::match_delivery_cost(){
       }
 }
 
-bool compare(Bucket b1,Bucket b2){ // comparing buckets for sorting in the bucket list, "b1<b2" <=> "b1 has content length greater than b2"
+bool compare(BucketDB b1,BucketDB b2){ // comparing buckets for sorting in the bucket list, "b1<b2" <=> "b1 has content length greater than b2"
 
-    std::list<Order> c1=b1.get_content();
-    std::list<Order> c2=b2.get_content();
+    std::list<OrderDBfirst> c1=b1.get_content();
+    std::list<OrderDBfirst> c2=b2.get_content();
 
     int l1=c1.size();
     int l2=c2.size();
@@ -179,22 +179,22 @@ bool compare(Bucket b1,Bucket b2){ // comparing buckets for sorting in the bucke
 }
 
 
-std::tuple<bool,Bucket, std::list<Bucket>> processOrder(std::list<Bucket> bucket_list, Order new_order){
+std::tuple<bool,BucketDB, std::list<BucketDB>> processOrder(std::list<BucketDB> bucket_list, OrderDBfirst new_order){
 
 
-    std::list<Bucket> buckets_to_inspect = generate_buckets(new_order, bucket_list); // generate list of buckets that can satisfy the optimization problem
+    std::list<BucketDB> buckets_to_inspect = generate_buckets(new_order, bucket_list); // generate list of buckets that can satisfy the optimization problem
                                                                                     // these new buckets are the only interesting ones to look at, the other ones can't be complete
 
     buckets_to_inspect.sort(compare);//sort bucket_list in decreasing order of length
 
-    std::list<Bucket>::iterator i;
+    std::list<BucketDB>::iterator i;
 
-    Bucket optimal_buc;// will store the optimal bucket, if found
+    BucketDB optimal_buc;// will store the optimal bucket, if found
 
     bool found=false;
 
     for (i=buckets_to_inspect.begin();i!=buckets_to_inspect.end();i++){
-        Bucket buc=*i;
+        BucketDB buc=*i;
         if (buc.get_completion()){ //take first completed bucket
             optimal_buc=buc;
             found=true;
@@ -204,16 +204,16 @@ std::tuple<bool,Bucket, std::list<Bucket>> processOrder(std::list<Bucket> bucket
 
     //removing orders in optimal_buc in all buckets in bucket list
 
-    std::tuple<bool,Bucket,std::list<Bucket>> tpl; //tpl is a tuple that will contain the final output
+    std::tuple<bool,BucketDB,std::list<BucketDB>> tpl; //tpl is a tuple that will contain the final output
 
-    std::list<Order> orders_to_remove=optimal_buc.get_content();
+    std::list<OrderDBfirst> orders_to_remove=optimal_buc.get_content();
 
     if (found==true){ // if an optimal bucket was found, there are orders to delete
 
-     std::list<Bucket> new_bucket_list;
+     std::list<BucketDB> new_bucket_list;
 
     for (i=bucket_list.begin();i!=bucket_list.end();i++){
-        Bucket buc=*i;
+        BucketDB buc=*i;
         buc.find_and_remove_order_list(orders_to_remove);
         if (buc.get_content().size()>0){
             new_bucket_list.push_back(buc);

@@ -100,7 +100,7 @@ OrderPage::OrderPage(): WContainerWidget(){
 }
 
 void OrderPage::Login(){
-    User* user{new User()};
+    UserDB* user{new UserDB()};
     user->set_password((passwordEdit_->text()).toUTF8());
     user->set_username((nameEdit_->text()).toUTF8());
     bool find_flag = database.find_user(user);

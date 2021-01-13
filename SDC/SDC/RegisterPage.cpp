@@ -120,7 +120,7 @@ RegisterPage::RegisterPage(): WContainerWidget()
 }
 
 void RegisterPage::Register(){
-    User* user{new User()};
+    UserDB* user{new UserDB()};
     user->set_password((passwordEdit_->text()).toUTF8());
     user->set_email((emailEdit_->text()).toUTF8());
     user->set_address((locationEdit_->text()).toUTF8());

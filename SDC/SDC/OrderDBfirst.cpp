@@ -1,7 +1,7 @@
-#include "Order.h"
+#include "OrderDBfirst.h"
 
-Order::Order(User user,
-             Company company,
+OrderDBfirst::OrderDBfirst(UserDB user,
+             CompanyDB company,
              double value,
              double delivery_cost,
              double distance){
@@ -12,7 +12,7 @@ Order::Order(User user,
         this->distance = distance;
 }
 
-bool Order::operator==(Order other){ // we assume orders are equal when the user's identity and company choice are the same
+bool OrderDBfirst::operator==(OrderDBfirst other){ // we assume orders are equal when the user's identity and company choice are the same
                                     // we assume the user will always group his orders for one company in a single order
 
     //name_comparison
@@ -32,19 +32,19 @@ bool Order::operator==(Order other){ // we assume orders are equal when the user
 
 }
 
-User Order::get_user(){
+UserDB OrderDBfirst::get_user(){
     return user;
 }
-Company Order::get_company(){
+CompanyDB OrderDBfirst::get_company(){
     return company;
 };
-double Order::get_value(){
+double OrderDBfirst::get_value(){
     return value;
 };
-double Order::get_delivery_cost(){
+double OrderDBfirst::get_delivery_cost(){
     return delivery_cost;
 };
-double Order::get_distance(){
+double OrderDBfirst::get_distance(){
     return distance;
 };
 

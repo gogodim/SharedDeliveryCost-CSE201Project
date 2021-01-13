@@ -4,8 +4,8 @@
 #include <Wt/WDateTime.h>
 #include <Wt/Dbo/Types.h>
 #include <Wt/Dbo/WtSqlTraits.h>
-#include "User.h"
-#include "Company.h"
+#include "UserDB.h"
+#include "CompanyDB.h"
 using namespace Wt;
 
 namespace dbo = Wt::Dbo;

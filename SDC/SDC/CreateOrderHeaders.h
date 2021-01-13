@@ -17,10 +17,10 @@
 #include <Wt/WSlider.h>
 #include <stdlib.h>
 
-#include "Order.h"
+#include "OrderDBfirst.h"
 #include "Database.h"
-#include "User.h"
-#include "Coordinate.h"
+#include "UserDB.h"
+#include "CoordinateDB.h"
 
 class NewOrderWidget : public Wt::WContainerWidget
 {
@@ -38,7 +38,7 @@ private:
 
     Wt::WLineEdit       *diff_loc_;
     Wt::WText           *diff_loc_description;
-    Coordinate          *address;
+    CoordinateDB          *address;
 
     Wt::WLineEdit       *order_val_;
     Wt::WText           *order_val_description;

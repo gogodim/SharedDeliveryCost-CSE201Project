@@ -23,7 +23,7 @@ Database::Database()
     session.setConnection(std::move(sqlite3));
 
     /* load user class from table*/
-    session.mapClass<User>("user");
+    session.mapClass<UserDB>("user");
 
     session.mapClass<Notification>("Notification");
 
@@ -35,8 +35,8 @@ Database::Database()
       std::cout<<"Create a new database in" + path << std::endl;
       session.createTables();
       dbo::Transaction transaction(session);
-      std::unique_ptr<User> user{new User()};
-      dbo::ptr<User> userPtr = session.add(std::move(user));
+      std::unique_ptr<UserDB> user{new UserDB()};
+      dbo::ptr<UserDB> userPtr = session.add(std::move(user));
       log("info") << "Database created";
     } catch (...) {
       log("info") << "Using existing database";
@@ -45,12 +45,12 @@ Database::Database()
 
 }
 
-bool Database::add_user(const User* user){
+bool Database::add_user(const UserDB* user){
     if (!Database::find_user(user)){
         dbo::Transaction transaction(session);
-        std::unique_ptr<User> userptr = std::make_unique<User>(*user);
+        std::unique_ptr<UserDB> userptr = std::make_unique<UserDB>(*user);
         std::cerr << "Add user " << userptr->get_username()<< " with email of " << userptr->get_email() << std::endl;
-        dbo::ptr<User> userPtr = session.add(std::move(userptr));
+        dbo::ptr<UserDB> userPtr = session.add(std::move(userptr));
         return true;
     }
     return false;
@@ -60,16 +60,16 @@ bool Database::add_user(const User* user){
 bool Database::addOrder(std::string username, double maxDeliveryCost, std::string deliveryLocation, double orderCost,
                         double radius, std::string store){
     dbo::Transaction transaction(session);
-    dbo::ptr<User> u = session.find<User>().where("username = ?").bind(username);
-    Company comp = Company();
+    dbo::ptr<UserDB> u = session.find<UserDB>().where("username = ?").bind(username);
+    CompanyDB comp = CompanyDB();
     double lat = 0;
     double lon = 0;
     if (deliveryLocation != ""){
-        Coordinate coord = coordinate_from_address(deliveryLocation);
+        CoordinateDB coord = coordinate_from_address(deliveryLocation);
         lat = coord.get_latitude();
         lon = coord.get_longitude();
     } else{
-        Coordinate coord = coordinate_from_address(u->get_address_second());
+        CoordinateDB coord = coordinate_from_address(u->get_address_second());
         deliveryLocation = u->get_address_second();
         lat = coord.get_latitude();
         lon = coord.get_longitude();
@@ -84,10 +84,10 @@ bool Database::addOrder(std::string username, double maxDeliveryCost, std::strin
 }
 
 
-bool Database::find_user(const User* user){
+bool Database::find_user(const UserDB* user){
     dbo::Transaction transaction(session);
-    std::unique_ptr<User> userptr = std::make_unique<User>(*user);
-    dbo::ptr<User> u = session.find<User>().where("username = ?").bind(userptr->get_username());
+    std::unique_ptr<UserDB> userptr = std::make_unique<UserDB>(*user);
+    dbo::ptr<UserDB> u = session.find<UserDB>().where("username = ?").bind(userptr->get_username());
     std::cerr << "Return" << u << std::endl;
     if(!u){
        std::cout<<"False"<<std::endl;
@@ -97,10 +97,10 @@ bool Database::find_user(const User* user){
     return true;
 }
 
-bool Database::valid_user(const User* user){
+bool Database::valid_user(const UserDB* user){
     dbo::Transaction transaction(session);
-    std::unique_ptr<User> userptr = std::make_unique<User>(*user);
-    dbo::ptr<User> u = session.find<User>().where("username = ?").bind(userptr->get_username());
+    std::unique_ptr<UserDB> userptr = std::make_unique<UserDB>(*user);
+    dbo::ptr<UserDB> u = session.find<UserDB>().where("username = ?").bind(userptr->get_username());
     std::cerr << "Return" << u << std::endl;
     if(!u){
        //std::cout<<"False"<<std::endl;

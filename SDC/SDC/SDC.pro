@@ -6,15 +6,15 @@ CONFIG -= qt
 QT += widgets
 
 SOURCES += \
-        Bucket.cpp \
-        Company.cpp \
-        Coordinate.cpp \
+        BucketDB.cpp \
+        CompanyDB.cpp \
+        CoordinateDB.cpp \
         Database.cpp \
         GeocodingAPI.cpp \
-        Order.cpp \
+        OrderDBfirst.cpp \
         OrderPage.cpp \
         RegisterPage.cpp \
-        User.cpp \
+        UserDB.cpp \
         main.cpp \
         NotificationWidget.cpp \
         notification.cpp \
@@ -46,15 +46,15 @@ LIBS  +=  -LC:/Qt/Tools/mingw730_64/i686-w64-mingw32/lib  \
                 -llibwsock32
 
 HEADERS += \
-    Bucket.h \
-    Company.h \
-    Coordinate.h \
+    BucketDB.h \
+    CompanyDB.h \
+    CoordinateDB.h \
     Database.h \
     GeocodingAPI.h \
-    Order.h \
+    OrderDBfirst.h \
     OrderPage.h \
-    User.h \
     NotificationWidget.h \
+    UserDB.h \
     notification.h \
     RegisterPage.h \
     notification.h \

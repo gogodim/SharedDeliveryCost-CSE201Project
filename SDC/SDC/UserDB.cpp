@@ -1,10 +1,10 @@
-#include "User.h"
-#include "Order.h"
+#include "UserDB.h"
+#include "OrderDBfirst.h"
 #include <string>
 #include "Database.h"
 
 //User Constructor
-User::User(){
+UserDB::UserDB(){
     username = "Default User";
     name = "";
     surname = "";
@@ -12,7 +12,7 @@ User::User(){
     address = "";
 }
 
-User::User(std::string username,
+UserDB::UserDB(std::string username,
            std::string password,
            std::string name,
            std::string surname,
@@ -28,59 +28,59 @@ User::User(std::string username,
 };
 
 // User, Gettters
-std::string User::get_username(){
+std::string UserDB::get_username(){
     return this->username;
 }
-std::string User::get_password(){
+std::string UserDB::get_password(){
     return this->password;
 };
-std::string User::get_name(){
+std::string UserDB::get_name(){
     return this->name;
 };
-std::string User::get_surname(){
+std::string UserDB::get_surname(){
     return this->surname;
 };
-std::string User::get_address(){
+std::string UserDB::get_address(){
     return this->address;
 };
-std::string User::get_email(){
+std::string UserDB::get_email(){
     return this->email;
 };
-Coordinate User::get_coordinates(){
+CoordinateDB UserDB::get_coordinates(){
     return this->coordinates;
 };
 
-std::string User::get_password() const{
+std::string UserDB::get_password() const{
     return this->password;
 }
 
-std::string User::get_address_second() const{
+std::string UserDB::get_address_second() const{
     return this->address;
 }
 
 
 //User, Setters
-void User::set_username(std::string username){
+void UserDB::set_username(std::string username){
     this->username = username;
 }
 std::hash <std::string> hash;
 
-void User::set_password(std::string password){
+void UserDB::set_password(std::string password){
     this->password = std::to_string(hash(password));
 };
-void User::set_name(std::string name){
+void UserDB::set_name(std::string name){
     this->name = name;
 };
-void User::set_surname(std::string surname){
+void UserDB::set_surname(std::string surname){
     this->surname = surname;
 };
-void User::set_address(std::string address){
+void UserDB::set_address(std::string address){
     this->address = address;
 };
-void User::set_email(std::string email){
+void UserDB::set_email(std::string email){
     this->email = email;
 };
-void User::set_coordinates(Coordinate coordinates){
+void UserDB::set_coordinates(CoordinateDB coordinates){
     this->coordinates = coordinates;
 };
 
