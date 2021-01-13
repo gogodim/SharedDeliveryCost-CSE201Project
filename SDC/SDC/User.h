@@ -42,6 +42,7 @@ public:
     Coordinate get_coordinates();
 
     std::string get_password()const;
+    std::string get_address_second()const;
 
     void set_username(std::string n);
     void set_password(std::string n);

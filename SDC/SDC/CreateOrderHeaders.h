@@ -20,6 +20,7 @@
 #include "Order.h"
 #include "Database.h"
 #include "User.h"
+#include "Coordinate.h"
 
 class NewOrderWidget : public Wt::WContainerWidget
 {
@@ -37,6 +38,7 @@ private:
 
     Wt::WLineEdit       *diff_loc_;
     Wt::WText           *diff_loc_description;
+    Coordinate          *address;
 
     Wt::WLineEdit       *order_val_;
     Wt::WText           *order_val_description;
@@ -50,7 +52,6 @@ private:
     Wt::WPushButton     *confirm_;
 
     std::string         user_;
-    Order               *new_order;
 };
 
 

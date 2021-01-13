@@ -53,6 +53,8 @@ void NewOrderWidget::confirm(){
 
     session_->addOrder(user_, std::stod(maxDeliveryVal_->text().toUTF8()), diff_loc_->text().toUTF8(),
                        std::stod(order_val_->text().toUTF8()), std::stod(radius_->text().toUTF8()),
-                       company_->currentText().toUTF8(),diff_loc_->text().toUTF8() );
+                       company_->currentText().toUTF8());
+//    this->display();
+
 };
 

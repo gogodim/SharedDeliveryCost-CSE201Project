@@ -8,13 +8,16 @@ OrderDB::OrderDB(std::string username,
              double value,
              double delivery_cost,
              double distance,
-             std::string address){
+             std::string address,
+             double latitude, double longitude){
         this->username = username;
         this->companyname = companyname;
         this->value = value;
         this->delivery_cost = delivery_cost;
         this->distance = distance;
         this->address = address;
+        this->latitude = latitude;
+        this->longitude = longitude;
 }
 OrderDB::OrderDB(){
   username = "";
@@ -22,7 +25,9 @@ OrderDB::OrderDB(){
   value =0;
   delivery_cost =0;
   distance =0;
-  address = "";
+  address="";
+  latitude = 0;
+  longitude = 0;
 }
 
 

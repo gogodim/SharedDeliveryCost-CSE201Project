@@ -25,7 +25,7 @@ public:
                          std::string deliveryLocation,std::string otherOrders);
     dbo::Session session;
     bool addOrder(std::string username, double maxDeliveryCost, std::string deliveryLocation,
-                  double orderCost, double radius, std::string store, std::string address);
+                  double orderCost, double radius, std::string store);
 
 private:
     mutable Dbo::Session session_;

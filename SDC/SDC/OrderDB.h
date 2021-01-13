@@ -22,7 +22,8 @@ public:
           double value,
           double delivery_cost,
           double distance,
-          std::string address);
+          std::string address,
+          double latitude,double longitude);
     std::string get_username();
     std::string get_companyname();
     double get_value();
@@ -35,6 +36,8 @@ public:
     double delivery_cost;
     double distance;
     std::string address;
+    double latitude;
+    double longitude;
 
     template<class Action>
     void persist(Action& a)
@@ -45,6 +48,8 @@ public:
       dbo::field(a, delivery_cost, "delivery_cost");
       dbo::field(a, distance, "distance");
       dbo::field(a, address, "address");
+      dbo::field(a, latitude, "latitude");
+      dbo::field(a, longitude, "longitude");
     }
 
 
