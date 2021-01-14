@@ -64,8 +64,6 @@ void NewOrderWidget::confirm(){
                        std::stod(order_val_->text().toUTF8()), std::stod(radius_->text().toUTF8()),
                        company_->currentText().toUTF8(),postal_->text().toUTF8(),
                                      city_->text().toUTF8(),diff_loc_->text().toUTF8());
-//    int Database::addOrder(std::string username, double maxDeliveryCost, double orderCost,
-//                            double radius, std::string store, string postal, string city, string street){
     this->display();
     //Run process order
     list<Bucket> listBuckets = session_->createBucketList();
