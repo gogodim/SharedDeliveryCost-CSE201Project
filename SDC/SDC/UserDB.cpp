@@ -11,6 +11,8 @@ UserDB::UserDB(){
     password = "123455";
     email = "a@gmail.com";
     address = "91120, 111, 111";
+    lat = 10.00;
+    lo = 10.00;
 }
 
 UserDB::UserDB(std::string username,

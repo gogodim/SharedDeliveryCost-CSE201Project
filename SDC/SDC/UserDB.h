@@ -21,7 +21,8 @@ public:
         this->email       = u.email;
         this->address     = u.address;
         //Three element: 91120, Palaiseau, Avenue Henri Becquerel 103
-
+        this->lo     = u.lo;
+        this->lat     = u.lat;
         this->coordinates = u.coordinates;
     };
     UserDB(std::string username,
