@@ -72,6 +72,12 @@ void NewOrderWidget::confirm(){
     tuple<bool,Bucket,list<Bucket>,string> tpl;
     Order ord = session_->createOrderForProcess(orderID);
     tpl = processOrder(listBuckets,ord);
+    if(get<0>(tpl)==true){
+        session_->createNotifications(get<1>(tpl), get<3>(tpl));
+    }
+    //delete all bucketsDB in DB
+    session_->createBucketDBs(get<2>(tpl));
+
 
 };
 

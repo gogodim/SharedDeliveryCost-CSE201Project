@@ -18,5 +18,4 @@ std::vector<int> splitOrderIDs(std::string OrderIDs);
 std::string compressOrderIDs(std::vector< int > OrderIDs);
 
 
-
 #endif // HELPINGFUNCTIONS_H
