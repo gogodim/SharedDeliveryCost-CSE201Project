@@ -9,7 +9,9 @@ OrderDB::OrderDB(int orderID,
              double value,
              double delivery_cost,
              double distance,
-             std::string address,
+             std::string postal,
+             std::string city,
+             std::string street,
              double latitude, double longitude){
         this->orderID = orderID;
         this->username = username;
@@ -17,7 +19,9 @@ OrderDB::OrderDB(int orderID,
         this->value = value;
         this->delivery_cost = delivery_cost;
         this->distance = distance;
-        this->address = address;
+        this->postal = postal;
+        this->city = city;
+        this->street = street;
         this->latitude = latitude;
         this->longitude = longitude;
 }
@@ -28,7 +32,9 @@ OrderDB::OrderDB(){
   value =0;
   delivery_cost =0;
   distance =0;
-  address="";
+  postal="";
+  city="";
+  street="";
   latitude = 0;
   longitude = 0;
 }

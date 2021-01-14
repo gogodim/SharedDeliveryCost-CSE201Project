@@ -38,6 +38,10 @@ private:
 
     Wt::WLineEdit       *diff_loc_;
     Wt::WText           *diff_loc_description;
+    Wt::WLineEdit       *postal_;
+    Wt::WText           *postal_description;
+    Wt::WLineEdit       *city_;
+    Wt::WText           *city_description;
     Coordinate          *address;
 
     Wt::WLineEdit       *order_val_;
@@ -51,7 +55,7 @@ private:
     Wt::WText           *radius_description;
     Wt::WPushButton     *confirm_;
 
-    std::string         user_;
+    std::string         username_;
 };
 
 

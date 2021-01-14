@@ -23,7 +23,9 @@ public:
           double value,
           double delivery_cost,
           double distance,
-          std::string address,
+          std::string postal,
+          std::string city,
+          std::string street,
           double latitude,double longitude);
     std::string get_username();
     std::string get_companyname();
@@ -37,7 +39,9 @@ public:
     double value;
     double delivery_cost;
     double distance;
-    std::string address;
+    std::string postal;
+    std::string city;
+    std::string street;
     double latitude;
     double longitude;
 
@@ -50,7 +54,9 @@ public:
       dbo::field(a, value, "value");
       dbo::field(a, delivery_cost, "delivery_cost");
       dbo::field(a, distance, "distance");
-      dbo::field(a, address, "address");
+      dbo::field(a, postal, "postal_code");
+      dbo::field(a,city,"city");
+      dbo::field(a,street,"street");
       dbo::field(a, latitude, "latitude");
       dbo::field(a, longitude, "longitude");
     }

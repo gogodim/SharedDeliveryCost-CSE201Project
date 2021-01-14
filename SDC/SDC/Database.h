@@ -27,8 +27,8 @@ public:
     list<Bucket> createBucketList();
     void addNotification(std::string username,int orderID,double costShare,std::string deliveryLocation,std::string otherOrders);
     dbo::Session session;
-    int addOrder(std::string username, double maxDeliveryCost, std::string deliveryLocation,
-                  double orderCost, double radius, std::string store);
+    int addOrder(std::string username, double maxDeliveryCost,
+                  double orderCost, double radius, std::string store, std::string postal, std::string city, std::string street);
 
 private:
     mutable Dbo::Session session_;
