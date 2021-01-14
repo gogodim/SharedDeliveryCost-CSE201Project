@@ -47,7 +47,7 @@ private:
     std::string Street;
 
 };
-Coordinate address_to_coordinates(int argc, char** argv, Address address);
+Coordinate address_to_coordinates(int argc, char** argv, std::string postalcode, std::string city, std::string street);
 Coordinate coordinate_from_address(std::string address);
 
 #endif // COORDINATE_H

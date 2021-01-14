@@ -146,6 +146,13 @@ void RegisterPage::Register(){
     UserDB* user{new UserDB()};
     Address useraddress((PostCodeEdit_->text()).toUTF8(), (CityEdit_->text()).toUTF8(), (StreetNoEdit_->text()).toUTF8());
 
+    user->set_username(usernameEdit_->text().toUTF8());
+    user->set_password((passwordEdit_->text()).toUTF8());
+    user->set_email((emailEdit_->text()).toUTF8());
+    user->set_address(useraddress.get_address());
+    user->set_useraddress(useraddress);
+    user->set_name((nameEdit_->text()).toUTF8());
+    user->set_surname((surnameEdit_->text()).toUTF8());
     bool find_flag = database->find_user(user);
 
     if(!find_flag){
@@ -155,23 +162,16 @@ void RegisterPage::Register(){
             confirm_->setText("Wrong Email");
         }
         else{
-            Coordinate cor = this->Check_Valid_Address(user->get_useraddress());
+            Coordinate cor = this->Check_Valid_Address((PostCodeEdit_->text()).toUTF8(), (CityEdit_->text()).toUTF8(), (StreetNoEdit_->text()).toUTF8());
             if(cor.get_latitude() == -1 && cor.get_longitude() == -1){
             //if (false){
                 confirm_->setText("Wrong Address");
                 return;
             }
-            user->set_coordinates(cor);
+
+            //user->set_coordinates(cor);
             user->lat = cor.get_latitude();
             user->lo =cor.get_longitude();
-            user->set_username(usernameEdit_->text().toUTF8());
-            user->set_password((passwordEdit_->text()).toUTF8());
-            user->set_email((emailEdit_->text()).toUTF8());
-            user->set_address(useraddress.get_address());
-            user->set_useraddress(useraddress);
-            user->set_name((nameEdit_->text()).toUTF8());
-            user->set_surname((surnameEdit_->text()).toUTF8());
-
             std::cout << user->lo <<" user information:"<<typeid(cor.get_latitude()).name()<<std::endl;
             confirm_->setText("Register Successful");
             database->add_user(user);
@@ -198,8 +198,8 @@ bool RegisterPage::Check_Valid_Email(std::string email){
     return regex_match(email, std::regex("(\\w+)(\\.|_)?(\\w*)@(\\w+)(\\.(\\w+))+"));
 }
 
-Coordinate RegisterPage::Check_Valid_Address(Address address){
-    Coordinate cor = address_to_coordinates(argc, argv, address);
+Coordinate RegisterPage::Check_Valid_Address(std::string postalcode, std::string city, std::string street){
+    Coordinate cor = address_to_coordinates(argc, argv, postalcode, city, street);
     std::cout<<"latitude: "<<cor.get_latitude()<<", longtitude: "<<cor.get_longitude()<<std::endl;
     if(cor.get_latitude() == -1 && cor.get_longitude() == -1){
         return Coordinate(-1, -1);

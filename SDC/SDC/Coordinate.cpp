@@ -45,7 +45,7 @@ Coordinate coordinate_from_address(std::string address){
     return Coordinate(0, 0);
 }
 
-Coordinate address_to_coordinates(int argc, char** argv, Address address){
+Coordinate address_to_coordinates(int argc, char** argv, std::string postalcode, std::string city, std::string street){
     Coordinate cor;
     // main application
   #undef qApp // undef macro qApp out of the way
@@ -69,9 +69,9 @@ Coordinate address_to_coordinates(int argc, char** argv, Address address){
       // build address
       QGeoAddress qGeoAddr;
       qGeoAddr.setCountry(QString::fromUtf8("France"));
-      qGeoAddr.setPostalCode(QString::fromUtf8(address.get_postalcode().c_str()));
-      qGeoAddr.setCity(QString::fromUtf8(address.get_city().c_str()));
-      qGeoAddr.setStreet(QString::fromUtf8(address.get_street().c_str()));
+      qGeoAddr.setPostalCode(QString::fromUtf8(postalcode.c_str()));
+      qGeoAddr.setCity(QString::fromUtf8(city.c_str()));
+      qGeoAddr.setStreet(QString::fromUtf8(street.c_str()));
       QGeoCodeReply *pQGeoCode = pQGeoCoder->geocode(qGeoAddr);
       if (!pQGeoCode) {
         std::cerr << "GeoCoding totally failed!" << std::endl;
