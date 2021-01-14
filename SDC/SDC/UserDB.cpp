@@ -114,6 +114,8 @@ void UserDB::set_useraddress(Address add){
 }
 void UserDB::set_coordinates(Coordinate coordinates){
     this->coordinates = coordinates;
+    this->lat = coordinates.get_latitude();
+    this->lo = coordinates.get_longitude();
 }
 
 /*double array_of_one_delivery(){ // This function creates the array of all the orders concerned by the delivery, idk how to do it because linked to the database?

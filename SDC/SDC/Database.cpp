@@ -207,3 +207,22 @@ list<Bucket> Database::createBucketList(){
     return for_return;
 }
 
+Order Database::createOrderForProcess(int orderID){
+    dbo::ptr<OrderDB> o = session.find<OrderDB>().where("orderID = ?").bind(orderID);
+    dbo::ptr<UserDB> u = session.find<UserDB>().where("username = ?").bind(o->username);
+    dbo::ptr<CompanyDB> c = session.find<CompanyDB>().where("name = ?").bind(o->companyname);
+    Company comp = Company(o->companyname,splitCompOprions(c->compressedOptions));
+    Order ord = Order(orderID,
+                                     User(u->get_username(),
+                                          u->get_password(),
+                                          u->get_name(),
+                                          u->get_surname(),
+                                          Coordinate(u->get_coordinates().get_latitude(),u->get_coordinates().get_longitude()),
+                                          u->get_email()),
+                                     comp,
+                                     o->value,
+                                     o->delivery_cost,
+                                     o->distance,
+                                     Coordinate(u->get_coordinates().get_latitude(),u->get_coordinates().get_longitude()));
+    return ord;
+}

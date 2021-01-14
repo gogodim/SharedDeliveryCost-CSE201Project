@@ -70,6 +70,8 @@ public:
         dbo::field(a, surname,  "surname");
         dbo::field(a, password, "password");
         dbo::field(a, email,    "email");
+        dbo::field(a, lat,  "latitude");
+        dbo::field(a, lo, "longtitude");
         dbo::field(a, address,  "address");
     }
 
@@ -87,6 +89,8 @@ private:
     std::string  address;
     Address      useraddress;
     Coordinate   coordinates;
+    double lat;
+    double lo;
 
 };
 
