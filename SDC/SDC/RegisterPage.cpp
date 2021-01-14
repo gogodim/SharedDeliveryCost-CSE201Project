@@ -148,7 +148,7 @@ void RegisterPage::Register(){
 
     bool find_flag = database->find_user(user);
 
-    if(!find_flag){
+    if(find_flag){
         bool email_flag = this->Check_Valid_Email(user->get_email());
         if(!email_flag){
         //if (false){

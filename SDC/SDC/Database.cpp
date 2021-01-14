@@ -203,8 +203,7 @@ list<Bucket> Database::createBucketList(){
                        bucketDB->completion,
                        Coordinate(bucketDB->lat,bucketDB->lo));
       for_return.push_back(newBucket);
-      //dbo::ptr<BucketDB> bdelete = session.find<BucketDB>().where("id = ?").bind(bucketDB.id());
-      //bdelete.remove();
+
     }
 
     transaction.commit();
@@ -227,61 +226,44 @@ Order Database::createOrderForProcess(int orderID){
                                           u->get_password(),
                                           u->get_name(),
                                           u->get_surname(),
-                                          Coordinate(u->get_coordinates().get_latitude(),u->get_coordinates().get_longitude()),
+                                          Coordinate(u->lat,u->lo),
                                           u->get_email()),
                                      comp,
                                      o->value,
                                      o->delivery_cost,
                                      o->distance,
-                                     Coordinate(u->get_coordinates().get_latitude(),u->get_coordinates().get_longitude()));
+                                     Coordinate(u->lat,u->lo));
     transaction.commit();
     return ord;
 }
 
 void Database::createBucketDBs(list<Bucket> bucketList){
     dbo::Transaction transaction(session);
-    std::cout<<"HERE1"<<std::endl;
 
     for(std::list<Bucket>::iterator it=bucketList.begin(); it!=bucketList.end();it++){
-        std::cout<<"HERE2"<<std::endl;
 
         Bucket  b = *it;
         std::vector< int > OrderIDs;
-        std::cout<<"HERE3"<<std::endl;
 
         list<Order> bb = b.get_content();
-        std::cout<<"HERE4"<<std::endl;
 
         for(std::list<Order>::iterator itb=bb.begin(); itb!=bb.end();itb++){
-            std::cout<<"HERE5"<<std::endl;
 
             OrderIDs.push_back(itb->orderID);
         }
-        std::cout<<"HERE6"<<std::endl;
 
         std::string OrdIDs = compressOrderIDs(OrderIDs);
-        std::cout<<"HERE7"<<std::endl;
-        std::cout<<b.get_company().get_name()<<std::endl;
-      std::cout<<OrdIDs<<std::endl;
-      std::cout<<b.get_cur_amount()<<std::endl;
-      std::cout<<b.get_cur_cost()<<std::endl;
-      std::cout<<b.get_max_cost()<<std::endl;
-      std::cout<<b.get_completion()<<std::endl;
-      std::cout<<b.get_intersection_point().get_latitude()<<std::endl;
-      std::cout<<b.get_intersection_point().get_longitude()<<std::endl;
         std::unique_ptr<BucketDB> bucket = std::make_unique<BucketDB>(b.get_company().get_name(),
                                                                       OrdIDs,
                                                                       b.get_cur_amount(),
                                                                       b.get_cur_cost(),
                                                                       b.get_max_cost(),
                                                                       b.get_completion(),
-                                                                      b.get_intersection_point().get_latitude(),
-                                                                      b.get_intersection_point().get_longitude()
+                                                                      b.get_intersection_point().latitude,
+                                                                      b.get_intersection_point().longitude
                                                                       );
-        std::cout<<"HERE8"<<std::endl;
 
         dbo::ptr<BucketDB> temp = session.add(std::move(bucket));
-        std::cout<<"HERE9"<<std::endl;
 
     }
     transaction.commit();
@@ -294,25 +276,27 @@ void Database::createNotifications(Bucket bucket,std::string link){
     list<Order> orders = bucket.get_content();
     for(std::list<Order>::iterator it=orders.begin(); it!=orders.end();it++){
 
-
         std::string otherOrders = "";
-        for(std::list<Order>::iterator it2=orders.begin(); it2!=orders.end();it2++){
+        list<Order> ordersTemp = bucket.get_content();
+        for(std::list<Order>::iterator it2=ordersTemp.begin(); it2!=ordersTemp.end();it2++){
+            cout<<"BEFORE IF!"<<it->get_user().get_username()<<it2->get_user().get_username()<<endl;
             if(it->get_user().get_username()!=it2->get_user().get_username()){
+                cout<<"INSIDE IF!"<<endl;
                 otherOrders += it2->get_user().get_username();
                 otherOrders += ",";
                 otherOrders += it2->get_user().get_email();
                 otherOrders += ",";
-                otherOrders += it2->to_pay;
+                otherOrders += to_string(it2->to_pay);
                 otherOrders += ",";
                 otherOrders += " ";
+                cout<<otherOrders<<endl;
             }
         }
         addNotification(it->get_user().get_username(),
                         it->orderID,
                         it->to_pay,
                         link,
-                        otherOrders
-                        );
+                        otherOrders);
     }
     transaction.commit();
 
@@ -321,8 +305,16 @@ void Database::createNotifications(Bucket bucket,std::string link){
 void Database::deleteBucket(){
     dbo::Transaction transaction(session);
 
-    dbo::ptr<BucketDB> buckets = session.find<BucketDB>();
-    buckets.remove();
+    typedef dbo::collection< dbo::ptr<BucketDB> > BucketDBs;
+
+    BucketDBs bdbs = session.find<BucketDB>();
+
+
+    for (const dbo::ptr<BucketDB> &bdb : bdbs){
+        dbo::ptr<BucketDB> bdelete = session.find<BucketDB>().where("id = ?").bind(bdb.id());
+        bdelete.remove();
+
+    }
     transaction.commit();
 
 
