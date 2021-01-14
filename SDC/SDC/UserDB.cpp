@@ -53,7 +53,12 @@ std::string UserDB::get_email(){
 Coordinate UserDB::get_coordinates(){
     return this->coordinates;
 };
-
+double UserDB::get_latitude(){
+    return this->lat;
+}
+double UserDB::get_longtitude(){
+    return this->lo;
+}
 std::string UserDB::get_password() const{
     return this->password;
 }
@@ -83,7 +88,7 @@ std::string UserDB::get_email()const{
 };
 Coordinate UserDB::get_coordinates()const{
     return this->coordinates;
-};
+}
 
 //User, Setters
 void UserDB::set_username(std::string username){
@@ -107,6 +112,12 @@ void UserDB::set_address(std::string address){
 void UserDB::set_email(std::string email){
     this->email = email;
 }
+void UserDB::set_longtitude(double longtitude){
+    this->lo = longtitude;
+}
+void UserDB::set_latitude(double latitude){
+    this->lat = latitude;
+}
 void UserDB::set_useraddress(Address add){
     this->useraddress.set_postalcode(add.get_postalcode());
     this->useraddress.set_city(add.get_city());
@@ -114,6 +125,8 @@ void UserDB::set_useraddress(Address add){
 }
 void UserDB::set_coordinates(Coordinate coordinates){
     this->coordinates = coordinates;
+    this->lat = coordinates.get_latitude();
+    this->lo = coordinates.get_longitude();
 }
 
 /*double array_of_one_delivery(){ // This function creates the array of all the orders concerned by the delivery, idk how to do it because linked to the database?

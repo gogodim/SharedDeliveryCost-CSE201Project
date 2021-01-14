@@ -51,6 +51,7 @@ bool Database::add_user(const UserDB* user){
         dbo::Transaction transaction(session);
         std::unique_ptr<UserDB> userptr = std::make_unique<UserDB>(*user);
         std::cerr << "Add user " << userptr->get_username()<< " with email of " << userptr->get_email() << std::endl;
+        std::cout<< "latitude in databasecpp: " << userptr->get_coordinates().get_latitude() << std::endl;
         dbo::ptr<UserDB> userPtr = session.add(std::move(userptr));
         return true;
     }
@@ -65,17 +66,13 @@ int Database::addOrder(std::string username, double maxDeliveryCost, double orde
     dbo::Transaction transaction(session);
     dbo::ptr<UserDB> u = session.find<UserDB>().where("username = ?").bind(username);
     CompanyDB comp = CompanyDB();
-    double lat = 0;
-    double lon = 0;
-    Coordinate coord;
+    Coordinate coord = u->get_coordinates();
+    double lat = coord.get_latitude();
+    double lon = coord.get_longitude();
+    Address address = u->get_useraddress();
     if (postal != "" && city!="" && street!=""){
-        Address address = Address(postal, city, street);
-//        Coordinate coord = address_to_coordinates(address);
-        lat = coord.get_latitude();
-        lon = coord.get_longitude();
-    } else{
-        Address address = u->get_useraddress();
-//        Coordinate coord = address_to_coordinates(address);
+        address = Address(postal, city, street);
+        Coordinate coord = Coordinate();
         lat = coord.get_latitude();
         lon = coord.get_longitude();
     };
@@ -86,7 +83,8 @@ int Database::addOrder(std::string username, double maxDeliveryCost, double orde
 
     std::unique_ptr<OrderDB> ordptr = std::make_unique<OrderDB>(temp.size()+1,   username,store, orderCost,
                                                                 maxDeliveryCost, radius,
-                                                                postal, city, street, lat, lon);
+                                                                address.get_postalcode(), address.get_city(),
+                                                                address.get_street(), lat, lon);
     dbo::ptr<OrderDB> ordrPtr = session.add(std::move(ordptr));
     return temp.size()+1;
 }
@@ -144,7 +142,11 @@ std::vector<Notification> Database::readAllNotifications()
     return result;
 }
 
-void Database::addNotification(std::string username1,int orderID1,double costShare1,std::string deliveryLocation1,std::string otherOrders1)
+void Database::addNotification(std::string username1,
+                               int orderID1,
+                               double costShare1,
+                               std::string deliveryLocation1,
+                               std::string otherOrders1)
 {
     dbo::Transaction transaction(session);
 
@@ -207,3 +209,71 @@ list<Bucket> Database::createBucketList(){
     return for_return;
 }
 
+Order Database::createOrderForProcess(int orderID){
+    dbo::ptr<OrderDB> o = session.find<OrderDB>().where("orderID = ?").bind(orderID);
+    dbo::ptr<UserDB> u = session.find<UserDB>().where("username = ?").bind(o->username);
+    dbo::ptr<CompanyDB> c = session.find<CompanyDB>().where("name = ?").bind(o->companyname);
+    Company comp = Company(o->companyname,splitCompOprions(c->compressedOptions));
+    Order ord = Order(orderID,
+                                     User(u->get_username(),
+                                          u->get_password(),
+                                          u->get_name(),
+                                          u->get_surname(),
+                                          Coordinate(u->get_coordinates().get_latitude(),u->get_coordinates().get_longitude()),
+                                          u->get_email()),
+                                     comp,
+                                     o->value,
+                                     o->delivery_cost,
+                                     o->distance,
+                                     Coordinate(u->get_coordinates().get_latitude(),u->get_coordinates().get_longitude()));
+    return ord;
+}
+
+void Database::createBucketDBs(list<Bucket> bucketList){
+    dbo::Transaction transaction(session);
+    for(std::list<Bucket>::iterator it=bucketList.begin(); it!=bucketList.end();it++){
+        Bucket  b = *it;
+        std::vector< int > OrderIDs;
+        list<Order> bb = b.get_content();
+        for(std::list<Order>::iterator itb=bb.begin(); itb!=bb.end();itb++){
+            OrderIDs.push_back(itb->orderID);
+        }
+        std::string OrdIDs = compressOrderIDs(OrderIDs);
+        std::unique_ptr<BucketDB> bucket = std::make_unique<BucketDB>(b.get_company().get_name(),
+                                                                      OrdIDs,
+                                                                      b.get_cur_amount(),
+                                                                      b.get_cur_cost(),
+                                                                      b.get_max_cost(),
+                                                                      b.get_completion(),
+                                                                      b.get_intersection_point().get_latitude(),
+                                                                      b.get_intersection_point().get_longitude()
+                                                                      );
+        dbo::ptr<BucketDB> temp = session.add(std::move(bucket));
+    }
+}
+
+void Database::createNotifications(Bucket bucket,std::string link){
+    list<Order> orders = bucket.get_content();
+    for(std::list<Order>::iterator it=orders.begin(); it!=orders.end();it++){
+
+
+        std::string otherOrders = "";
+        for(std::list<Order>::iterator it2=orders.begin(); it2!=orders.end();it2++){
+            if(it->get_user().get_username()!=it2->get_user().get_username()){
+                otherOrders += it2->get_user().get_username();
+                otherOrders += ",";
+                otherOrders += it2->get_user().get_email();
+                otherOrders += ",";
+                otherOrders += it2->to_pay;
+                otherOrders += ",";
+                otherOrders += " ";
+            }
+        }
+        addNotification(it->get_user().get_username(),
+                        it->orderID,
+                        it->to_pay,
+                        link,
+                        otherOrders
+                        );
+    }
+}

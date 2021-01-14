@@ -70,19 +70,14 @@ void NewOrderWidget::confirm(){
     list<Bucket> listBuckets = session_->createBucketList();
 
     tuple<bool,Bucket,list<Bucket>,string> tpl;
-    Order ord = Order(orderID,
-                                     User("username",
-                                          "password",
-                                          "name",
-                                          "surname",
-                                          Coordinate(),
-                                          "get_email"),
-                                     Company(),
-                                     std::stod(order_val_->text().toUTF8()),
-                                     std::stod(maxDeliveryVal_->text().toUTF8()),
-                                     std::stod(radius_->text().toUTF8()),
-                                     Coordinate());
+    Order ord = session_->createOrderForProcess(orderID);
     tpl = processOrder(listBuckets,ord);
+    if(get<0>(tpl)==true){
+        session_->createNotifications(get<1>(tpl), get<3>(tpl));
+    }
+    //delete all bucketsDB in DB
+    session_->createBucketDBs(get<2>(tpl));
+
 
 };
 

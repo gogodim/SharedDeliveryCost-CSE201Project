@@ -21,7 +21,7 @@ public:
     void Register();
     void Go_Login();
     bool Check_Valid_Email(std::string email);
-    bool Check_Valid_Address(Address address, UserDB *userptr);
+    Coordinate Check_Valid_Address(Address address, UserDB &userptr);
 
 private:
     Wt::WLineEdit                  *usernameEdit_;

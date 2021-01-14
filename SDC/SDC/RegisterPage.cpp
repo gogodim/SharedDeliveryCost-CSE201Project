@@ -7,9 +7,11 @@
 #include <Wt/WBorderLayout.h>
 #include <Wt/WHBoxLayout.h>
 #include <Wt/WVBoxLayout.h>
-
+#include <stdlib.h>
+#include <string>
 //#include <boost/regex.hpp>
 #include <regex>
+#include <typeinfo>
 
 #include "Database.h"
 #include "RegisterPage.h"
@@ -160,12 +162,16 @@ void RegisterPage::Register(){
             confirm_->setText("Wrong Email");
         }
         else{
-//            bool address_flag = this->Check_Valid_Address(user->get_useraddress(), user);
-//            if(!address_flag){
-            if (false){
+            Coordinate cor = this->Check_Valid_Address(user->get_useraddress(), *user);
+            if(cor.get_latitude() == -1 && cor.get_longitude() == -1){
+            //if (false){
                 confirm_->setText("Wrong Address");
                 return;
             }
+            user->set_coordinates(cor);
+            user->lat = cor.get_latitude();
+            user->lo =cor.get_longitude();
+            std::cout <<" user information:"<<typeid(cor.get_latitude()).name()<<std::endl;
             confirm_->setText("Register Successful");
             database->add_user(user);
             return;
@@ -191,12 +197,14 @@ bool RegisterPage::Check_Valid_Email(std::string email){
     return regex_match(email, std::regex("(\\w+)(\\.|_)?(\\w*)@(\\w+)(\\.(\\w+))+"));
 }
 
-bool RegisterPage::Check_Valid_Address(Address address, UserDB* userptr){
+Coordinate RegisterPage::Check_Valid_Address(Address address, UserDB &userptr){
     Coordinate cor = address_to_coordinates(argc, argv, address);
     std::cout<<"latitude: "<<cor.get_latitude()<<", longtitude: "<<cor.get_longitude()<<std::endl;
     if(cor.get_latitude() == -1 && cor.get_longitude() == -1){
-        return false;
+        return Coordinate(-1, -1);
     }
-    userptr->set_coordinates(cor);
-    return true;
+    userptr.set_coordinates(cor);
+    userptr.set_latitude(cor.get_latitude());
+    userptr.set_longtitude(cor.get_longitude());
+    return cor;
 }

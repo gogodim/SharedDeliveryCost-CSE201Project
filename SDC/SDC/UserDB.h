@@ -40,6 +40,8 @@ public:
     std::string get_address();
     std::string get_email();
     Coordinate get_coordinates();
+    double get_latitude();
+    double get_longtitude();
     std::string get_password()const;
     std::string get_address_second()const;
     std::string get_username()const;
@@ -57,6 +59,8 @@ public:
     void set_address(std::string n);
     void set_useraddress(Address add);
     void set_email(std::string n);
+    void set_latitude(double latitude);
+    void set_longtitude(double longtitude);
     void set_coordinates(Coordinate coord);
     void Address2Coordinate();
     //void Coordinate2Address(Coordinate coord);
@@ -70,6 +74,8 @@ public:
         dbo::field(a, surname,  "surname");
         dbo::field(a, password, "password");
         dbo::field(a, email,    "email");
+        dbo::field(a, lat,  "latitude");
+        dbo::field(a, lo, "longtitude");
         dbo::field(a, address,  "address");
     }
 
@@ -77,7 +83,8 @@ public:
         os << user.name << " is user's name";
         return os;
     }
-
+    double lat;
+    double lo;
 private:
     std::string  username;
     std::string  password;
@@ -87,6 +94,7 @@ private:
     std::string  address;
     Address      useraddress;
     Coordinate   coordinates;
+
 
 };
 
