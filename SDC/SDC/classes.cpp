@@ -256,35 +256,6 @@ void Bucket::print(){
     }
 }
 
-//void Bucket::find_and_remove(Order order){ //find an order equal to the input order and removes it from the bucket
-
-//    std::list<Order>::iterator i;
-//    std::list<Order>::iterator final;
-
-//    bool found=false;
-
-//    for(i=content.begin();i!=content.end();i++){
-
-//        if (*i==order){
-//            final=i;
-//            found=true;
-//            content.erase(final);
-//            break;
-//        }
-//    }
-
-//    if (found==true){ // if the order is removed, update all bucket data members
-
-//        double new_amnt=cur_amount-order.get_value();
-//        double new_cost=cur_cost-order.get_delivery_cost();
-//        double new_max=delivery_cost(company,new_amnt);
-
-//        cur_amount=new_amnt;
-//        cur_cost=new_cost;
-//        max_cost=new_max;
-
-//    }
-//}
 
 void Bucket::update_parameters(Order order){ //updates bucket parameters after deletion of the input order "order", the deletion is already done (bucket content updated)
 
@@ -514,28 +485,6 @@ double delivery_cost(Company company,double amount){
     return 0;
 }
 
-
-//double array_of_one_delivery(){ // This function creates the array of all the orders concerned by the delivery, idk how to do it because linked to the database?
-//    double arr = 0;
-//    Coordinate c = order.get_user().get_coordinates();
-//    double weight = order.get_delivery_cost(); //or get_value()?
-
-//};
-
-
-//Coordinate distance_optimization(double array_of_one_delivery()){  //arr has elements of type (lat, lon, weight) and it is the array of all the orders concerned by this delivery
-//    double lat = 0;
-//    double lon = 0;
-//    for(int i;array_of_one_delivery().size(); i++){
-//        if(i!=()){
-//            lat = lat + i[0]*i[2];
-//            lon = lon + i[1]*i[2];
-//        };
-
-//    };
-//    return Coordinate(lat/array_of_one_delivery().size(),lon/array_of_one_delivery().size());
-//};
-
 bool compare(Bucket b1,Bucket b2){ // comparing buckets for sorting in the bucket list, "b1<b2" <=> "b1 has content length greater than b2"
 
     list<Order> c1=b1.get_content();
@@ -661,13 +610,13 @@ double* convert_to_meters(Coordinate C)
 // this function is the mathematical way to get the intersection of the radius between two orders, this is necessary in order for the next one to be able to take in a vector of orders, and say wether or not they can all fit in one bucket.
     Coordinate C1= Order1.get_user().get_address();
     Coordinate C2= Order2.get_user().get_address();
-    //double* c1= convert_to_meters(C1);
+    
     double y1=C1.get_latitude()*111000;
     double x1=C1.get_longitude()*111000*cos(C1.get_latitude()*M_PI/180);
     double y2=C2.get_latitude()*111000;
     double x2=C2.get_longitude()*111000*cos(C2.get_latitude()*M_PI/180);
 
-    //double* c2= convert_to_meters(C2);
+    
     double r1=Order1.get_distance();
     double r2=Order2.get_distance();
     double d= C1.get_distance(C2);
@@ -714,7 +663,7 @@ boolPoint check_if_bucket (std::vector<Order> order_vector){
 // This function takes in a vector of orders, so a potential bucket, and says whether or not they could all fit in a bucket, and returns the intersection where to deliver if it is true.
 //If it its false it will return an empty coordinate and false.
 //In order to check if an other order can be added to a bucket we could simply take the vector and pushback the new order. And say if check_if_bucket then its good.
-    //struct boolPoint p3 = {Coordinate(), false};
+    
     boolPoint p3=boolPoint();
     int count0=0;
     for (int i = 0; i < int(order_vector.size()); i++){
@@ -752,13 +701,13 @@ boolPoint check_if_bucket (std::vector<Order> order_vector){
               }}}
             if (int(order_vector.size())==count1)
             {
-                //struct boolPoint p1 = {intersection1, true};
+                
                 boolPoint p1=boolPoint(intersection1,true);
                 return p1;
             }
             if (int(order_vector.size())==count2)
             {
-                //struct boolPoint p2 = {intersection2, true};
+                
                 boolPoint p2=boolPoint(intersection2,true);
                 return p2;
             }
@@ -766,7 +715,7 @@ boolPoint check_if_bucket (std::vector<Order> order_vector){
     }}
     if (count0==(order_vector.size()*order_vector.size()-order_vector.size())/2)
     {
-        //struct boolPoint p4 = {order_vector[0].get_user().get_address(), true};
+        
         boolPoint p4=boolPoint(order_vector[0].get_user().get_address(), true);
         return p4;
     }
