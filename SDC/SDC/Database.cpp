@@ -58,20 +58,24 @@ bool Database::add_user(const UserDB* user){
 }
 
 
-int Database::addOrder(std::string username, double maxDeliveryCost, std::string deliveryLocation, double orderCost,
-                        double radius, std::string store){
+
+int Database::addOrder(std::string username, double maxDeliveryCost, double orderCost,
+                        double radius, std::string store, string postal, string city, string street){
+
     dbo::Transaction transaction(session);
     dbo::ptr<UserDB> u = session.find<UserDB>().where("username = ?").bind(username);
     CompanyDB comp = CompanyDB();
     double lat = 0;
     double lon = 0;
-    if (deliveryLocation != ""){
-        Coordinate coord = coordinate_from_address(deliveryLocation);
+    Coordinate coord;
+    if (postal != "" && city!="" && street!=""){
+        Address address = Address(postal, city, street);
+//        Coordinate coord = address_to_coordinates(address);
         lat = coord.get_latitude();
         lon = coord.get_longitude();
     } else{
-        Coordinate coord = coordinate_from_address(u->get_address_second());
-        deliveryLocation = u->get_address_second();
+        Address address = u->get_useraddress();
+//        Coordinate coord = address_to_coordinates(address);
         lat = coord.get_latitude();
         lon = coord.get_longitude();
     };
@@ -82,7 +86,7 @@ int Database::addOrder(std::string username, double maxDeliveryCost, std::string
 
     std::unique_ptr<OrderDB> ordptr = std::make_unique<OrderDB>(temp.size()+1,   username,store, orderCost,
                                                                 maxDeliveryCost, radius,
-                                                                deliveryLocation, lat, lon);
+                                                                postal, city, street, lat, lon);
     dbo::ptr<OrderDB> ordrPtr = session.add(std::move(ordptr));
     return temp.size()+1;
 }
