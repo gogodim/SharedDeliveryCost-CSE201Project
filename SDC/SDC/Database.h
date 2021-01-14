@@ -26,6 +26,8 @@ public:
     std::vector<Notification> readAllNotifications();
     list<Bucket> createBucketList();
     Order createOrderForProcess(int orderID);
+    void createBucketDBs(list<Bucket> bucketList);
+    void createNotifications(Bucket bucket,std::string link);
     void addNotification(std::string username,int orderID,double costShare,std::string deliveryLocation,std::string otherOrders);
     dbo::Session session;
     int addOrder(std::string username, double maxDeliveryCost,

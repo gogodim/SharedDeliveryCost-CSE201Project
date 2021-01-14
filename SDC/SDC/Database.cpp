@@ -144,7 +144,11 @@ std::vector<Notification> Database::readAllNotifications()
     return result;
 }
 
-void Database::addNotification(std::string username1,int orderID1,double costShare1,std::string deliveryLocation1,std::string otherOrders1)
+void Database::addNotification(std::string username1,
+                               int orderID1,
+                               double costShare1,
+                               std::string deliveryLocation1,
+                               std::string otherOrders1)
 {
     dbo::Transaction transaction(session);
 
@@ -225,4 +229,53 @@ Order Database::createOrderForProcess(int orderID){
                                      o->distance,
                                      Coordinate(u->get_coordinates().get_latitude(),u->get_coordinates().get_longitude()));
     return ord;
+}
+
+void Database::createBucketDBs(list<Bucket> bucketList){
+    dbo::Transaction transaction(session);
+    for(std::list<Bucket>::iterator it=bucketList.begin(); it!=bucketList.end();it++){
+        Bucket  b = *it;
+        std::vector< int > OrderIDs;
+        list<Order> bb = b.get_content();
+        for(std::list<Order>::iterator itb=bb.begin(); itb!=bb.end();itb++){
+            OrderIDs.push_back(itb->orderID);
+        }
+        std::string OrdIDs = compressOrderIDs(OrderIDs);
+        std::unique_ptr<BucketDB> bucket = std::make_unique<BucketDB>(b.get_company().get_name(),
+                                                                      OrdIDs,
+                                                                      b.get_cur_amount(),
+                                                                      b.get_cur_cost(),
+                                                                      b.get_max_cost(),
+                                                                      b.get_completion(),
+                                                                      b.get_intersection_point().get_latitude(),
+                                                                      b.get_intersection_point().get_longitude()
+                                                                      );
+        dbo::ptr<BucketDB> temp = session.add(std::move(bucket));
+    }
+}
+
+void Database::createNotifications(Bucket bucket,std::string link){
+    list<Order> orders = bucket.get_content();
+    for(std::list<Order>::iterator it=orders.begin(); it!=orders.end();it++){
+
+
+        std::string otherOrders = "";
+        for(std::list<Order>::iterator it2=orders.begin(); it2!=orders.end();it2++){
+            if(it->get_user().get_username()!=it2->get_user().get_username()){
+                otherOrders += it2->get_user().get_username();
+                otherOrders += ",";
+                otherOrders += it2->get_user().get_email();
+                otherOrders += ",";
+                otherOrders += it2->to_pay;
+                otherOrders += ",";
+                otherOrders += " ";
+            }
+        }
+        addNotification(it->get_user().get_username(),
+                        it->orderID,
+                        it->to_pay,
+                        link,
+                        otherOrders
+                        );
+    }
 }
