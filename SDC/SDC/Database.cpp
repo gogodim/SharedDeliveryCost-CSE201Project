@@ -58,8 +58,10 @@ bool Database::add_user(const UserDB* user){
 }
 
 
+
 int Database::addOrder(std::string username, double maxDeliveryCost, double orderCost,
                         double radius, std::string store, string postal, string city, string street){
+
     dbo::Transaction transaction(session);
     dbo::ptr<UserDB> u = session.find<UserDB>().where("username = ?").bind(username);
     CompanyDB comp = CompanyDB();

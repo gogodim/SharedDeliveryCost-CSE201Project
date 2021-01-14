@@ -60,6 +60,7 @@ void NewOrderWidget::display(){
 };
 void NewOrderWidget::confirm(){
 
+
     int orderID = session_->addOrder(username_, std::stod(maxDeliveryVal_->text().toUTF8()),
                        std::stod(order_val_->text().toUTF8()), std::stod(radius_->text().toUTF8()),
                        company_->currentText().toUTF8(),postal_->text().toUTF8(),
