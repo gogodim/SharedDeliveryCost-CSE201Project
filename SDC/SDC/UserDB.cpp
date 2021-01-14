@@ -5,11 +5,12 @@
 
 //User Constructor
 UserDB::UserDB(){
-    username = "Default User";
-    name = "";
-    surname = "";
-    email = "";
-    address = "";
+    username = "a";
+    name = "a";
+    surname = "a";
+    password = "123455";
+    email = "a@gmail.com";
+    address = "91120, 111, 111";
 }
 
 UserDB::UserDB(std::string username,

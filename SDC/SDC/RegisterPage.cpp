@@ -156,11 +156,13 @@ void RegisterPage::Register(){
     if(!find_flag){
         bool email_flag = this->Check_Valid_Email(user->get_email());
         if(!email_flag){
+        //if (false){
             confirm_->setText("Wrong Email");
         }
         else{
             bool address_flag = this->Check_Valid_Address(user->get_useraddress(), user);
             if(!address_flag){
+            //if (false){
                 confirm_->setText("Wrong Address");
                 return;
             }
