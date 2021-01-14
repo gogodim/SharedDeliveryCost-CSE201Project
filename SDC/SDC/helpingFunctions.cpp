@@ -55,5 +55,6 @@ std::string compressOrderIDs(std::vector< int > OrderIDs){
     for(auto& row:OrderIDs){
           for_return += std::to_string(row)+",";
     }
+    return for_return;
 }
 

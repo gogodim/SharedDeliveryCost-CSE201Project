@@ -27,6 +27,7 @@ public:
     list<Bucket> createBucketList();
     Order createOrderForProcess(int orderID);
     void createBucketDBs(list<Bucket> bucketList);
+    void deleteBucket();
     void createNotifications(Bucket bucket,std::string link);
     void addNotification(std::string username,int orderID,double costShare,std::string deliveryLocation,std::string otherOrders);
     dbo::Session session;

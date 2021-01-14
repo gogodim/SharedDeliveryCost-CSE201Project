@@ -155,7 +155,7 @@ void RegisterPage::Register(){
     user->set_surname((surnameEdit_->text()).toUTF8());
     bool find_flag = database->find_user(user);
 
-    if(!find_flag){
+    if(find_flag){
         bool email_flag = this->Check_Valid_Email(user->get_email());
         if(!email_flag){
         //if (false){
