@@ -24,7 +24,7 @@ public:
     bool find_user(const UserDB*);
     bool valid_user(const UserDB*);
     std::vector<Notification> readAllNotifications();
-    list<Bucket> createBucketList();
+    //list<Bucket> createBucketList();
     void addNotification(std::string username,int orderID,double costShare,std::string deliveryLocation,std::string otherOrders);
     dbo::Session session;
     bool addOrder(std::string username, double maxDeliveryCost, std::string deliveryLocation,

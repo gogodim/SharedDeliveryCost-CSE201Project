@@ -43,6 +43,12 @@ public:
     std::string get_password()const;
     std::string get_address_second()const;
     std::string get_username()const;
+    std::string get_name()const;
+    std::string get_surname()const;
+    Address get_useraddress()const;
+    std::string get_address()const;
+    std::string get_email()const;
+    Coordinate get_coordinates()const;
 
     void set_username(std::string n);
     void set_password(std::string n);

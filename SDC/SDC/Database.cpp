@@ -172,7 +172,7 @@ void Database::addNotification(std::string username1,int orderID1,double costSha
 
           orders.push_back(Order(row,
                                  User(o->username,
-                                      "password",
+                                      u->get_password(),
                                       "name",
                                       "surname",
                                       Coordinate(),
