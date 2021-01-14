@@ -65,6 +65,26 @@ std::string UserDB::get_username() const{
     return this->username;
 }
 
+Address UserDB::get_useraddress()const{
+    return this->useraddress;
+}
+
+std::string UserDB::get_name()const{
+    return this->name;
+};
+std::string UserDB::get_surname()const{
+    return this->surname;
+};
+std::string UserDB::get_address()const{
+    return this->address;
+};
+std::string UserDB::get_email()const{
+    return this->email;
+};
+Coordinate UserDB::get_coordinates()const{
+    return this->coordinates;
+};
+
 //User, Setters
 void UserDB::set_username(std::string username){
     this->username = username;

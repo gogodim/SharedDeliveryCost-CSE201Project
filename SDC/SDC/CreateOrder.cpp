@@ -56,12 +56,27 @@ void NewOrderWidget::display(){
 };
 void NewOrderWidget::confirm(){
 
-    session_->addOrder(user_, std::stod(maxDeliveryVal_->text().toUTF8()), diff_loc_->text().toUTF8(),
+    int orderID = session_->addOrder(user_, std::stod(maxDeliveryVal_->text().toUTF8()), diff_loc_->text().toUTF8(),
                        std::stod(order_val_->text().toUTF8()), std::stod(radius_->text().toUTF8()),
                        company_->currentText().toUTF8());
     this->display();
     //Run process order
+    list<Bucket> listBuckets = session_->createBucketList();
 
+    tuple<bool,Bucket,list<Bucket>,string> tpl;
+    Order ord = Order(orderID,
+                                     User("username",
+                                          "password",
+                                          "name",
+                                          "surname",
+                                          Coordinate(),
+                                          "get_email"),
+                                     Company(),
+                                     std::stod(order_val_->text().toUTF8()),
+                                     std::stod(maxDeliveryVal_->text().toUTF8()),
+                                     std::stod(radius_->text().toUTF8()),
+                                     Coordinate());
+    tpl = processOrder(listBuckets,ord);
 
 };
 
