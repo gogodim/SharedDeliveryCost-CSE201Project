@@ -48,6 +48,6 @@ private:
 
 };
 Coordinate address_to_coordinates(int argc, char** argv, Address address);
-//Coordinate coordinate_from_address(std::string address);
+Coordinate coordinate_from_address(std::string address);
 
 #endif // COORDINATE_H

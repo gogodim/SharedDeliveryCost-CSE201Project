@@ -5,6 +5,7 @@
 #include <Wt/WApplication.h>
 #include <Wt/WLogger.h>
 #include "Database.h"
+#include "Coordinate.h"
 #include <fstream>
 using namespace Wt;
 namespace dbo = Wt::Dbo;
