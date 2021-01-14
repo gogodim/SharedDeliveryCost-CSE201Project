@@ -67,15 +67,17 @@ void NewOrderWidget::confirm(){
                                      city_->text().toUTF8(),diff_loc_->text().toUTF8());
     this->display();
     //Run process order
+
     list<Bucket> listBuckets = session_->createBucketList();
 
     tuple<bool,Bucket,list<Bucket>,string> tpl;
     Order ord = session_->createOrderForProcess(orderID);
     tpl = processOrder(listBuckets,ord);
+
     if(get<0>(tpl)==true){
         session_->createNotifications(get<1>(tpl), get<3>(tpl));
     }
-    //delete all bucketsDB in DB
+    //session_->deleteBucket();
     session_->createBucketDBs(get<2>(tpl));
 
 
