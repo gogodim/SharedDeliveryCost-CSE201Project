@@ -17,7 +17,8 @@ typedef dbo::collection< dbo::ptr<OrderDB> > OrderDBs;
 class OrderDB{
 public:
     OrderDB();
-    OrderDB(std::string username,
+    OrderDB(int orderID,
+          std::string username,
           std::string companyname,
           double value,
           double delivery_cost,
@@ -30,6 +31,7 @@ public:
     double get_delivery_cost();
     double get_distance();
 
+    int orderID;
     std::string username;
     std::string companyname;
     double value;
@@ -42,6 +44,7 @@ public:
     template<class Action>
     void persist(Action& a)
     {
+      dbo::field(a, orderID, "orderID");
       dbo::field(a, username, "username");
       dbo::field(a, companyname, "companyname");
       dbo::field(a, value, "value");

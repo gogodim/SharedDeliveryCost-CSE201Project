@@ -136,10 +136,10 @@ int testing(){
 
         //Order(User user, Company company,double value,double delivery_cost,double distance,Coordinate address)
 
-        Order ord1=Order(John,X,24,0.6,200);
-        Order ord2=Order(Yuki,X,16,0.3,10);
-        Order ord3=Order(Haruhi,X,57,0.5,200);
-        Order ord4=Order(Noah,X,5,0.8,200);
+        Order ord1=Order(1,John,X,24,0.6,200);
+        Order ord2=Order(2,Yuki,X,16,0.3,10);
+        Order ord3=Order(3,Haruhi,X,57,0.5,200);
+        Order ord4=Order(4,Noah,X,5,0.8,200);
 
         b1.add_order(ord1); // b1 has John + Yuki + Haruhi
         b1.add_order(ord2);

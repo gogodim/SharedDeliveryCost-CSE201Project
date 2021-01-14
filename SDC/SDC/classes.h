@@ -4,7 +4,7 @@
 #include <list>
 #include <vector>
 #include <Coordinate.h>
-#endif // CLASSES_H
+
 using namespace std;
 
 
@@ -65,12 +65,14 @@ private:
 
 class Order{
 public:
-    Order(User user,
+    Order(int orderID,
+          User user,
           Company company,
           double value,
           double delivery_cost,
           double distance, // in meters
           Coordinate address = Coordinate());
+    int orderID;
     User get_user();
     Company get_company();
     double get_value();
@@ -100,7 +102,13 @@ Coordinate distance_optimization(double array);
 class Bucket{
 public:
     Bucket();
-    Bucket(Company company, list<Order> content,double bucket_cur_amount,double bucket_cur_cost,double bucket_max_cost,bool bucket_completion, Coordinate inter);
+    Bucket(Company company,
+           list<Order> content,
+           double bucket_cur_amount,
+           double bucket_cur_cost,
+           double bucket_max_cost,
+           bool bucket_completion,
+           Coordinate inter);
     tuple<bool,Coordinate> is_compatible(Order new_order);
 
     void add_order(Order order,Coordinate inter=Coordinate()); // adds valid order in bucket_content and updates all data members accordingly
@@ -224,3 +232,4 @@ std::vector<Coordinate> get_intersection(Order Order1, Order Order2);
 bool check_if_inside(Order Order1, Order Order2);
 
 boolPoint check_if_bucket (std::vector<Order> order_vector);
+#endif // CLASSES_H

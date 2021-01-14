@@ -13,11 +13,7 @@ using namespace Wt;
 
 NotificationTable::NotificationTable(const std::string &username,Database *session)
 {
-    std::cout<<"HEREEE";
     std::vector<Notification> notifications = session->readAllNotifications();
-    //title_ = addWidget(std::make_unique<Wt::WText>());
-    //title_->addStyleClass("title");
-    //title_->setText("Those are the notifications for the user with ID:"+std::to_string(userID));
     table_ = addWidget(cpp14::make_unique<Wt::WTable>());
     table_->addStyleClass("tableNotifications");
     table_->setHeaderCount(1);
@@ -41,7 +37,6 @@ NotificationTable::NotificationTable(const std::string &username,Database *sessi
 
 NotificationWidget::NotificationWidget(const std::string &username,Database *session)
 {
-    //Wt::WPushButton *button = addWidget(std::make_unique<Wt::WPushButton>("Greet me."));
     button_ = addWidget(std::make_unique<Wt::WPushButton>("Notifications"));
     button_->addStyleClass("buttonNotifications");
     Ntable_ = addWidget(std::make_unique<NotificationTable>(username,&*session));

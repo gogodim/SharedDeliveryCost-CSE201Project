@@ -1,7 +1,12 @@
 #include "CreateOrderHeaders.h"
 #include <stdlib.h>
-
+#include <stdio.h>
 #include <iostream>
+#include <classes.h>
+#include <math.h>
+#include <string>
+#include <regex>
+#include <algorithm>
 
 namespace dbo = Wt::Dbo;
 using namespace Wt;
@@ -55,6 +60,8 @@ void NewOrderWidget::confirm(){
                        std::stod(order_val_->text().toUTF8()), std::stod(radius_->text().toUTF8()),
                        company_->currentText().toUTF8());
     this->display();
+    //Run process order
+
 
 };
 

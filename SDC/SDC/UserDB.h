@@ -5,7 +5,6 @@
 #include <Wt/Dbo/Dbo.h>
 #include <Wt/Dbo/backend/Sqlite3.h>
 #include <Wt/WApplication.h>
-
 #include "Coordinate.h"
 
 namespace dbo = Wt::Dbo;

@@ -24,10 +24,10 @@ Database::Database()
 
     /* load user class from table*/
     session.mapClass<UserDB>("user");
-
     session.mapClass<Notification>("Notification");
-
     session.mapClass<OrderDB>("Order");
+    session.mapClass<CompanyDB>("Company");
+    session.mapClass<BucketDB>("BucketDB");
 
     /* if there isn't a .db, create and add a default user to the database*/
     dbo::Transaction transaction(session);
@@ -74,9 +74,12 @@ bool Database::addOrder(std::string username, double maxDeliveryCost, std::strin
         lat = coord.get_latitude();
         lon = coord.get_longitude();
     };
+    typedef dbo::collection< dbo::ptr<OrderDB> > OrderDBs;
+
+    OrderDBs temp = session.find<OrderDB>();
 
 
-    std::unique_ptr<OrderDB> ordptr = std::make_unique<OrderDB>(username,store, orderCost,
+    std::unique_ptr<OrderDB> ordptr = std::make_unique<OrderDB>(temp.size()+1,   username,store, orderCost,
                                                                 maxDeliveryCost, radius,
                                                                 deliveryLocation, lat, lon);
     dbo::ptr<OrderDB> ordrPtr = session.add(std::move(ordptr));
@@ -150,3 +153,52 @@ void Database::addNotification(std::string username1,int orderID1,double costSha
 
 }
 
+/*list<Bucket> Database::createBucketList(){
+    dbo::Transaction transaction(session);
+    list<Bucket> for_return;
+    typedef dbo::collection< dbo::ptr<BucketDB> > BucketDBs;
+    BucketDBs temp = session.find<BucketDB>();
+
+    for (BucketDBs::const_iterator i = temp.begin(); i != temp.end(); ++i) {
+      dbo::ptr<BucketDB> bucketDB = *i;
+      list<Order> orders;
+      std::vector<int> orderIDs = splitOrderIDs(bucketDB->orderIDs);
+      dbo::ptr<CompanyDB> c = session.find<CompanyDB>().where("name = ?").bind(bucketDB->companyname);
+      Company comp = Company(bucketDB->companyname,splitCompOprions(c->compressedOptions));
+      for(auto& row:orderIDs){
+          dbo::ptr<OrderDB> o = session.find<OrderDB>().where("orderID = ?").bind(row);
+          dbo::ptr<UserDB> u = session.find<UserDB>().where("username = ?").bind(o->username);
+
+          orders.push_back(Order(row,
+                                 User(o->username,
+                                      "password",
+                                      "name",
+                                      "surname",
+                                      Coordinate(),
+                                      "email"),
+                                 comp,
+                                 o->value,
+                                 o->delivery_cost,
+                                 o->distance, // in meters
+                                 Coordinate(o->latitude,o->longitude)));
+      }
+
+
+
+
+
+      Bucket newBucket = Bucket(comp,
+                       orders,
+                       bucketDB->cur_amount,
+                       bucketDB->cur_cost,
+                       bucketDB->max_cost,
+                       bucketDB->completion,
+                       Coordinate(bucketDB->lat,bucketDB->lo));
+      for_return.push_back(newBucket);
+    }
+
+    transaction.commit();
+
+    return result;
+}
+*/

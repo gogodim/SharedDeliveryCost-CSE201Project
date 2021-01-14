@@ -98,13 +98,15 @@ void Company::set_name(std::string name){
 
 //---------Order-----------
 
-Order::Order(User user,
+Order::Order(int orderID,
+             User user,
              Company company,
              double value,
              double delivery_cost,
              double distance,
              Coordinate address){
         to_pay=0;
+        this->orderID = orderID;
         this->user = user;
         this->company = company;
         this->value = value;

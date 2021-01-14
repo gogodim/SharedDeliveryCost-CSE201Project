@@ -3,13 +3,15 @@
 
 DBO_INSTANTIATE_TEMPLATES(OrderDB);
 
-OrderDB::OrderDB(std::string username,
+OrderDB::OrderDB(int orderID,
+             std::string username,
              std::string companyname,
              double value,
              double delivery_cost,
              double distance,
              std::string address,
              double latitude, double longitude){
+        this->orderID = orderID;
         this->username = username;
         this->companyname = companyname;
         this->value = value;
@@ -20,6 +22,7 @@ OrderDB::OrderDB(std::string username,
         this->longitude = longitude;
 }
 OrderDB::OrderDB(){
+  orderID = 0;
   username = "";
   companyname="";
   value =0;

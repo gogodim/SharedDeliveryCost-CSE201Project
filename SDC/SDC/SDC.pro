@@ -17,6 +17,7 @@ SOURCES += \
         OrderPage.cpp \
         RegisterPage.cpp \
         UserDB.cpp \
+        helpingFunctions.cpp \
         main.cpp \
         NotificationWidget.cpp \
         notification.cpp \
@@ -52,15 +53,16 @@ HEADERS += \
     BucketDB.h \
     CompanyDB.h \
     Coordinate.h \
+    CreateOrderHeaders.h \
     Database.h \
     OrderDBfirst.h \
     OrderPage.h \
     NotificationWidget.h \
     UserDB.h \
+    helpingFunctions.h \
     notification.h \
     RegisterPage.h \
     notification.h \
-    CreateOrderHeaders.h \
     OrderDB.h\
     classes.h\
     testing.h

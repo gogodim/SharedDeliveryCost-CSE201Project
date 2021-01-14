@@ -16,7 +16,6 @@
 #include <Wt/WSelectionBox.h>
 #include <Wt/WSlider.h>
 #include <stdlib.h>
-
 #include "OrderDBfirst.h"
 #include "Database.h"
 #include "UserDB.h"
@@ -28,6 +27,7 @@ public:
     NewOrderWidget(const std::string &username, Database *session);
     void confirm();
     void display();
+
 
 private:
     Database            *session_;
