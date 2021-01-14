@@ -90,10 +90,10 @@ OrderPage::OrderPage(int argc, char** argv): WContainerWidget(){
     hbox->addWidget(std::move(Login));
 
     /*Testing*/
-    auto a = testing();
-    if (a==0){
-        std::cout<<"TESTS PASSED"<<std::endl;
-    }
+//    auto a = testing();
+//    if (a==0){
+//        std::cout<<"TESTS PASSED"<<std::endl;
+//    }
 
 
     passwordEdit_->enterPressed().connect(std::bind(&OrderPage::Login, this));

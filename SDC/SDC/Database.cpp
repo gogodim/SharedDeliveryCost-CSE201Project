@@ -58,7 +58,7 @@ bool Database::add_user(const UserDB* user){
 }
 
 
-bool Database::addOrder(std::string username, double maxDeliveryCost, std::string deliveryLocation, double orderCost,
+int Database::addOrder(std::string username, double maxDeliveryCost, std::string deliveryLocation, double orderCost,
                         double radius, std::string store){
     dbo::Transaction transaction(session);
     dbo::ptr<UserDB> u = session.find<UserDB>().where("username = ?").bind(username);
@@ -84,7 +84,7 @@ bool Database::addOrder(std::string username, double maxDeliveryCost, std::strin
                                                                 maxDeliveryCost, radius,
                                                                 deliveryLocation, lat, lon);
     dbo::ptr<OrderDB> ordrPtr = session.add(std::move(ordptr));
-    return true;
+    return temp.size()+1;
 }
 
 
@@ -154,7 +154,7 @@ void Database::addNotification(std::string username1,int orderID1,double costSha
 
 }
 
-/*list<Bucket> Database::createBucketList(){
+list<Bucket> Database::createBucketList(){
     dbo::Transaction transaction(session);
     list<Bucket> for_return;
     typedef dbo::collection< dbo::ptr<BucketDB> > BucketDBs;
@@ -172,11 +172,11 @@ void Database::addNotification(std::string username1,int orderID1,double costSha
 
           orders.push_back(Order(row,
                                  User(o->username,
-                                      "password",
-                                      "name",
-                                      "surname",
-                                      Coordinate(),
-                                      "email"),
+                                      u->get_password(),
+                                      u->get_name(),
+                                      u->get_surname(),
+                                      u->get_coordinates(),
+                                      u->get_email()),
                                  comp,
                                  o->value,
                                  o->delivery_cost,
@@ -200,6 +200,6 @@ void Database::addNotification(std::string username1,int orderID1,double costSha
 
     transaction.commit();
 
-    return result;
+    return for_return;
 }
-*/
+

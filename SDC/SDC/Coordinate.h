@@ -37,7 +37,7 @@ public:
     std::string get_city(){return City;}
     std::string get_street(){return Street;}
     std::string get_address(){return Postalcode + "," + City +"," + Street;}
-    void set_postalcode(std::string postalcode){this->Postalcode = postalcode;};
+    void set_postalcode(std::string postalcode){this->Postalcode = postalcode;}
     void set_city(std::string city){this->City = city;}
     void set_street(std::string street){this->Street = street;}
 
