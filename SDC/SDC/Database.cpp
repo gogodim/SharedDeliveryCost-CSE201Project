@@ -51,6 +51,7 @@ bool Database::add_user(const UserDB* user){
         dbo::Transaction transaction(session);
         std::unique_ptr<UserDB> userptr = std::make_unique<UserDB>(*user);
         std::cerr << "Add user " << userptr->get_username()<< " with email of " << userptr->get_email() << std::endl;
+        std::cout<< "latitude in databasecpp: " << userptr->get_coordinates().get_latitude() << std::endl;
         dbo::ptr<UserDB> userPtr = session.add(std::move(userptr));
         return true;
     }
@@ -65,17 +66,13 @@ int Database::addOrder(std::string username, double maxDeliveryCost, double orde
     dbo::Transaction transaction(session);
     dbo::ptr<UserDB> u = session.find<UserDB>().where("username = ?").bind(username);
     CompanyDB comp = CompanyDB();
-    double lat = 0;
-    double lon = 0;
-    Coordinate coord;
+    Coordinate coord = u->get_coordinates();
+    double lat = coord.get_latitude();
+    double lon = coord.get_longitude();
+    Address address = u->get_useraddress();
     if (postal != "" && city!="" && street!=""){
-        Address address = Address(postal, city, street);
-//        Coordinate coord = address_to_coordinates(address);
-        lat = coord.get_latitude();
-        lon = coord.get_longitude();
-    } else{
-        Address address = u->get_useraddress();
-//        Coordinate coord = address_to_coordinates(address);
+        address = Address(postal, city, street);
+        Coordinate coord = Coordinate();
         lat = coord.get_latitude();
         lon = coord.get_longitude();
     };
@@ -86,7 +83,8 @@ int Database::addOrder(std::string username, double maxDeliveryCost, double orde
 
     std::unique_ptr<OrderDB> ordptr = std::make_unique<OrderDB>(temp.size()+1,   username,store, orderCost,
                                                                 maxDeliveryCost, radius,
-                                                                postal, city, street, lat, lon);
+                                                                address.get_postalcode(), address.get_city(),
+                                                                address.get_street(), lat, lon);
     dbo::ptr<OrderDB> ordrPtr = session.add(std::move(ordptr));
     return temp.size()+1;
 }
