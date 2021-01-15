@@ -58,6 +58,26 @@ Make sure you are using the right compiler, initially the libraries are set for 
 
 4. Build and run the project directly from Qt.
 
+## Testing and examples
+
+After running the project we reccomend registering few users, and then creating at least 1 order from each of the users. After doing that we reccoment you log-in again to he users to see if you got any notifications about a matched order. 
+
+Things to keep in mind:
+
+- The functionality of entering another address for the order is under construction, so we reccomend you don't use the future, as it will just take the default user address that you entered when you created the user. (Notice: The origram won't crush, but it may confuse you to the fact that you are not getting the expected result)
+
+- In order to get 2 or more orders matched then must be from the same company, and must be in range from each other, this means that there is an intersection between them taking into account the default location and the willingness to walk (radius) for the order.
+
+- We reccomend downloading a DB Browser (we use: https://sqlitebrowser.org/) and in it opening the "SDC.db" file from "SDC/SDC" in order to see what happens when you add an order.
+
+- The distance of the radius is in meters, so make sure you give big enough radius so your orders can match.
+
+- Example of a simpe match of orders for the company Ikea: 
+   - User 1: maximum payment for delivery 0.6, order value 24
+   - User 2: maximum payment for delivery 0.3, order value 16
+
+- Currnetly working on a fix, but in the case of not fixing it before release: beware that the final location for the order is not correctly displayed, it can be found inside a print statement in the consloe or inside the database, but not in the google maps link we return in the end.
+
 #### Warning
 
 The project contains a big part of CSS ("resources" folder in "SDC/SDC") which is not written by the students, but comes with the Wt library, and is subject to copyright. This folder is present on the repository to easen the process of running the project and avoid complications that mey occure if one must link the resources from the command line arguments.
