@@ -15,29 +15,29 @@ NewOrderWidget::NewOrderWidget(const std::string &username,Database *session){
     session_ = session;
     username_ = username;
 
-    maxDelivery_description = addWidget(std::make_unique<WText>("max delivery:"));
+    maxDelivery_description = addWidget(std::make_unique<WText>("Delivery cost less than: "));
     maxDeliveryVal_  = (addWidget(std::make_unique<WLineEdit>()));
     addWidget(std::make_unique<WBreak>());
 
-    postal_description = addWidget(std::make_unique<WText>("Postal code"));
+    postal_description = addWidget(std::make_unique<WText>("Postal code: "));
     postal_ = addWidget(std::make_unique<WLineEdit>());
     addWidget(std::make_unique<WBreak>());
-    city_description = addWidget(std::make_unique<WText>("City"));
+    city_description = addWidget(std::make_unique<WText>("City: "));
     city_ = addWidget(std::make_unique<WLineEdit>());
     addWidget(std::make_unique<WBreak>());
-    diff_loc_description = addWidget(std::make_unique<WText>("Street"));
+    diff_loc_description = addWidget(std::make_unique<WText>("Street: "));
     diff_loc_  = addWidget(std::make_unique<WLineEdit>());
     addWidget(std::make_unique<WBreak>());
 
-    order_val_description =addWidget(std::make_unique<WText>("Order value"));
+    order_val_description =addWidget(std::make_unique<WText>("Total cost of order: "));
     order_val_  = addWidget(std::make_unique<WLineEdit>());
     addWidget(std::make_unique<WBreak>());
 
-    radius_description =addWidget(std::make_unique<WText>("How far can you pick up your order"));
+    radius_description =addWidget(std::make_unique<WText>("Max distance to pickup location: "));
     radius_ = addWidget(std::make_unique<WLineEdit>());
     addWidget(std::make_unique<WBreak>());
 
-    company_description = addWidget(std::make_unique<WText>("Select store"));
+    company_description = addWidget(std::make_unique<WText>("Select store: "));
     company_ = addWidget(std::make_unique<WSelectionBox>());
     company_->addItem("Ikea");
     company_->addItem("Auchan");
@@ -59,7 +59,6 @@ void NewOrderWidget::display(){
     }
 };
 void NewOrderWidget::confirm(){
-
     cout<<"HEREEEEEE"<<endl;
     int orderID = session_->addOrder(username_, std::stod(maxDeliveryVal_->text().toUTF8()),
                        std::stod(order_val_->text().toUTF8()), std::stod(radius_->text().toUTF8()),
@@ -91,7 +90,7 @@ void NewOrderWidget::confirm(){
 
     session_->createBucketDBs(get<2>(tpl));
     cout<<"New buckets created"<<endl;
-
+//    maxDeliveryVal_->setValueText("");
 
 };
 

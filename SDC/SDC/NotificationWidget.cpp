@@ -6,7 +6,9 @@
 #include <Wt/WPushButton.h>
 #include <Wt/WText.h>
 #include <Wt/WAny.h>
-
+#include <Wt/WLink.h>
+#include <Wt/WAnchor.h>
+#include "helpingFunctions.h"
 #include "Database.h"
 
 using namespace Wt;
@@ -25,9 +27,13 @@ NotificationTable::NotificationTable(const std::string &username,Database *sessi
     int counter = 1;
     for (int i=0;i<notifications.size();i++){
         if (notifications[i].username==username){
+
+            Wt::WLink link = Wt::WLink(notifications[i].deliveryLocation);
+            link.setTarget(Wt::LinkTarget::NewWindow);
+            std::unique_ptr<Wt::WAnchor> anchor = Wt::cpp14::make_unique<Wt::WAnchor>(link,"");
             table_->elementAt(counter, 0)->addWidget(std::make_unique<Wt::WText>(std::to_string(notifications[i].orderID)));
-            table_->elementAt(counter, 1)->addWidget(std::make_unique<Wt::WText>(std::to_string(notifications[i].costShare)+"$"));
-            table_->elementAt(counter, 2)->addWidget(std::make_unique<Wt::WText>(notifications[i].deliveryLocation));
+            table_->elementAt(counter, 1)->addWidget(std::make_unique<Wt::WText>((precision_2(notifications[i].costShare))+"$"));
+            table_->elementAt(counter, 2)->addWidget( Wt::cpp14::make_unique<Wt::WAnchor>(link,"See on google maps"));
             table_->elementAt(counter, 3)->addWidget(std::make_unique<OtherOrdersTable>(notifications[i].otherOrders));
             counter++;
         }
@@ -43,7 +49,7 @@ NotificationWidget::NotificationWidget(const std::string &username,Database *ses
     Ntable_->hide();
     showed = false;
     button_->clicked().connect(this,&NotificationWidget::showHide);
-
+    addWidget(std::make_unique<Wt::WText>("Logged in as: " + username));
     CreateOrderButton_ = addWidget(std::make_unique<Wt::WPushButton>("Create Order"));
     CreateOrderButton_->addStyleClass("CreateOrderButton");
     CreateOrderWidget_ = addWidget(std::make_unique<NewOrderWidget>(username,&*session));
@@ -109,7 +115,7 @@ OtherOrdersTable::OtherOrdersTable(std::string otherOrders)
     for (int i = 0; i < splitted.size(); i++)
     {
         for (int j=0; j < 3; j++){
-            if (j==2) table_->elementAt(i+1, j)->addWidget(std::make_unique<Wt::WText>(splitted[i][j]+"$"));
+            if (j==2) table_->elementAt(i+1, j)->addWidget(std::make_unique<Wt::WText>(precision_2(splitted[i][j])+"$"));
             else table_->elementAt(i+1, j)->addWidget(std::make_unique<Wt::WText>(splitted[i][j]));
         }
     }

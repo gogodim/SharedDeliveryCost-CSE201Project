@@ -58,3 +58,22 @@ std::string compressOrderIDs(std::vector< int > OrderIDs){
     return for_return;
 }
 
+std::string precision_2(float number)
+{
+    int decimal_part = (number * 100) - ((int)number * 100);
+    if (decimal_part > 10) {
+        return std::to_string((int)number) + "." + std::to_string(decimal_part);
+    } else {
+        return std::to_string((int)number) + ".0" + std::to_string(decimal_part);
+    }
+}
+std::string precision_2(std::string str)
+{
+    double number = std::stod(str);
+    int decimal_part = (number * 100) - ((int)number * 100);
+    if (decimal_part > 10) {
+        return std::to_string((int)number) + "." + std::to_string(decimal_part);
+    } else {
+        return std::to_string((int)number) + ".0" + std::to_string(decimal_part);
+    }
+}
