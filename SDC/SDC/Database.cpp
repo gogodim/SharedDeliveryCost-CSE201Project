@@ -1,4 +1,4 @@
-#include <Wt/Dbo/Dbo.h>
+﻿#include <Wt/Dbo/Dbo.h>
 #include <Wt/Dbo/backend/Sqlite3.h>
 #include <string>
 #include "notification.h"
@@ -37,7 +37,21 @@ Database::Database()
       session.createTables();
       dbo::Transaction transaction(session);
       std::unique_ptr<UserDB> user{new UserDB()};
+//      std::vector<double> v = {0,10,1};
+//      std::vector<double> v1 = {10,30,1};
+//      std::vector<double> v2 = {30,70,0.8};
+//      std::vector<double> v3 = {70,200,0.8};
+//      std::vector<std::vector<double>> v4 = {v,v1,v2,v3};
+      std::unique_ptr<CompanyDB> ikea{new CompanyDB()};
+      std::unique_ptr<CompanyDB> auchan{new CompanyDB()};
+      ikea->set_name("Ikea");
+      ikea->compressedOptions = "0,10,1, 10,30,1, 30,70,0.8, 70,200,0.8, ";
+      auchan->set_name("Auchan");
+      auchan->compressedOptions = "0,100,10, 100,500,5, ";
+
       dbo::ptr<UserDB> userPtr = session.add(std::move(user));
+      dbo::ptr<CompanyDB> ikeaPtr = session.add(std::move(ikea));
+      dbo::ptr<CompanyDB> auchanPtr = session.add(std::move(auchan));
       log("info") << "Database created";
     } catch (...) {
       log("info") << "Using existing database";
