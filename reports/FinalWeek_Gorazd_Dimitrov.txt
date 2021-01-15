@@ -1,0 +1,4 @@
+This week I woked on merging the WT and non-WT brench, as well as recreating some of the classes in order to easen the merge.
+Worked also on testing and debugging, and finally getting to a working prototype.
+Currently working on the release i.e. giving instructions for running the project, needed libraries and configurations, as wekk as instructions for testing.
+Organized the presentation outline for the whole team, and am now working on some bug fixes and my final report.
