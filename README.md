@@ -34,9 +34,11 @@ The application allows you to:
 
 ### Prerequisites
 - QT Creator
-- WT library (installation guide for Windows provided)
-- Boost library bundle installed
-- OpenSSL installed and added to path on machine (```Windows: https://medium.com/swlh/installing-openssl-on-windows-10-and-updating-path-80992e26f6a1```)
+- Boost library bundle installed (Version 1_67: ```https://www.boost.org/users/history/version_1_67_0.html```)
+- WT library (installation guide for Windows provided in the repository in ```Install_WT.md```)
+- OpenSSL installed and added to path on machine (Windows: ```https://medium.com/swlh/installing-openssl-on-windows-10-and-updating-path-80992e26f6a1```)
+
+Remark: Beware, both boost and WT library take a while to build (around an hour and a half).
 
 ### Other set-ups, building and running
 
@@ -44,7 +46,7 @@ Run the project in Qt Creator by following the steps below:
 
 1. Command line arguments
 
-In order to be able to run first adjuce the command line arguments in the QT project by modifying the following line:
+Go to the "Projects" section on the left sidebar in QT after having opened the project. Under the MinGW 64-bit compiler go to "Run" and adjust the command line arguments by modifying the following line:
 ```
 --docroot="path_to_project\\SharedDeliveryCost-CSE201Project\\SDC\\SDC" --http-port=9090 --http-address=0.0.0.0 ---config wt_config.xml --resources-dir="path_to_the_parent_directory_of_project"
 ```
@@ -54,7 +56,7 @@ Delete the "SDB.db" file from "SharedDeliveryCost-CSE201Project/SDC/SDC" in orde
 
 3. Compiler
 
-Make sure you are using the right compiler, initially the libraries are set for 64-bit compiler, if using a 32-bit machine be careful to change it in the SDC.pro file as well as in the Qt configuration.
+Make sure you are using the right compiler by choosing MinGW 64-bit under "SDC Debug" right above the green "Run" button on the left sidebar.
 
 4. Build and run the project directly from Qt.
 
@@ -73,11 +75,12 @@ Things to keep in mind:
 - The distance of the radius is in meters, so make sure you give big enough radius so your orders can match.
 
 - Example of a simpe match of orders for the company Ikea: 
-   - User 1: maximum payment for delivery 0.6, order value 24
+   - User 1: maximum payment for delivery 0.6, order value 24, 
    - User 2: maximum payment for delivery 0.3, order value 16
 
 - Currnetly working on a fix, but in the case of not fixing it before release: beware that the final location for the order is not correctly displayed, it can be found inside a print statement in the consloe or inside the database, but not in the google maps link we return in the end.
 
 #### Warning
 
-The project contains a big part of CSS ("resources" folder in "SDC/SDC") which is not written by the students, but comes with the Wt library, and is subject to copyright. This folder is present on the repository to easen the process of running the project and avoid complications that mey occure if one must link the resources from the command line arguments.
+The project contains a big part of CSS ("resources" folder in "SDC/SDC") which is not written by the students, but comes with the Wt library, and is subject to copyright. This folder is present on the repository to easen the process of running the project and avoid complications that may occur if one must link the resources from the command line arguments.
+
