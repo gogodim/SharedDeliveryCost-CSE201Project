@@ -42,10 +42,6 @@ The application allows you to:
 
 In order to be able to run first adjuce the command line arguments in the QT project by modifying the following line:
 ```
---docroot="path_to_project\\SharedDeliveryCost-CSE201Project\\SDC\\SDC" --http-port=9090 --http-address=0.0.0.0 ---config wt_config.xml --resources-dir="path_to_the_WT_library_files\\resources"
-```
-If this doesn't work try moving the resources folder alone from the wt files to the parent directory of your project and using the following comand line arguments:
-```
 --docroot="path_to_project\\SharedDeliveryCost-CSE201Project\\SDC\\SDC" --http-port=9090 --http-address=0.0.0.0 ---config wt_config.xml --resources-dir="path_to_the_parent_directory_of_project"
 ```
 2. Clearing old Database
@@ -57,3 +53,5 @@ Delete the "SDB.db" file from "SharedDeliveryCost-CSE201Project/SDC/SDC" in orde
 Make sure you are using the right compiler, initially the libraries are set for 64-bit compiler, if using a 32-bit machine be careful to change it in the SDC.pro file as well as in the Qt configuration.
 
 4. Build and run the project directly from Qt.
+
+Warning: The project contains a big part of CSS ("resources" folder in "SDC/SDC") which is not written by the students, but comes with the Wt library, and is subject to copyright. This folder is present on the repository to easen the process of running the project and avoid complications that mey occure if one must link the resources from the command line arguments.
