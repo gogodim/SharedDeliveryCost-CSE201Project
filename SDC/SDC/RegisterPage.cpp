@@ -55,7 +55,7 @@ RegisterPage::RegisterPage(int argc, char** argv): WContainerWidget()
 
     /*surname input*/
     hbox = vbox->addLayout(Wt::cpp14::make_unique<Wt::WHBoxLayout>());
-    text = Wt::cpp14::make_unique<Wt::WText>("Surame");
+    text = Wt::cpp14::make_unique<Wt::WText>("Surname");
     text->setStyleClass("login-element");
     hbox->addWidget(std::move(text));
     surnameEdit_ = hbox->addWidget(Wt::cpp14::make_unique<Wt::WLineEdit>());
@@ -84,7 +84,7 @@ RegisterPage::RegisterPage(int argc, char** argv): WContainerWidget()
 
     /*postalcode input*/
     hbox = vbox->addLayout(Wt::cpp14::make_unique<Wt::WHBoxLayout>());
-    text = Wt::cpp14::make_unique<Wt::WText>("PostalCode");
+    text = Wt::cpp14::make_unique<Wt::WText>("Postal code");
     text->setStyleClass("login-element");
     hbox->addWidget(std::move(text));
     PostCodeEdit_ = hbox->addWidget(Wt::cpp14::make_unique<Wt::WLineEdit>());
@@ -155,7 +155,7 @@ void RegisterPage::Register(){
     user->set_surname((surnameEdit_->text()).toUTF8());
     bool find_flag = database->find_user(user);
 
-    if(find_flag){
+    if(!find_flag){
         bool email_flag = this->Check_Valid_Email(user->get_email());
         if(!email_flag){
         //if (false){

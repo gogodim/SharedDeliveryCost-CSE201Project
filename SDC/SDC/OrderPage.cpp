@@ -126,7 +126,7 @@ void OrderPage::Login(){
         }
     }
     else{
-        confirm_->setText("Cannot find the user" + nameEdit_->text());
+        confirm_->setText("Cannot find the user: " + nameEdit_->text());
     }
 }
 
