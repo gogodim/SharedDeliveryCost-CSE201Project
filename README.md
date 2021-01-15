@@ -84,3 +84,15 @@ Things to keep in mind:
 
 The project contains a big part of CSS ("resources" folder in "SDC/SDC") which is not written by the students, but comes with the Wt library, and is subject to copyright. This folder is present on the repository to easen the process of running the project and avoid complications that may occur if one must link the resources from the command line arguments.
 
+### Pictures
+
+#### Login page:
+
+![Screenshot](project_screenshots/login.png)
+
+#### Register page:
+![Screenshot](project_screenshots/register.png)
+
+#### main page:
+
+![Screenshot](project_screenshots/main.png)
