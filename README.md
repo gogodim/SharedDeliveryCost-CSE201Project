@@ -34,8 +34,8 @@ The application allows you to:
 
 ### Prerequisites
 - WT library (installation guide for Windows provided)
-- OpenSSL installed and added to path on machine
 - Boost library bundle installed
+- OpenSSL installed and added to path on machine (```Windows: https://medium.com/swlh/installing-openssl-on-windows-10-and-updating-path-80992e26f6a1```)
 
 ### Other set-ups, building and running
 1. Command line arguments
