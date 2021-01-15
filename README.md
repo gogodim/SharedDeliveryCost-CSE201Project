@@ -54,4 +54,6 @@ Make sure you are using the right compiler, initially the libraries are set for 
 
 4. Build and run the project directly from Qt.
 
-Warning: The project contains a big part of CSS ("resources" folder in "SDC/SDC") which is not written by the students, but comes with the Wt library, and is subject to copyright. This folder is present on the repository to easen the process of running the project and avoid complications that mey occure if one must link the resources from the command line arguments.
+#### Warning
+
+The project contains a big part of CSS ("resources" folder in "SDC/SDC") which is not written by the students, but comes with the Wt library, and is subject to copyright. This folder is present on the repository to easen the process of running the project and avoid complications that mey occure if one must link the resources from the command line arguments.
