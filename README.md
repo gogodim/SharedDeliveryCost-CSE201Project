@@ -16,16 +16,44 @@ The application allows you to:
    - location (if different from him default one)
    - distance willing to go to pick up his order (ex. None- for big objects, 500m for something small)
 3. Recieve a notification when their order has been grouped. This contains:
-   - The contact information of the people you were grouped in order share your delivery
+   - The contact information of the people you were grouped in order to share your delivery
    - The portion of the delivery you are going to pay
-   - A valid address for the delivery taking into account the "locations" and "willingness to go" from all included parties
+   - An address for the delivery taking into account the "locations" and "willingness to go" from all included parties
 
 ## Members (name surname, github username, trello username, [role])
 
-- Gorazd Dimitrov, gogodim, gorazddimitrov, project leader
-- Maika Edberg, maikaedberg, maikaedberg, UI leader
+- Gorazd Dimitrov, gogodim, gorazddimitrov, Project leader
+- Maika Edberg, maikaedberg, maikaedberg, Localiation leader
 - Sigurjon Agustsson, SigurjonAg, sigurjonagustsson, Databases and server leader
-- Danaé Broustail, danaebroustail, danaebroustail, Optimization leader
+- Danaé Broustail, danaebroustail, danaebroustail, Back-end leader
 - Yarou Hsu, yarou1025, yarou1025, Trello leader
-- Leonardo Israilovici, leoisrailovici, leonardoisrailovici
+- Leonardo Israilovici, leoisrailovici, leonardoisrailovici, Optimization leader
 - Estelle Martin, estellemartin, estellemartin20, Git leader
+
+## Running the project
+
+### Prerequisites
+- WT library (installation guide for Windows provided)
+- OpenSSL installed and added to path on machine
+- Boost library bundle installed
+
+### Other set-ups, building and running
+1. Command line arguments
+
+In order to be able to run first adjuce the command line arguments in the QT project by modifying the following line:
+```
+--docroot="path_to_project\\SharedDeliveryCost-CSE201Project\\SDC\\SDC" --http-port=9090 --http-address=0.0.0.0 ---config wt_config.xml --resources-dir="path_to_the_WT_library_files\\resources"
+```
+If this doesn't work try moving the resources folder alone from the wt files to the parent directory of your project and using the following comand line arguments:
+```
+--docroot="path_to_project\\SharedDeliveryCost-CSE201Project\\SDC\\SDC" --http-port=9090 --http-address=0.0.0.0 ---config wt_config.xml --resources-dir="path_to_the_parent_directory_of_project"
+```
+2. Clearing old Database
+
+Delete the "SDB.db" file from "SharedDeliveryCost-CSE201Project/SDC/SDC" in order for the system to create it by itself at the first running of the project on a new machine.
+
+3. Compiler
+
+Make sure you are using the right compiler, initially the libraries are set for 64-bit compiler, if using a 32-bit machine be careful to change it in the SDC.pro file as well as in the Qt configuration.
+
+4. Build and run the project directly from Qt.
