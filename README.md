@@ -33,11 +33,15 @@ The application allows you to:
 ## Running the project
 
 ### Prerequisites
+- QT Creator
 - WT library (installation guide for Windows provided)
 - Boost library bundle installed
 - OpenSSL installed and added to path on machine (```Windows: https://medium.com/swlh/installing-openssl-on-windows-10-and-updating-path-80992e26f6a1```)
 
 ### Other set-ups, building and running
+
+Run the project in Qt Creator by following the steps below:
+
 1. Command line arguments
 
 In order to be able to run first adjuce the command line arguments in the QT project by modifying the following line:
