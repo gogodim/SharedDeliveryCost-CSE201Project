@@ -74,11 +74,9 @@ Things to keep in mind:
 
 - The distance of the radius is in meters, so make sure you give big enough radius so your orders can match.
 
-- Example of a simpe match of orders for the company Ikea: 
+- Example of a simple match of orders for the company Ikea: 
    - User 1: maximum payment for delivery 0.6, order value 24, 
    - User 2: maximum payment for delivery 0.3, order value 16
-
-- Currnetly working on a fix, but in the case of not fixing it before release: beware that the final location for the order is not correctly displayed, it can be found inside a print statement in the consloe or inside the database, but not in the google maps link we return in the end.
 
 #### Warning
 
