@@ -147,10 +147,10 @@ int testing(){
 
     Noah=User(("Noix"),("feuihfrf"),("Noah"),("Russotto"),Coordinate(48.712137,2.218609),("noah.rb@gmail.com")); // ensta dorms
 
-    Order ord1=Order(John,X,24,0.1,200); // change orders here
-    Order ord2=Order(Yuki,X,3,0.2,200);
-    Order ord3=Order(Haruhi,X,57,0.1,200);
-    Order ord4=Order(Noah,X,5,0.8,200);
+        Order ord1=Order(1,John,X,24,0.6,200);
+        Order ord2=Order(2,Yuki,X,16,0.3,10);
+        Order ord3=Order(3,Haruhi,X,57,0.5,200);
+        Order ord4=Order(4,Noah,X,5,0.8,200);
 
     b1.add_order(ord1); // b1 has John + Yuki + Haruhi
     b1.add_order(ord2);
