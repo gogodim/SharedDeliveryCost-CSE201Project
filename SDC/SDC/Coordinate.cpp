@@ -46,37 +46,80 @@ Coordinate coordinate_from_address(std::string address){
 }
 
 Coordinate address_to_coordinates(int argc, char** argv, std::string postalcode, std::string city, std::string street){
-    #undef qApp
+    Coordinate cor;
+    // main application
+  #undef qApp // undef macro qApp out of the way
     QCoreApplication qApp(argc, argv);
-    // we use an api call to osm
-    QGeoServiceProvider qGeoService("osm");
-    QGeoCodingManager *pQGeoCoder = qGeoService.geocodingManager();
-    QLocale qLocaleC(QLocale::C, QLocale::France);
-    pQGeoCoder->setLocale(qLocaleC);
-    // build address
-    QGeoAddress qGeoAddr;
-    qGeoAddr.setPostalCode(QString::fromUtf8(postalcode.c_str()));
-    qGeoAddr.setCity(QString::fromUtf8(city.c_str()));
-    qGeoAddr.setStreet(QString::fromUtf8(street.c_str()));
-    QGeoCodeReply *pQGeoCode = pQGeoCoder->geocode(qGeoAddr);
-
-    Coordinate res;
-
-    QObject::connect(pQGeoCode, &QGeoCodeReply::finished,
-      [&qApp, &qGeoAddr, pQGeoCode, &res](){
-        if (pQGeoCode->error() != QGeoCodeReply::NoError) {
-            std::cout << "an error occured!" << std::endl;
-            return;}
-        // eval. result
-        QList<QGeoLocation> qGeoLocs = pQGeoCode->locations();
-        for (QGeoLocation &qGeoLoc : qGeoLocs) {
-          qGeoLoc.setAddress(qGeoAddr);
-          res = Coordinate(qGeoLoc.coordinate().latitude(), qGeoLoc.coordinate().longitude());
-        }
-        qApp.exit(0);
-      });
-  qApp.exec();
-  return res;
+    // check for available services
+    QStringList qGeoSrvList = QGeoServiceProvider::availableServiceProviders();
+    //for (int i = 0; i < qGeoSrvList.size(); i++) {
+      QString entry = QString::fromStdString("osm");
+      std::cout << "Try service: " << entry.toStdString() << std::endl;
+      // choose provider
+      QGeoServiceProvider qGeoService(entry);
+      QGeoCodingManager *pQGeoCoder = qGeoService.geocodingManager();
+      if (!pQGeoCoder) {
+        std::cerr
+          << "GeoCodingManager '" << entry.toStdString()
+          << "' not available!" << std::endl;
+        return cor;
+      }
+      QLocale qLocaleC(QLocale::C, QLocale::France);
+      pQGeoCoder->setLocale(qLocaleC);
+      // build address
+      QGeoAddress qGeoAddr;
+      qGeoAddr.setCountry(QString::fromUtf8("France"));
+      qGeoAddr.setPostalCode(QString::fromUtf8(postalcode.c_str()));
+      qGeoAddr.setCity(QString::fromUtf8(city.c_str()));
+      qGeoAddr.setStreet(QString::fromUtf8(street.c_str()));
+      QGeoCodeReply *pQGeoCode = pQGeoCoder->geocode(qGeoAddr);
+      if (!pQGeoCode) {
+        std::cerr << "GeoCoding totally failed!" << std::endl;
+        return cor;
+      }
+      std::cout << "Searching..." << std::endl;
+      QObject::connect(pQGeoCode, &QGeoCodeReply::finished,
+        [&qApp, &qGeoAddr, pQGeoCode, &cor]()
+      {
+          std::cout << "Reply: " << pQGeoCode->errorString().toStdString() << std::endl;
+          switch (pQGeoCode->error()) {
+  #define CASE(ERROR) \
+  case QGeoCodeReply::ERROR: std::cerr << #ERROR << std::endl; break
+            CASE(NoError);
+            CASE(EngineNotSetError);
+            CASE(CommunicationError);
+            CASE(ParseError);
+            CASE(UnsupportedOptionError);
+            CASE(CombinationError);
+            CASE(UnknownError);
+  #undef CASE
+          default: std::cerr << "Undocumented error!" << std::endl;
+          }
+          if (pQGeoCode->error() != QGeoCodeReply::NoError) return "Error";
+          // eval. result
+          QList<QGeoLocation> qGeoLocs = pQGeoCode->locations();
+          std::cout << qGeoLocs.size() << " location(s) returned." << std::endl;
+          if(qGeoLocs.size() == 0){
+              cor.set_coordinate(-1, -1);
+          }
+          else{
+            QGeoLocation &qGeoLoc = qGeoLocs[0];
+            qGeoLoc.setAddress(qGeoAddr);
+            QGeoCoordinate qGeoCoord = qGeoLoc.coordinate();
+            std::cout
+              << "Lat.:  " << qGeoCoord.latitude() << std::endl
+              << "Long.: " << qGeoCoord.longitude() << std::endl
+              << "Alt.:  " << qGeoCoord.altitude() << std::endl;
+            cor.set_coordinate(qGeoCoord.latitude(), qGeoCoord.longitude());
+          }
+            qApp.exit(0);
+            return "Successful";
+        });
+      qApp.exec();
+    return cor;
+}
+std::string coordinate_to_address(Coordinate coordinate){
+    return "";
 }
 
 
