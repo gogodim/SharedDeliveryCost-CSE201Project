@@ -23,7 +23,7 @@ The application allows you to:
 ## Members (name surname, github username, trello username, [role])
 
 - Gorazd Dimitrov, gogodim, gorazddimitrov, Project leader
-- Maika Edberg, maikaedberg, maikaedberg, Localiation leader
+- Maika Edberg, maikaedberg, maikaedberg, Localization leader
 - Sigurjon Agustsson, SigurjonAg, sigurjonagustsson, Databases and server leader
 - Danaé Broustail, danaebroustail, danaebroustail, Back-end leader
 - Yarou Hsu, yarou1025, yarou1025, Trello leader
